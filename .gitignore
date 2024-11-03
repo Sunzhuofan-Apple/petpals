@@ -1,4 +1,3 @@
-# Python and Django
 *.pyc
 db.sqlite3
 0*.py
@@ -9,11 +8,3 @@ venv_ubuntu
 .idea
 media
 config.ini
-
-# Node.js
-node_modules/
-npm-debug.log
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-yarn.lock
