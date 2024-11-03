@@ -4,22 +4,23 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack-config.js",
-    "start": "node server.js"
+    "start": "npm run frontend & npm run backend",
+    "frontend": "react-scripts start",
+    "backend": "cd petpal && ../venv/bin/python manage.py runserver 8001"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1",
-    "path": "^0.12.7",
+    "axios": "^1.7.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.6.3",
-    "webpack": "^5.96.1",
-    "webpack-cli": "^5.1.4"
-  }
+    "react-scripts": "^5.0.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }
 
