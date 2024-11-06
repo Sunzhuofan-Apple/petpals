@@ -1,0 +1,126 @@
+.HomePage1 {
+    width: 100%;
+    height: 100%;
+    padding: 194px 118.5px 252.8px 118.5px;
+    background: #FEDCD2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+  }
+  
+  .Frame2 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 33px;
+  }
+  
+  .Header {
+    width: 361px;
+    height: 411px;
+  }
+  
+  .Frame1 {
+    display: flex;
+    flex-direction: column;
+    gap: 67px;
+  }
+  
+  .SwipeAdoptLove {
+    opacity: 0.70;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 75px;
+    font-weight: 700;
+    line-height: 90px;
+  }
+  
+  .black-text {
+    color: black;
+  }
+  
+  .highlighted-text {
+    color: #FF7578;
+  }
+  
+  .GetStartedButton {
+    width: 175px;
+    padding: 18px 10px;
+    background: #F2968F;
+    color: white;
+    font-size: 22px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .Group7 {
+    width: 486px;
+    height: 333px;
+    position: relative;
+  }
+  
+  .PetPalsPromise {
+    width: 100%;
+    position: absolute;
+    top: 208px;
+    text-align: center;
+    color: #6F4747;
+    font-size: 35px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    line-height: 40px;
+  }
+  
+  .PawPrint2 {
+    width: 236px;
+    height: 333px;
+    padding: 87.8px 19px 66.5px;
+    position: absolute;
+    left: 125px;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  .G3023 {
+    width: 197.06px;
+    height: 178.71px;
+    position: relative;
+  }
+  
+  .Path3025, .Path3027, .Path3029, .Path3031, .Path3033 {
+    background: rgba(238, 118, 94, 0.57);
+    position: absolute;
+  }
+  
+  .Frame28 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 100px;
+  }
+  
+  .Frame23, .Frame24, .Frame22 {
+    padding: 30px;
+    background: #FFF1EE;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.10);
+    border-radius: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .SetYourProfile, .MatchAndChat, .FindPlaceToWalking {
+    color: #735858;
+    font-size: 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 800;
+    line-height: 25px;
+  }
+  
