@@ -29,15 +29,15 @@ function HomePage() {
 
       <div className="Frame">
         <div className="Frame-mini">
-          <img className="Owner1" src={`${process.env.PUBLIC_URL}/image/1.jpg`} alt="Owner Profile" />
+          <img className="Owner1" src={`${process.env.PUBLIC_URL}/image/1.svg`} alt="Owner Profile" />
           <div className="SetYourProfile">SET YOUR PROFILE</div>
         </div>
         <div className="Frame-mini">
-          <img className="PetShop1" src={`${process.env.PUBLIC_URL}/image/2.jpg`} alt="Pet Shop" />
+          <img className="PetShop1" src={`${process.env.PUBLIC_URL}/image/2.svg`} alt="Pet Shop" />
           <div className="MatchAndChat">MATCH AND CHAT</div>
         </div>
         <div className="Frame-mini">
-          <img className="PetsAllowed1" src={`${process.env.PUBLIC_URL}/image/3.jpg`} alt="Pets Allowed" />
+          <img className="PetsAllowed1" src={`${process.env.PUBLIC_URL}/image/3.svg`} alt="Pets Allowed" />
           <div className="FindPlaceToWalking">FIND PLACE TO WALKING</div>
         </div>
       </div>
