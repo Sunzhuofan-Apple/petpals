@@ -2,12 +2,17 @@
 import React from 'react';
 import '../styles/HomePage.css';
 
-
 function HomePage() {
   return (
     <div className="HomePage">
+      <header className="AppHeader">
+        <button className="header-button">Home</button>
+        <button className="header-button">Login</button>
+        <button className="header-button">Register</button>
+      </header>
+
       <div className="Frame2">
-      <img className="Header" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
+        <img className="HeaderPic" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
         <div className="Frame1">
           <div className="SwipeAdoptLove">
             <span className="black-text">Connect. </span>
@@ -19,10 +24,10 @@ function HomePage() {
       </div>
 
       <div className="Group7">
-        <div className="PetPalsPromise"> Pet Pal Promise</div>
+        <div className="PetPalsPromise">Pet Pal Promise</div>
         <div className="PawPrint2">
           <div className="G3023">
-             <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+            <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
           </div>
         </div>
       </div>
@@ -46,3 +51,4 @@ function HomePage() {
 }
 
 export default HomePage;
+
