@@ -4,7 +4,6 @@ import '../styles/Register.css';
 
 const Register = () => {
     const [birth, setBirth] = useState("");
-
     // Health State options
     const healthOptions = [
         { value: 'rabies', label: 'Rabies' },
@@ -29,7 +28,6 @@ const Register = () => {
             }
         }
     };
-
     return (
         <div className="profile-signup">
             <header className="AppHeader">
