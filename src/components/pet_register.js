@@ -32,13 +32,12 @@ const Register = () => {
 
     return (
         <div className="profile-signup">
-            <header className="header">
-                <h1 className="app-name">Petpal</h1>
-                <div className="auth-buttons">
-                    <button className="login-button">Login</button>
-                    <button className="signup-button">Sign Up</button>
-                </div>
-            </header>
+            <header className="AppHeader">
+                <button className="header-button">Home</button>
+                <button className="header-button">Login</button>
+                <button className="header-button">Register</button>
+      </header>
+
             <div className="form-container">
                 <h2 className="profile-title">Profile Sign Up</h2>
                 <div className="form-grid">
