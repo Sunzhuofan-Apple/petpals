@@ -21,8 +21,9 @@ class Pet(models.Model):
     ])
     breed = models.CharField(max_length=100)
     birth_date = models.DateField()  
-    latitude = models.FloatField() 
-    longitude = models.FloatField()  
+    location = models.CharField(max_length=200)  
+    #latitude = models.FloatField() 
+    #longitude = models.FloatField()  
     weight = models.FloatField()
     health_states = models.TextField()  
 

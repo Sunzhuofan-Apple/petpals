@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets
 from .models import Pet
+from .forms import PetForm
 from .serializers import PetSerializer
 from django.http import HttpResponse
 
@@ -14,7 +15,6 @@ from .forms import RegisterForm
 from rest_framework.generics import CreateAPIView
 from .models import Pet
 from .serializers import PetSerializer
-
 
 
 
@@ -52,15 +52,14 @@ class LoginView(View):
         return render(request, 'api/login.html', {'form': form})
 
 
-class PetCreateView(View):
+class PetFormView(View):
     def get(self, request):
-        pets = Pet.objects.all()
-        serializer = PetSerializer(pets, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        form = PetForm()
+        return render(request, 'api/pet_form.html', {'form': form})
+    
     def post(self, request):
-        serializer = PetSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        form = PetForm(request.POST)
+        if form.is_valid():
+            form.save()  
+            return redirect('pet-success')  
+        return render(request, 'api/pet_form.html', {'form': form})  
