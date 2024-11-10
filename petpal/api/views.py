@@ -11,6 +11,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import RegisterForm
+from rest_framework.generics import CreateAPIView
+from .models import Pet
+from .serializers import PetSerializer
+
+
 
 
 class PetViewSet(viewsets.ModelViewSet):
@@ -45,3 +50,17 @@ class LoginView(View):
             login(request, user)
             return redirect('home')
         return render(request, 'api/login.html', {'form': form})
+
+
+class PetCreateView(View):
+    def get(self, request):
+        pets = Pet.objects.all()
+        serializer = PetSerializer(pets, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = PetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

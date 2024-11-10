@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PetViewSet, RegisterView, LoginView, home
+from .views import PetViewSet, RegisterView, LoginView,PetCreateView, home
 
 router = DefaultRouter()
 router.register(r'pets', PetViewSet)
@@ -11,4 +11,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('login/', LoginView.as_view(), name='login'),
     path('home/', home, name='home'),
+    path('pets/', PetCreateView.as_view(), name='pet-create'), 
 ]
