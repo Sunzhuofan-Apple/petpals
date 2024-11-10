@@ -24,7 +24,11 @@
             <a href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
         {% endif %}
     </div>
-    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/pets/add/">Set Up Your Profile</a>
+    {% if user.is_authenticated %}
+        <a href="/pets/add/">Set Up Your Profile</a>
+    {% else %}
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next=/pets/add/">Set Up Your Profile</a> 
+    {% endif %}
 </div>
 
 </body>

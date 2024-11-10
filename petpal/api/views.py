@@ -69,7 +69,3 @@ class PetFormView(View):
             form.save()  
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
-    
-def oauth_callback(request):
-    next_url = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
-    return redirect(next_url)
