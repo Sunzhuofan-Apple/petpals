@@ -10,7 +10,7 @@ class RegisterForm(UserCreationForm):
 class PetForm(forms.ModelForm):
     class Meta:
         model = Pet
-        fields = ['name', 'birth_date', 'breed', 'birth_date', 'location', 'sex']
+        fields = ['name', 'birth_date', 'breed', 'birth_date', 'location', 'sex','preferred_time', 'weight']
         widgets = {
             'birth_date': forms.DateInput(attrs={'type': 'date'}),  
         }
