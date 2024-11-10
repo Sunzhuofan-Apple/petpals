@@ -32,9 +32,6 @@ export const Register = () => {
             />
             <span>Login with Google</span>
           </div>
-          <p className="sign-up-text">
-            Don't have an account? <span className="sign-up-link">Sign up</span>
-          </p>
         </div>
       </div>
     </div>
