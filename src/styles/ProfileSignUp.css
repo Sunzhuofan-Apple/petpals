@@ -1,0 +1,117 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #FEDCD2;
+}
+
+.profile-signup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.app-name {
+    color: #714949;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.login-button, .signup-button {
+    font-size: 16px;
+    padding: 8px 16px;
+    border: 1px solid #4B4B4B;
+    border-radius: 100px;
+    background: white;
+    color: #735858;
+    cursor: pointer;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 30px;
+    color: #735858;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-grid label {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    color: #735858;
+    text-align: left;
+}
+
+.input-field, .select__control {
+    padding: 10px;
+    font-size: 16px;
+    margin-top: 5px;
+    color: #735858;
+    border: 1px solid #9F9F9F;
+    border-radius: 8px;
+    text-align: left;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23735858' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.next-button {
+    margin-top: 30px;
+    padding: 12px 30px;
+    background-color: #EC847C;
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 普通输入框样式 - 移除下拉箭头 */
+input.input-field {
+    background-image: none;
+    padding-right: 10px;  /* 恢复正常padding */
+}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import '../styles/Register.css';
+import '../styles/ProfileSignUp.css';
 
-const Register = () => {
+export const ProfileSignUp = () => {
     const [birth, setBirth] = useState("");
     // Health State options
     const healthOptions = [
@@ -143,4 +143,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default ProfileSignUp;
