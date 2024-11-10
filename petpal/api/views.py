@@ -3,6 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets
 from .models import Pet
+from .forms import PetForm
 from .serializers import PetSerializer
 from django.http import HttpResponse
 
@@ -11,6 +12,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.views import View
 from .forms import RegisterForm
+from rest_framework.generics import CreateAPIView
+from .models import Pet
+from .serializers import PetSerializer
+
 
 from django.contrib.auth.decorators import login_required
 
@@ -54,3 +59,16 @@ class LoginView(View):
             login(request, user)
             return redirect('home')
         return render(request, 'api/login.html', {'form': form})
+
+
+class PetFormView(View):
+    def get(self, request):
+        form = PetForm()
+        return render(request, 'api/pet_form.html', {'form': form})
+    
+    def post(self, request):
+        form = PetForm(request.POST)
+        if form.is_valid():
+            form.save()  
+            return redirect('pet-success')  
+        return render(request, 'api/pet_form.html', {'form': form})  
