@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<h1>Welcome to Petpals</h1>
+
+<!-- Set Your Profile Button -->
+<div>
+    <div style="position: absolute; top: 10px; right: 10px;">
+        {% if user.is_authenticated %}
+            <span>Hello, {{ user.get_full_name }}!</span>
+
+            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit">
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
+        {% endif %}
+    </div>
+    <a href="{% url 'social:begin' 'google-oauth2' %}?next=/pets/add/">Set Up Your Profile</a>
+</div>
+
+</body>
+</html>
