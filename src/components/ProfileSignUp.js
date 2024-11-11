@@ -3,6 +3,7 @@ import Select from 'react-select';
 import '../styles/ProfileSignUp.css';
 
 export const ProfileSignUp = () => {
+    const [petName, setPetName] = useState("");
     const [birth, setBirth] = useState("");
     // Health State options
     const healthOptions = [
@@ -44,7 +45,9 @@ export const ProfileSignUp = () => {
                         <input 
                             type="text" 
                             className="input-field" 
-                            placeholder="Enter pet's name" 
+                            placeholder="Enter pet's name"
+                            value={petName}
+                            onChange={(e) => setPetName(e.target.value)}
                         />
                     </label>
                     <label>

@@ -1,0 +1,136 @@
+.transition-container {
+    background-color: #fedcd2;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+}
+
+.main-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.text-section {
+    flex: 1;
+    text-align: left;
+    padding-right: 40px;
+}
+
+.title {
+    font-family: "Open Sans", Helvetica, sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+    color: #333333;
+    line-height: 1.1;
+    text-align: left;
+}
+
+.highlight {
+    color: #f2968f;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.image-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illustration {
+    max-width: 100%;
+    height: auto;
+}
+
+.match-button {
+    background-color: #f2968f;
+    color: #ffffff;
+    border: none;
+    border-radius: 100px;
+    padding: 16px 32px;
+    font-family: "Open Sans", Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.match-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 1024px) {
+    .content-wrapper {
+        padding: 30px;
+    }
+
+    .title {
+        font-size: 56px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        margin-bottom: 40px;
+    }
+
+    .content-wrapper {
+        padding: 20px;
+    }
+
+    .text-section {
+        margin-bottom: 30px;
+        padding-right: 0;
+        text-align: center;
+    }
+
+    .title {
+        font-size: 48px;
+        text-align: center;
+    }
+
+    .image-section {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .transition-container {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+
+    .match-button {
+        padding: 12px 24px;
+        font-size: 14px;
+        min-width: 160px;
+    }
+
+    .image-section {
+        width: 90%;
+    }
+}
