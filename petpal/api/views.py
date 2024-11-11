@@ -20,6 +20,8 @@ from django.utils.decorators import method_decorator
 
 
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'api/home.html')
@@ -69,3 +71,9 @@ class PetFormView(View):
             form.save()  
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
+    
+
+@login_required
+def oauth_success(request):
+    return JsonResponse({'status': 'success', 'redirect_url': '/'})
+
