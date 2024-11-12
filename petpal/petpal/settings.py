@@ -136,6 +136,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:3000"  
+LOGIN_REDIRECT_URL = "http://localhost:3000"
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = CONFIG.get("GoogleOAuth2", "client_id")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = CONFIG.get("GoogleOAuth2", "client_secret")
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account'}
@@ -145,5 +147,5 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['fullname', 'picture']
 LOGIN_URL = '/login/'
 
 # Default URL to redirect to after a user logs in.
-LOGIN_REDIRECT_URL = 'http://127.0.0.1:3000/ProfileSignUp'
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:3000/oauth2callback"
 
