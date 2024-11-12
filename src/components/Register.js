@@ -1,14 +1,24 @@
 import React from "react";
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import illustrationImage from "../assets/illustration-image.png";
-import logosGoogleIcon from "../assets/logos-google-icon.svg";
 import "../styles/Register.css";
 
 const Register = () => {
     const handleSuccess = (response) => {
         console.log("Google Login Success:", response);
-        // 登录后跳转至后端的 Django Google OAuth2 URL
-        window.location.href = `http://127.0.0.1:8000/auth/complete/google-oauth2/?code=${response.code}`;
+        
+        // get token from Google response
+        const token = response.credential;
+        const nextPage = new URLSearchParams(window.location.search).get('next') || '/';
+
+        const backendRedirectUrl = `http://localhost:8000/auth/complete/google-oauth2/?token=${encodeURIComponent(token)}/?next=${encodeURIComponent(nextPage)}`;
+
+        console.log("Redirect URL:", backendRedirectUrl);
+
+        window.location.href = backendRedirectUrl;
+
+        // window.location.href = `http://127.0.0.1:8000/auth/complete/google-oauth2/?code=${response.code}`;
     };
 
     const handleFailure = (error) => {
@@ -16,7 +26,8 @@ const Register = () => {
     };
 
     return (
-        <div className="login-page">
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                    <div className="login-page">
             <div className="left-section">
                 <p className="tagline">
                     <span>Happiness </span>
@@ -33,16 +44,14 @@ const Register = () => {
                 <div className="login-box">
                     <h1 className="login-title">Login</h1>
                     <GoogleLogin
-                          clientId="1039706282957-6gg8a9pj9vnr77evefotsdgkmce9hh3l.apps.googleusercontent.com" // 后端的 Client ID
-                          buttonText="Login with Google"
-                          onSuccess={handleSuccess}
-                          onFailure={handleFailure}
-                          cookiePolicy={"single_host_origin"}
-                          scope="profile email"
+                        onSuccess={handleSuccess}
+                        onError={handleFailure}
+                        useOneTap
                       />
                 </div>
             </div>
         </div>
+        </GoogleOAuthProvider>
     );
 };
 

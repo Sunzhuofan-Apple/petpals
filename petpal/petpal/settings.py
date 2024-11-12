@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -54,9 +55,14 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+# SSL_CERTIFICATE_PATH = os.path.join(BASE_DIR, 'certificates', 'localhost+2.pem')
+# SSL_KEY_PATH = os.path.join(BASE_DIR, 'certificates', 'localhost+2-key.pem')
 
 ROOT_URLCONF = "petpal.urls"
 
@@ -126,26 +132,39 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+GOOGLE_OAUTH2_BACKEND = 'social_core.backends.google.GoogleOAuth2'
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
+    GOOGLE_OAUTH2_BACKEND,
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:3000"  
-LOGIN_REDIRECT_URL = "http://localhost:3000"
+# SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:3000"  
+# LOGIN_REDIRECT_URL = "http://localhost:3000"
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = CONFIG.get("GoogleOAuth2", "client_id")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = CONFIG.get("GoogleOAuth2", "client_secret")
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account'}
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['fullname', 'picture']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
+    'fullname', 
+    'picture',
+    'email',
+]
 
 # Used by the @login_required decorator to redirect to the login action
 LOGIN_URL = '/login/'
 
 # Default URL to redirect to after a user logs in.
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:3000/oauth2callback"
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:8000/auth/complete/google-oauth2/"
 
+env_path = BASE_DIR.parent / ".env"
+try:
+    with open(env_path, "w") as f:
+        f.write(f"REACT_APP_GOOGLE_CLIENT_ID={SOCIAL_AUTH_GOOGLE_OAUTH2_KEY}\n")
+    print(f".env file generated successfully at {env_path} with client_id.")
+except KeyError:
+    print("Error: 'client_id' not found in config.ini under [GoogleOAuth2] section.")

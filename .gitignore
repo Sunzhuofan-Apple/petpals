@@ -10,3 +10,4 @@ venv_ubuntu
 media
 config.ini
 node_modules
+.env
