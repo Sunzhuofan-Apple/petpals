@@ -21,8 +21,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from google.auth.transport import requests
-from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.http import JsonResponse, HttpResponseRedirect
 
