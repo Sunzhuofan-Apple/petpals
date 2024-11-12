@@ -21,6 +21,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
+from google.auth.transport import requests
+from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.http import JsonResponse, HttpResponseRedirect
+
 def home(request):
     return render(request, 'api/home.html')
 
@@ -74,12 +79,6 @@ class PetFormView(View):
 @login_required
 def oauth_success(request):
     return JsonResponse({'status': 'success', 'redirect_url': '/'})
-
-
-from google.auth.transport import requests
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.http import JsonResponse, HttpResponseRedirect
 
 def oauth_complete(request):
     token = request.GET.get('token')
