@@ -10,9 +10,9 @@ const Register = () => {
         
         // get token from Google response
         const token = response.credential;
-        const nextPage = new URLSearchParams(window.location.search).get('next') || '/';
+        const nextPage = new URLSearchParams(window.location.search).get('next') || '';
 
-        const backendRedirectUrl = `http://localhost:8000/auth/complete/google-oauth2/?token=${encodeURIComponent(token)}/?next=${encodeURIComponent(nextPage)}`;
+        const backendRedirectUrl = `http://localhost:8000/auth/complete/google-oauth2/?token=${encodeURIComponent(token)}&next=${encodeURIComponent(nextPage)}`;
 
         console.log("Redirect URL:", backendRedirectUrl);
 
