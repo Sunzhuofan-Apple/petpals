@@ -101,34 +101,12 @@ def oauth_complete(request):
     token = request.GET.get('token')
     next_url = request.GET.get('next', '')
     print(f"Token: {token}")
+    print("user, ", request.user)
 
     if not token:
         return JsonResponse({"error": "Token is missing"}, status=400)
 
     try:
-        user_info = get_google_user_info(token)
-        fullname = user_info.get('name')
-        picture = user_info.get('picture')
-        email = user_info.get('email')
-
-        user, created = User.objects.get_or_create(
-            username=email, 
-            defaults={
-                'email': email, 
-                'first_name': fullname
-            })
-        
-        if created:
-            UserProfile.objects.create(user=user, profile_picture=picture, full_name=fullname, email=email)
-            print(f"User created successfully")
-        else:
-            user_profile = user.profile
-            user_profile.fullname = fullname
-            user_profile.picture = picture
-            user_profile.email = email
-            user_profile.save()
-        
-        login(request, user)
         print(f"User logged in successfully")
 
         front_end_url = f"http://localhost:3000/{next_url}"
@@ -140,33 +118,6 @@ def oauth_complete(request):
         error_message = f"Unexpected error: {str(e)}"
         print(error_message)
         return JsonResponse({"error": error_message}, status=500)
-
-def get_google_user_info(token):
-    user_info_url = 'https://oauth2.googleapis.com/tokeninfo?id_token='
-    headers = {
-        'Authorization': f'Bearer {token}'
-    }
-
-    try:
-        response = requests.get(user_info_url, headers=headers)
-
-        if response.status_code == 200:
-            user_info = response.json()
-            fullname = user_info.get('name')
-            picture = user_info.get('picture')
-            email = user_info.get('email')
-
-            return {
-                'fullname': fullname,
-                'picture': picture,
-                'email': email
-            }
-        else:
-            raise Exception(f"Failed to fetch user info from Google. Status code: {response.status_code}, Response: {response.text}")
-
-    except requests.exceptions.RequestException as e:
-        raise Exception(f"An error occurred while trying to fetch user info from Google: {str(e)}")
-
 
 @custom_login_required
 def profile_setup(request):

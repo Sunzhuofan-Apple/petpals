@@ -155,6 +155,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
     'email',
 ]
 
+
 # Used by the @login_required decorator to redirect to the login action
 LOGIN_URL = f"{CORS_ALLOWED_ORIGINS[0]}/Register"
 
