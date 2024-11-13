@@ -19,5 +19,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     
     path('auth/complete/google-oauth2/', views.oauth_complete, name='oauth_complete'),
+    path('auth/redirect/', views.oauth_redirect, name='oauth_redirect'),
     path('api/ProfileSignUp', views.profile_setup, name='profile_setup'),
 ]

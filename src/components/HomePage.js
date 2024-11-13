@@ -1,10 +1,11 @@
 // src/components/HomePage.js
 import React from 'react';
 import '../styles/HomePage.css';
+import protectRedirect from './protectRedirect';
 
 function HomePage() {
   const handleGetStarted = () => {
-    window.location.href = "/ProfileSignUp";
+    protectRedirect("", "ProfileSignUp");
   }
 
   return (

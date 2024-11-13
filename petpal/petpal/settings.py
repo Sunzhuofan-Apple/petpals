@@ -155,6 +155,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
     'email',
 ]
 
+ALLOWED_PATH_SUFFIXES = [
+    '',
+    'ProfileSignUp',
+    'Matching',
+    'Dashboard',
+    'Profile',
+]
 
 # Used by the @login_required decorator to redirect to the login action
 LOGIN_URL = f"{CORS_ALLOWED_ORIGINS[0]}/Register"
@@ -166,6 +173,7 @@ env_path = BASE_DIR.parent / ".env"
 try:
     with open(env_path, "w") as f:
         f.write(f"REACT_APP_GOOGLE_CLIENT_ID={SOCIAL_AUTH_GOOGLE_OAUTH2_KEY}\n")
+        f.write(f"REACT_APP_BACKEND=http://localhost:8000\n")
     print(f".env file generated successfully at {env_path} with client_id.")
 except KeyError:
     print("Error: 'client_id' not found in config.ini under [GoogleOAuth2] section.")

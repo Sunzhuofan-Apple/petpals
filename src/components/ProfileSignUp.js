@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import "../styles/ProfileSignUp.css";
-import useProtectedRedirect from "./useProtectedRedirect";
+import protectRedirect from "./protectRedirect";
 
 const ProfileSignUp = () => {
-    const renderContent = useProtectedRedirect("ProfileSignUp");
+    const [shouldRender, setShouldRender] = useState(false);
+    useEffect(() => {
+        const path = "ProfileSignUp";
+        const isRedirectNeeded = protectRedirect(path, path);
+        if (!isRedirectNeeded) {
+            setShouldRender(true);
+        }
+    }, []);
 
     const [formData, setFormData] = useState({
         name: "",

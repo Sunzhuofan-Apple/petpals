@@ -27,7 +27,8 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from .models import UserProfile
 
-import requests
+from django.views.decorators.http import require_GET
+from urllib.parse import urlencode
 
 def home(request):
     return render(request, 'api/home.html')
@@ -78,24 +79,20 @@ class PetFormView(View):
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
 
-from urllib.parse import urlencode
-
 # Custom login required decorator
 def custom_login_required(view_func):
     def wrapper(request, *args, **kwargs):
-        full_path = request.get_full_path()
-        next_url = full_path.replace('/api/', '')
-        print(f"Next URL: {next_url}")
-        print("user", request)
+        next_url = request.GET.get('next', '')
+        next_url = validate_url(next_url)
         if not request.user.is_authenticated:
-            login_url =  f"{settings.LOGIN_URL}?{urlencode({'next': next_url})}"
-            print(f"Redirecting to login URL: {login_url}")
-            return redirect(login_url)
-        
+            return JsonResponse({"message": "User is not authenticated"}, status=401)
         return view_func(request, *args, **kwargs)
-    
     return wrapper
-            
+
+@require_GET
+@custom_login_required
+def oauth_redirect(request):
+    return JsonResponse({"message": "User is authenticated"}, status=200)
 
 def oauth_complete(request):
     token = request.GET.get('token')
@@ -108,10 +105,13 @@ def oauth_complete(request):
 
     try:
         print(f"User logged in successfully")
-
+        print(f"Next URL: {next_url}")
+        next_url = validate_url(next_url)
         front_end_url = f"http://localhost:3000/{next_url}"
         response = HttpResponseRedirect(front_end_url)
-        response.set_cookie('session_token', 'your_session_token', httponly=True, secure=False, samesite='None')
+        response.set_cookie('session_token', token, httponly=True, secure=False, samesite='None')
+        print(f"Redirecting to: {front_end_url}")
+        print("response, ", response)
         return response
 
     except Exception as e:
@@ -119,6 +119,12 @@ def oauth_complete(request):
         print(error_message)
         return JsonResponse({"error": error_message}, status=500)
 
-@custom_login_required
+@login_required
 def profile_setup(request):
-    return JsonResponse({"message": "Profile setup page"})
+    return
+
+# helper function to check path suffix:
+def validate_url(next_url):
+    if not (next_url and next_url in settings.ALLOWED_PATH_SUFFIXES):
+        next_url = ''
+    return next_url
