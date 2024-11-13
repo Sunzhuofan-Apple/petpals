@@ -19,6 +19,11 @@ const protectRedirect = (curPage, nextPage, params = {}) => {
             throw new Error("Unexpected response");
         }
     })
+    .then(data => {
+        if (data && curPage !== nextPage) {
+            window.location.href = nextPage;
+        }
+    })
     .catch(error => console.error("Error:", error));
 };
 
