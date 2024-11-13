@@ -156,7 +156,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = [
 ]
 
 # Used by the @login_required decorator to redirect to the login action
-LOGIN_URL = '/login/'
+LOGIN_URL = f"{CORS_ALLOWED_ORIGINS[0]}/Register"
 
 # Default URL to redirect to after a user logs in.
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:8000/auth/complete/google-oauth2/"

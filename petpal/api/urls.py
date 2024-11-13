@@ -12,8 +12,12 @@ urlpatterns = [
     path('', home, name='home'),
     path('api/', include(router.urls)),
     path('login/', login, name='login'),
+
     path('pets/add/', PetFormView.as_view(), name='pet-add'), 
     path('pets/success/', lambda request: render(request, 'api/success.html'), name='pet-success'),  
+    
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    
     path('auth/complete/google-oauth2/', views.oauth_complete, name='oauth_complete'),
+    path('api/ProfileSignUp', views.profile_setup, name='profile_setup'),
 ]

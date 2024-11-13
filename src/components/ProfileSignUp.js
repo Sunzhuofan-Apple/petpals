@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import "../styles/ProfileSignUp.css";
+import useProtectedRedirect from "./useProtectedRedirect";
 
 const ProfileSignUp = () => {
+    const renderContent = useProtectedRedirect("ProfileSignUp");
+
     const [formData, setFormData] = useState({
         name: "",
         sex: "",

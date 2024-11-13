@@ -3,6 +3,10 @@ import React from 'react';
 import '../styles/HomePage.css';
 
 function HomePage() {
+  const handleGetStarted = () => {
+    window.location.href = "/ProfileSignUp";
+  }
+
   return (
     <div className="HomePage">
       <header className="AppHeader">
@@ -19,7 +23,7 @@ function HomePage() {
             <span className="highlighted-text">Match</span>
             <span className="black-text">.Wag!</span>
           </div>
-          <button className="GetStartedButton">Get Started</button>
+          <button className="GetStartedButton" onClick={handleGetStarted}>Get Started</button>
         </div>
       </div>
 
