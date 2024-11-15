@@ -177,3 +177,5 @@ try:
     print(f".env file generated successfully at {env_path} with client_id.")
 except KeyError:
     print("Error: 'client_id' not found in config.ini under [GoogleOAuth2] section.")
+
+GOOGLE_MAPS_API_KEY = CONFIG.get("GoogleMaps", "API_KEY")

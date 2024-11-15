@@ -30,6 +30,8 @@ from .models import UserProfile
 from django.views.decorators.http import require_GET
 from urllib.parse import urlencode
 
+import googlemaps
+
 def home(request):
     return render(request, 'api/home.html')
 
@@ -128,3 +130,8 @@ def validate_url(next_url):
     if not (next_url and next_url in settings.ALLOWED_PATH_SUFFIXES):
         next_url = ''
     return next_url
+
+def calculate_distance(start, end):
+    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+    distance = gmaps.distance_matrix(start, end)
+    return distance['rows'][0]['elements'][0]['distance']['value'] / 1609.34 # convert to miles

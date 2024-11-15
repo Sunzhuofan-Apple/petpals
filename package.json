@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run frontend & npm run backend",
     "frontend": "react-scripts start",
-    "backend": "cd petpal && ../venv/bin/python manage.py runserver 8001",
+    "backend": "cd petpal && ../venv/bin/pip install -r requirements.txt && ../venv/bin/python manage.py migrate && ../venv/bin/python manage.py runserver 8000", 
     "build": "react-scripts build"
   },
   "keywords": [],
