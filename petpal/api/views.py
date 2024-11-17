@@ -79,6 +79,11 @@ def api_logout(request):
         return JsonResponse({"message": "Successfully logged out"}, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=400)
 
+import googlemaps
+
+def home(request):
+    return render(request, 'api/home.html')
+
 def login(request):
     return render(request, 'api/login.html')
 
@@ -138,3 +143,7 @@ def validate_url(next_url):
         next_url = ''
     return next_url
 
+def calculate_distance(start, end):
+    gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
+    distance = gmaps.distance_matrix(start, end)
+    return distance['rows'][0]['elements'][0]['distance']['value'] / 1609.34 # convert to miles

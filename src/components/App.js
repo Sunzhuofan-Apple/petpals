@@ -8,6 +8,7 @@ import AddPhoto from './AddPhoto';
 import Characters from './Characters';
 import RedFlags from './RedFlags';
 import Transition from './Transition';
+import Matching from './Matching';
 
 function App() {
     const [petName, setPetName] = useState("");
@@ -29,6 +30,7 @@ function App() {
                     <Route path="/Characters" element={<Characters />} />
                     <Route path="/RedFlags" element={<RedFlags />} />
                     <Route path="/Transition" element={<Transition />} />
+                    <Route path="/Matching" element={<Matching />} />
                 </Routes>
             </div>
         </Router>
