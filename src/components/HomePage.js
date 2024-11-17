@@ -2,18 +2,68 @@
 import React from 'react';
 import '../styles/HomePage.css';
 import protectRedirect from './protectRedirect';
+import { useState, useEffect } from 'react';
+import getCSRFToken from './getCSRFToken';
 
 function HomePage() {
+  const [isLogin, setIsLogin] = useState(false);
+  const [username, setUsername] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                const data = await response.json(); // Parse the JSON response
+                console.log("Fetched data:", data);
+                if (data && data.is_authenticated) {
+                    setIsLogin(true);
+                    setUsername(data.username);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    fetchData();  
+  }, []);
+
   const handleGetStarted = () => {
-    protectRedirect("", "ProfileSignUp");
+    protectRedirect("", "/ProfileSignUp");
+  }
+
+  const handleLogin = () => {
+    if (!isLogin) {
+      window.location.href = "/Register";
+    } else {
+      fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
+        },
+        credentials: 'include',
+      })
+      .then(response => {
+        if (response.ok) {
+          setIsLogin(false);
+          setUsername("");
+        }
+      })
+    }
   }
 
   return (
     <div className="HomePage">
       <header className="AppHeader">
-        <button className="header-button">Home</button>
-        <button className="header-button">Login</button>
-        <button className="header-button">Register</button>
+        <button className="header-button">{username}</button>
+        <button className="header-button" onClick= {handleLogin}>{isLogin ? "Logout" : "Login"}</button>
       </header>
 
       <div className="Frame2">

@@ -30,11 +30,60 @@ from .models import UserProfile
 from django.views.decorators.http import require_GET
 from urllib.parse import urlencode
 
-def home(request):
-    return render(request, 'api/home.html')
+from django.urls import reverse
+from django.http import JsonResponse
+from django.contrib.auth import logout
+
+# --- authentication methods ---
+
+# # get oauth redirect link
+# def google_login_link(request):
+#     google_login_url = reverse('social:begin', args=['google-oauth2'])
+#     return JsonResponse({'google_login_url': google_login_url})
+
+# # custom oauth complete
+# def oauth_complete(request):
+#     print("oauth_complete")
+#     # add additional user data
+#     if request.user.is_authenticated:
+#         return JsonResponse({"message": "User is authenticated",
+#                              "user": request.user}, status=200)
+#     return JsonResponse({"message": "User is not authenticated"}, status=401)
+    
+# Custom login required decorator, return json response
+def custom_login_required(view_func):
+    def wrapper(request, *args, **kwargs):
+        next_url = request.GET.get('next', '')
+        next_url = validate_url(next_url)
+        if not request.user.is_authenticated:
+            return JsonResponse({"is_authenticated": False}, status=401)
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+@require_GET
+@custom_login_required
+def oauth_redirect(request):
+    return JsonResponse({"is_authenticated": request.user.is_authenticated,
+                         "username": request.user.username,
+                         }, status=200)
+
+# Custom redirect
+@login_required
+def profileSignUp(request):
+    return redirect('http://localhost:3000/ProfileSignUp')
+
+@login_required
+def api_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return JsonResponse({"message": "Successfully logged out"}, status=200)
+    return JsonResponse({"error": "Invalid request method"}, status=400)
 
 def login(request):
     return render(request, 'api/login.html')
+
+def home(request):
+    return render(request, 'api/home.html')
 
 class PetViewSet(viewsets.ModelViewSet):
     queryset = Pet.objects.all()
@@ -78,53 +127,14 @@ class PetFormView(View):
             form.save()  
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
-
-# Custom login required decorator
-def custom_login_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        next_url = request.GET.get('next', '')
-        next_url = validate_url(next_url)
-        if not request.user.is_authenticated:
-            return JsonResponse({"message": "User is not authenticated"}, status=401)
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
-@require_GET
+    
 @custom_login_required
-def oauth_redirect(request):
-    return JsonResponse({"message": "User is authenticated"}, status=200)
-
-def oauth_complete(request):
-    token = request.GET.get('token')
-    next_url = request.GET.get('next', '')
-    print(f"Token: {token}")
-    print("user, ", request.user)
-
-    if not token:
-        return JsonResponse({"error": "Token is missing"}, status=400)
-
-    try:
-        print(f"User logged in successfully")
-        print(f"Next URL: {next_url}")
-        next_url = validate_url(next_url)
-        front_end_url = f"http://localhost:3000/{next_url}"
-        response = HttpResponseRedirect(front_end_url)
-        response.set_cookie('session_token', token, httponly=True, secure=False, samesite='None')
-        print(f"Redirecting to: {front_end_url}")
-        print("response, ", response)
-        return response
-
-    except Exception as e:
-        error_message = f"Unexpected error: {str(e)}"
-        print(error_message)
-        return JsonResponse({"error": error_message}, status=500)
-
-@login_required
 def profile_setup(request):
-    return
+    return JsonResponse({"message": "User is authenticated"}, status=200)
 
 # helper function to check path suffix:
 def validate_url(next_url):
     if not (next_url and next_url in settings.ALLOWED_PATH_SUFFIXES):
         next_url = ''
     return next_url
+

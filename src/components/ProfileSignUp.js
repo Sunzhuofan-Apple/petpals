@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import "../styles/ProfileSignUp.css";
 import protectRedirect from "./protectRedirect";
+import getCSRFToken from "./getCSRFToken";
 
 const ProfileSignUp = () => {
     const [shouldRender, setShouldRender] = useState(false);
+    const handleHome = () => {
+        window.location.href = "/";
+    }
     useEffect(() => {
-        const path = "ProfileSignUp";
+        const path = "/ProfileSignUp";
         const isRedirectNeeded = protectRedirect(path, path);
         if (!isRedirectNeeded) {
             setShouldRender(true);
@@ -53,10 +57,12 @@ const ProfileSignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/pets/", {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp`, {
                 method: "POST",
+                credentials: "include",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCSRFToken()
                 },
                 body: JSON.stringify(formData)
             });
@@ -73,6 +79,8 @@ const ProfileSignUp = () => {
                     weight: "",
                     health_states: []
                 });
+            } else if (response.status === 401) {
+                window.location.href = `/Register?next=${window.location.pathname}`
             } else {
                 alert("Failed to create pet profile. Please try again.");
             }
@@ -84,9 +92,7 @@ const ProfileSignUp = () => {
     return (
         <div className="profile-signup">
             <header className="AppHeader">
-                <button className="header-button">Home</button>
-                <button className="header-button">Login</button>
-                <button className="header-button">Register</button>
+                <button className="header-button" onClick={handleHome}>Home</button>
             </header>
 
             <div className="form-container">
