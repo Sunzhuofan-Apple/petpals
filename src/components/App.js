@@ -2,13 +2,12 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './HomePage';
-import ProfileSignUp from './ProfileSignUp';
+import SignupPage from './SignupPage';
 import Register from './Register';
-import AddPhoto from './AddPhoto';
-import Characters from './Characters';
-import RedFlags from './RedFlags';
 import Transition from './Transition';
 import Matching from './Matching';
+import ProfileSignUp from './ProfileSignUp';
+import AddPhoto from './AddPhoto';
 
 function App() {
     const [petName, setPetName] = useState("");
@@ -27,8 +26,7 @@ function App() {
                         path="/AddPhoto" 
                         element={<AddPhoto petName={petName} />} 
                     />
-                    <Route path="/Characters" element={<Characters />} />
-                    <Route path="/RedFlags" element={<RedFlags />} />
+                    <Route path="/SignupPage" element={<SignupPage />} />
                     <Route path="/Transition" element={<Transition />} />
                     <Route path="/Matching" element={<Matching />} />
                 </Routes>

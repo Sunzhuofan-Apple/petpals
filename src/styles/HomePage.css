@@ -8,8 +8,8 @@
 
 .HomePage {
   width: 100%;
-  height: 100%;
-  padding: 5vh 5vw;
+  min-height: 100vh;
+  padding: 3vh 5vw;
   background: #FEDCD2;
   display: flex;
   flex-direction: column;
@@ -18,18 +18,20 @@
   overflow-x: hidden;
 }
 
-.Frame2 {
+.HeaderSection {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 2vw;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  margin-top: 2vh;
 }
 
-.HeaderPic {
+.HeaderImage {
   width: 100%;
-  max-width: 361px;
+  max-width: 450px;
   height: auto;
 }
 
@@ -67,25 +69,20 @@
   color: #FF7578;
 }
 
-.Frame1 {
+.IntroText {
   display: flex;
   flex-direction: column;
-  gap: 2vh;
-  width: 100%;
+  align-items: flex-start;
+  text-align: left;
+  gap: 1rem;
   max-width: 600px;
-  text-align: center;
 }
 
-.SwipeAdoptLove {
-  opacity: 0.7;
+.Tagline {
   font-family: 'Open Sans', sans-serif;
-  font-size: 5vw;
+  font-size: clamp(3rem, 7vw, 6rem);
   font-weight: 700;
   line-height: 1.2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 }
 
 .black-text {
@@ -97,12 +94,11 @@
 }
 
 .GetStartedButton {
-  width: 60%;
-  max-width: 200px;
-  padding: 1vh 2vw;
+  margin-top: 1rem;
+  padding: 1rem 3rem;
   background: #F2968F;
   color: white;
-  font-size: 1.5vw;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
   font-family: 'Open Sans', sans-serif;
   font-weight: 600;
   border-radius: 50px;
@@ -110,16 +106,17 @@
   cursor: pointer;
 }
 
-.Group7 {
+.PromiseSection {
   position: relative;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 3vh;
 }
 
-.PetPalsPromise {
+.PromiseText {
   width: 100%;
   text-align: center;
   color: #6F4747;
@@ -129,64 +126,62 @@
   position: relative;
 }
 
-
-.G3023 img {
-  width: 150px;
+.PawImage img {
+  width: 200px;
   height: auto;
   opacity: 0.7;
   z-index: -1;
 }
 
-.PawPrint2 {
-  width: 50%;
-  max-width: 250px;
+.PawPrint {
+  width: 60%;
+  max-width: 300px;
   height: auto;
-  left: 25%;
+  left: 20%;
   position: absolute;
 }
 
-.Frame {
-    width: 100%;
-    max-width: 3000px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2vw;
-    flex-wrap: wrap;
-    padding: 2vh 0;
-    margin-top: 10vh; 
-  }
-  
+.FeaturesSection {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2vw;
+  flex-wrap: wrap;
+  padding: 2vh 0;
+  margin-top: 5vh;
+}
 
-.Frame-mini {
+.FeatureCard {
   background: #FFF1EE;
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.10);
   border-radius: 35px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   width: 100%;
   max-width: 350px;
-  padding: 4vh 2vh;
+  height: 250px;
+  padding: 2vh;
   gap: 1vh;
-  min-height: 250px; 
 }
 
-.Frame-mini img {
-  width: 200px;
+.FeatureImage {
+  width: clamp(80px, 20vw, 120px);
   height: auto;
 }
 
-
 @media (min-width: 768px) {
-  .Frame {
+  .FeaturesSection {
     flex-direction: row;
   }
 }
 
 @media (max-width: 768px) {
-  .SwipeAdoptLove {
+  .Tagline {
     font-size: 6vw;
   }
 
@@ -195,35 +190,39 @@
     padding: 1vw;
   }
 
-  .Frame {
+  .FeaturesSection {
     flex-direction: column;
     gap: 2vh;
   }
 
-  .Frame-mini {
+  .FeatureCard {
     width: 80%;
+  }
+
+  .HeaderSection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .HeaderImage {
+    max-width: 80%;
   }
 }
 
-.SetYourProfile,
-.MatchAndChat,
-.FindPlaceToWalking {
+.FeatureTitle {
   color: #735858;
-  font-size: 1.5vw;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   font-family: 'Open Sans', sans-serif;
   font-weight: 800;
-  margin-top: auto; 
+  text-align: center;
 }
 
-
 @media (max-width: 768px) {
-  .PetPalsPromise {
+  .PromiseText {
     font-size: 4vw;
   }
 
-  .SetYourProfile,
-  .MatchAndChat,
-  .FindPlaceToWalking {
+  .FeatureTitle {
     font-size: 3vw;
   }
 }
