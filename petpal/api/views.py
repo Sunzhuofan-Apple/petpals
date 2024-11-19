@@ -146,7 +146,6 @@ class PetFormView(View):
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
     
-@csrf_exempt 
 @login_required
 def profile_setup(request):
     if request.method == 'POST':
