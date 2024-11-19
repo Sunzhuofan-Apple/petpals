@@ -34,6 +34,14 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth import logout
 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+
+
+
 # --- authentication methods ---
 
 # # get oauth redirect link
@@ -90,9 +98,14 @@ def login(request):
 def home(request):
     return render(request, 'api/home.html')
 
-class PetViewSet(viewsets.ModelViewSet):
+class PetViewSet(ModelViewSet):
     queryset = Pet.objects.all()
     serializer_class = PetSerializer
+    permission_classes = [IsAuthenticated]  
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)  
+
 
 class RegisterView(View):
     def get(self, request):
@@ -133,9 +146,23 @@ class PetFormView(View):
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
     
-@custom_login_required
+@csrf_exempt 
+@login_required
 def profile_setup(request):
-    return JsonResponse({"message": "User is authenticated"}, status=200)
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+
+            serializer = PetSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save(owner=request.user) 
+                return JsonResponse({"message": "Pet profile created successfully!"}, status=201)
+            else:
+                return JsonResponse({"errors": serializer.errors}, status=400)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+    else:
+        return JsonResponse({"error": "Invalid HTTP method"}, status=405)
 
 # helper function to check path suffix:
 def validate_url(next_url):

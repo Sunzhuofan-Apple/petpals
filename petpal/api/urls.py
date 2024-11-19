@@ -24,9 +24,9 @@ urlpatterns = [
     path('auth/redirect/', views.oauth_redirect, name='oauth_redirect'),
 
     # redirect protected pages
-    path('ProfileSignUp', views.profileSignUp, name='profileSignUp'),
+    path('ProfileSignUp/', views.profileSignUp, name='profileSignUp'),
 
-    path('api/ProfileSignUp', views.profile_setup, name='profile_setup'),
+    path('api/ProfileSignUp/', views.profile_setup, name='profile_setup'),
 
     # path('api/google-login-link/', views.google_login_link, name='google-login-link'),
 ]

@@ -28,9 +28,8 @@ SECRET_KEY = CONFIG.get("Django", "Secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "localhost",
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 
 # Application definition
@@ -165,6 +164,7 @@ ALLOWED_PATH_SUFFIXES = [
     'Dashboard',
     'Profile',
 ]
+
 
 # Used by the @login_required decorator to redirect to the login action
 LOGIN_URL = f"{CORS_ALLOWED_ORIGINS[0]}/Register"

@@ -47,17 +47,18 @@ const ProfileSignUp = () => {
     };
 
     const handleSelectChange = (selectedOptions) => {
-        const healthStates = selectedOptions.map((option) => option.value);
+        const healthStates = selectedOptions.map((option) => option.value).join(","); 
         setFormData({
             ...formData,
             health_states: healthStates
         });
     };
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
