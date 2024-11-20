@@ -61,11 +61,10 @@ function HomePage() {
 
   return (
     <div className="HomePage">
-      {/* <header className="AppHeader">
-        <button className="header-button">Home</button>
-        <button className="header-button">Login</button>
-        <button className="header-button">Register</button>
-      </header> */}
+      <header className="AppHeader">
+        <button className="header-button">{username}</button>
+        <button className="header-button" onClick= {handleLogin}>{isLogin ? "Logout" : "Login"}</button>
+      </header>
 
 <div className="HeaderSection">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
