@@ -146,50 +146,6 @@ class PetFormView(View):
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
 
-# Custom login required decorator
-def custom_login_required(view_func):
-    def wrapper(request, *args, **kwargs):
-        next_url = request.GET.get('next', '')
-        next_url = validate_url(next_url)
-        if not request.user.is_authenticated:
-            return JsonResponse({"message": "User is not authenticated"}, status=401)
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
-@require_GET
-@custom_login_required
-def oauth_redirect(request):
-    username = request.user.username
-    return JsonResponse({
-        "isAuthenticated": True,
-        "username": username
-        }, status=200)
-
-def oauth_complete(request):
-    token = request.GET.get('token')
-    next_url = request.GET.get('next', '')
-    print(f"Token: {token}")
-    print("user, ", request.user)
-
-    if not token:
-        return JsonResponse({"error": "Token is missing"}, status=400)
-
-    try:
-        print(f"User logged in successfully")
-        print(f"Next URL: {next_url}")
-        next_url = validate_url(next_url)
-        front_end_url = f"http://localhost:3000/{next_url}"
-        response = HttpResponseRedirect(front_end_url)
-        response.set_cookie('session_token', token, httponly=True, secure=False, samesite='None')
-        print(f"Redirecting to: {front_end_url}")
-        print("response, ", response)
-        return response
-
-    except Exception as e:
-        error_message = f"Unexpected error: {str(e)}"
-        print(error_message)
-        return JsonResponse({"error": error_message}, status=500)
-
 @login_required
 def profile_setup(request):
     if request.method == 'POST':
@@ -212,6 +168,7 @@ def validate_url(next_url):
     if not (next_url and next_url in settings.ALLOWED_PATH_SUFFIXES):
         next_url = ''
     return next_url
+
 def calculate_distance(start, end):
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
     distance = gmaps.distance_matrix(start, end)

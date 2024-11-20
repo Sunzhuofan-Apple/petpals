@@ -66,7 +66,7 @@ function HomePage() {
         <button className="header-button" onClick= {handleLogin}>{isLogin ? "Logout" : "Login"}</button>
       </header>
 
-<div className="HeaderSection">
+      <div className="HeaderSection">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
         <div className="IntroText">
           <div className="Tagline">
