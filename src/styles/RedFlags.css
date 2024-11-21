@@ -1,15 +1,21 @@
-/* RedFlags 页面整体容器样式 */
-.redflags-page {
+.redflags-container {
     background-color: #fedcd2;
     min-height: 100vh;
     width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.redflags-page .content-wrapper {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
 }
 
-/* 标题样式 */
 .redflags-page .page-title {
     color: #725757;
     font-family: "Open Sans", Helvetica, sans-serif;
@@ -19,7 +25,6 @@
     margin-bottom: 3rem;
 }
 
-/* Flag Grid 样式 */
 .redflags-page .flag-grid {
     display: flex;
     flex-wrap: wrap;
@@ -28,9 +33,9 @@
     width: 100%;
     max-width: 900px;
     margin-bottom: 2rem;
+    padding: 0 20px;
 }
 
-/* 单个 Flag Card 样式 */
 .redflags-page .flag-card {
     background-color: #e0bfb8;
     border-radius: 16px;
@@ -42,28 +47,33 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    font-family: "Open Sans", Helvetica, sans-serif;
+    width: auto;
+    margin: 0;
 }
 
-/* 选中的 Flag 样式 */
+.redflags-page .flag-name {
+    color: #725757;
+    font-family: "Open Sans", Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    line-height: 1;
+}
+
 .redflags-page .flag-card.selected {
     background-color: #f2968f99;
 }
 
-/* 禁用的 Flag 样式 */
-.redflags-page .flag-card.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* 鼠标悬停时的效果 */
 .redflags-page .flag-card:hover:not(.disabled) {
     transform: translateY(-2px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 选择计数器样式 */
+.redflags-page .flag-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .redflags-page .selection-counter {
     color: #725757;
     font-family: "Open Sans", Helvetica, sans-serif;
@@ -73,23 +83,80 @@
     margin: 2rem 0;
 }
 
-/* 按钮样式 */
-.redflags-page .button-container {
-    display: flex;
-    gap: 10px;
-}
-
-.redflags-page .button {
+.redflags-page .next-button {
     background-color: #f2968f;
-    color: white;
+    border-radius: 100px;
     border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 16px 40px;
     cursor: pointer;
-    font-size: 14px;
+    min-width: 120px;
     transition: all 0.3s ease;
 }
 
-.redflags-page .button:hover {
-    background-color: #e67300;
+.redflags-page .button-text {
+    color: #ffffff;
+    font-family: "Open Sans", Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
 }
+
+.redflags-page .next-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .redflags-container .content-wrapper {
+        padding: 16px;
+    }
+
+    .redflags-container .page-title {
+        font-size: 24px;
+        margin-bottom: 2rem;
+    }
+
+    .redflags-container .flag-grid {
+        gap: 12px;
+        padding: 0 12px;
+    }
+
+    .redflags-container .flag-card {
+        height: 40px;
+        padding: 8px 20px;
+    }
+
+    .redflags-container .flag-name {
+        font-size: 14px;
+    }
+
+    .redflags-container .selection-counter {
+        font-size: 18px;
+        margin: 1.5rem 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .redflags-container .flag-grid {
+        gap: 8px;
+        padding: 0 8px;
+    }
+
+    .redflags-container .flag-card {
+        height: 36px;
+        padding: 6px 16px;
+    }
+
+    .redflags-container .flag-name {
+        font-size: 13px;
+    }
+
+    .redflags-container .next-button {
+        padding: 12px 32px;
+    }
+
+    .redflags-container .button-text {
+        font-size: 14px;
+    }
+}
+

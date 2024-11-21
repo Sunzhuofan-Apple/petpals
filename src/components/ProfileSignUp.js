@@ -4,7 +4,8 @@ import "../styles/ProfileSignUp.css";
 import "../styles/AddPhoto.css";
 import protectRedirect from "./protectRedirect";
 import getCSRFToken from "./getCSRFToken";
-// import "./../styles/RedFlags.css";
+import "../styles/RedFlags.css"; 
+
 
 
 const charactersList = [
@@ -356,24 +357,24 @@ const ProfileSignUp = () => {
             )}
         {/* 页面4: Red Flags */}
             {currentPage === 4 && (
-                <div className="redflags-container">
+                <div className="redflags-page">
                     <h1 className="page-title">Red Flags</h1>
                     <div className="flag-grid">
-                            {redFlagsList.map((flag) => (
-                                <button
-                                    key={flag.id}
-                                    className={`flag-card ${
-                                        selectedFlags.includes(flag) ? "selected" : ""
-                                    } ${
-                                        selectedFlags.length >= 3 &&
-                                        !selectedFlags.includes(flag) ? "disabled" : ""
-                                    }`}
-                                    onClick={() => handleFlagSelect(flag)}
-                                >
-                                    <span className="flag-name">{flag.name}</span>
-                                </button>
-                            ))}
-                        </div>
+                        {redFlagsList.map((flag) => (
+                            <button
+                                key={flag.id}
+                                className={`flag-card ${
+                                    selectedFlags.includes(flag) ? "selected" : ""
+                                } ${
+                                    selectedFlags.length >= 3 &&
+                                    !selectedFlags.includes(flag) ? "disabled" : ""
+                                }`}
+                                onClick={() => handleFlagSelect(flag)}
+                            >
+                                <span className="flag-name">{flag.name}</span>
+                            </button>
+                        ))}
+                    </div>
                     <p className="selection-counter">{selectedFlags.length}/3</p>
                     <div className="button-container">
                         <button className="button" onClick={handlePrevious}>
@@ -385,7 +386,6 @@ const ProfileSignUp = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
