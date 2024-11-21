@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import "../styles/Characters.css";
+import React from "react";
 
 const charactersList = [
     { id: 1, name: "Calm", description: "Peaceful and relaxed temperament" },
@@ -14,9 +13,7 @@ const charactersList = [
     { id: 10, name: "Social", description: "Loves meeting new friends" }
 ];
 
-export const Characters = () => {
-    const [selectedCharacters, setSelectedCharacters] = useState([]);
-
+const Characters = ({ selectedCharacters, setSelectedCharacters }) => {
     const handleCharacterSelect = (character) => {
         if (selectedCharacters.includes(character)) {
             setSelectedCharacters(prev => prev.filter(c => c !== character));
@@ -25,40 +22,29 @@ export const Characters = () => {
         }
     };
 
-    const handleSubmit = () => {
-        console.log("Selected characters:", selectedCharacters);
-    };
-
     return (
         <div className="characters-container">
             <div className="content-wrapper">
                 <h1 className="page-title">Characters</h1>
                 <div className="character-grid">
                     {charactersList.map((character) => (
-                        <button 
+                        <button
                             key={character.id}
                             className={`character-card ${
                                 selectedCharacters.includes(character) ? 'selected' : ''
                             } ${
-                                selectedCharacters.length >= 3 && 
+                                selectedCharacters.length >= 3 &&
                                 !selectedCharacters.includes(character) ? 'disabled' : ''
                             }`}
                             onClick={() => handleCharacterSelect(character)}
                         >
-                            <span className="character-name">{character.name}</span>
+                            {character.name}
                         </button>
                     ))}
                 </div>
                 <p className="selection-counter">
                     {selectedCharacters.length}/3
                 </p>
-                <button 
-                    className="next-button"
-                    onClick={handleSubmit}
-                    disabled={selectedCharacters.length === 0}
-                >
-                    <span className="button-text">Next</span>
-                </button>
             </div>
         </div>
     );
