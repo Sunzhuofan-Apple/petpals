@@ -151,6 +151,7 @@ class PetFormView(View):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@login_required
 def profile_setup(request):
     try:
         user_profile, created = UserProfile.objects.get_or_create(user=request.user)
