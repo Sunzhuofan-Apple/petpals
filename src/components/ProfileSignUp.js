@@ -57,6 +57,7 @@ const ProfileSignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Submitting form data:', formData);
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
@@ -67,6 +68,10 @@ const ProfileSignUp = () => {
                 },
                 body: JSON.stringify(formData)
             });
+
+            console.log('Response status:', response.status);
+            const responseData = await response.json();
+            console.log('Response data:', responseData);
 
             if (response.ok) {
                 alert("Pet profile created successfully!");
@@ -80,6 +85,7 @@ const ProfileSignUp = () => {
                     weight: "",
                     health_states: []
                 });
+                window.location.href = '/Matching';
             } else if (response.status === 401) {
                 window.location.href = `/Register?next=${window.location.pathname}`
             } else {
