@@ -48,8 +48,12 @@ const ProfileSignUp = () => {
         birth_date: "",
         location: "",
         weight: "",
-        health_states: []
+        health_states: [],
+        characters: [],
+        red_flags: [],
+        photos: []
     });
+    
     const [photos, setPhotos] = useState(Array(6).fill(null));
     const [selectedCharacters, setSelectedCharacters] = useState([]);
 
@@ -125,45 +129,35 @@ const ProfileSignUp = () => {
     // 表单提交
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submitting form data:', formData);
+        const payload = {
+            ...formData,
+            health_states: formData.health_states.join(','), // 转换为逗号分隔字符串
+            characters: formData.characters,               // 直接发送数组
+            red_flags: formData.red_flags,                 // 直接发送数组
+            photos: formData.photos                        // 直接发送照片的 URL 数组
+        };
+    
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
-                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRFToken": getCSRFToken()
                 },
-                body: JSON.stringify({ ...formData, photos }) // 发送表单数据和照片
+                body: JSON.stringify(payload)
             });
-
-            console.log('Response status:', response.status);
-            const responseData = await response.json();
-            console.log('Response data:', responseData);
-
+    
             if (response.ok) {
                 alert("Pet profile created successfully!");
-                setFormData({
-                    name: "",
-                    sex: "",
-                    preferred_time: "",
-                    breed: "",
-                    birth_date: "",
-                    location: "",
-                    weight: "",
-                    health_states: []
-                });
-                window.location.href = '/Matching';
-                setPhotos(Array(6).fill(null));
-            } else if (response.status === 401) {
-                window.location.href = `/Register?next=${window.location.pathname}`;
             } else {
-                alert("Failed to create pet profile. Please try again.");
+                const data = await response.json();
+                alert(data.error || "Failed to create profile.");
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error submitting profile:", error);
         }
     };
+    
 
     // 切换页面
     const handleNext = () => setCurrentPage((prevPage) => prevPage + 1);

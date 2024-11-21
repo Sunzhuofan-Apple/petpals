@@ -165,7 +165,10 @@ def profile_setup(request):
             birth_date=pet_data['birth_date'],
             location=pet_data['location'],
             weight=float(pet_data['weight']),
-            health_states=pet_data['health_states']
+            health_states=pet_data.get('health_states', ''),
+            characters=pet_data.get('characters', ''),
+            red_flags=pet_data.get('red_flags', ''),
+            photos=pet_data.get('photos', [])
         )
         
         user_profile.pet = pet
@@ -173,8 +176,8 @@ def profile_setup(request):
         
         return Response({'message': 'Profile created successfully'}, status=201)
     except Exception as e:
-        print(f"Error creating profile: {str(e)}")  # 添加错误日志
         return Response({'error': str(e)}, status=400)
+
 
 # helper function to check path suffix:
 def validate_url(next_url):
