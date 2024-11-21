@@ -125,6 +125,7 @@ const ProfileSignUp = () => {
     // 表单提交
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('Submitting form data:', formData);
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
@@ -135,6 +136,10 @@ const ProfileSignUp = () => {
                 },
                 body: JSON.stringify({ ...formData, photos }) // 发送表单数据和照片
             });
+
+            console.log('Response status:', response.status);
+            const responseData = await response.json();
+            console.log('Response data:', responseData);
 
             if (response.ok) {
                 alert("Pet profile created successfully!");
@@ -148,6 +153,7 @@ const ProfileSignUp = () => {
                     weight: "",
                     health_states: []
                 });
+                window.location.href = '/Matching';
                 setPhotos(Array(6).fill(null));
             } else if (response.status === 401) {
                 window.location.href = `/Register?next=${window.location.pathname}`;

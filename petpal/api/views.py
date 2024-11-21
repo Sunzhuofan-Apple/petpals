@@ -39,7 +39,12 @@ from django.utils.decorators import method_decorator
 import json
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-
+import googlemaps
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.db.models import Q
+from datetime import datetime
 
 
 # --- authentication methods ---
@@ -86,8 +91,6 @@ def api_logout(request):
         logout(request)
         return JsonResponse({"message": "Successfully logged out"}, status=200)
     return JsonResponse({"error": "Invalid request method"}, status=400)
-
-import googlemaps
 
 def home(request):
     return render(request, 'api/home.html')
@@ -146,22 +149,32 @@ class PetFormView(View):
             return redirect('pet-success')  
         return render(request, 'api/pet_form.html', {'form': form})
 
-@login_required
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def profile_setup(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-
-            serializer = PetSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save(owner=request.user) 
-                return JsonResponse({"message": "Pet profile created successfully!"}, status=201)
-            else:
-                return JsonResponse({"errors": serializer.errors}, status=400)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
-    else:
-        return JsonResponse({"error": "Invalid HTTP method"}, status=405)
+    try:
+        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
+        
+        pet_data = request.data
+        pet = Pet.objects.create(
+            owner=request.user,
+            name=pet_data['name'],
+            sex=pet_data['sex'],
+            preferred_time=pet_data['preferred_time'],
+            breed=pet_data['breed'],
+            birth_date=pet_data['birth_date'],
+            location=pet_data['location'],
+            weight=float(pet_data['weight']),
+            health_states=pet_data['health_states']
+        )
+        
+        user_profile.pet = pet
+        user_profile.save()
+        
+        return Response({'message': 'Profile created successfully'}, status=201)
+    except Exception as e:
+        print(f"Error creating profile: {str(e)}")  # 添加错误日志
+        return Response({'error': str(e)}, status=400)
 
 # helper function to check path suffix:
 def validate_url(next_url):
@@ -173,3 +186,163 @@ def calculate_distance(start, end):
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
     distance = gmaps.distance_matrix(start, end)
     return distance['rows'][0]['elements'][0]['distance']['value'] / 1609.34 # convert to miles
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def match_pet(request):
+    try:
+        print(f"Checking user profile for: {request.user.username}")
+        user_profile = UserProfile.objects.get(user=request.user)
+        print(f"Found user profile: {user_profile}")
+        
+        if user_profile.pet:
+            print(f"Found pet: {user_profile.pet.__dict__}")
+            return Response({
+                'name': user_profile.pet.name,
+                'breed': user_profile.pet.breed,
+                'sex': user_profile.pet.sex,
+                'birth_date': user_profile.pet.birth_date,
+                'weight': user_profile.pet.weight,
+                'location': user_profile.pet.location,
+                'preferred_time': user_profile.pet.preferred_time,
+                'health_states': user_profile.pet.health_states,
+            })
+        print("No pet found for user profile")
+        return Response({'error': 'No pet found'}, status=404)
+    except UserProfile.DoesNotExist:
+        print(f"UserProfile does not exist for user: {request.user.username}")
+        return Response({'error': 'User profile not found'}, status=404)
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return Response({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_pet(request):
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        if user_profile.pet:
+            return Response({
+                'name': user_profile.pet.name,
+                'breed': user_profile.pet.breed,
+                'sex': user_profile.pet.sex,
+                'birth_date': user_profile.pet.birth_date,
+                'weight': user_profile.pet.weight,
+                'location': user_profile.pet.location,
+                'preferred_time': user_profile.pet.preferred_time,
+                'health_states': user_profile.pet.health_states,
+            })
+        return Response({'error': 'No pet found'}, status=404)
+    except UserProfile.DoesNotExist:
+        return Response({'error': 'User profile not found'}, status=404)
+
+@login_required
+def matching_redirect(request):
+    return redirect('http://localhost:3000/Matching')
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_matching_recommendations(request):
+    try:
+        # Get the current user's pet location
+        user_profile = UserProfile.objects.get(user=request.user)
+        if not user_profile.pet:
+            return Response({'error': 'User has no pet'}, status=404)
+        
+        user_location = user_profile.pet.location
+        
+        # Get all pets except the user's own pet
+        other_pets = Pet.objects.exclude(owner=request.user)
+        
+        # Calculate distances and create recommendation list
+        recommendations = []
+        for pet in other_pets:
+            try:
+                distance = calculate_distance(user_location, pet.location)
+                recommendations.append({
+                    'name': pet.name,
+                    'breed': pet.breed,
+                    'sex': pet.sex,
+                    'birth_date': pet.birth_date,
+                    'weight': pet.weight,
+                    'location': pet.location,
+                    'preferred_time': pet.preferred_time,
+                    'health_states': pet.health_states,
+                    'distance': round(distance, 1)  # Round to 1 decimal place
+                })
+            except Exception as e:
+                print(f"Error calculating distance for pet {pet.name}: {str(e)}")
+                continue
+        
+        # Sort recommendations by distance
+        recommendations.sort(key=lambda x: x['distance'])
+        
+        return Response(recommendations)
+    except UserProfile.DoesNotExist:
+        return Response({'error': 'User profile not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_sorted_profiles(request):
+    try:
+        print("=== Debug: Starting get_sorted_profiles ===")
+        user_profile = UserProfile.objects.get(user=request.user)
+        print(f"Found user profile for: {request.user.username}")
+        
+        if not user_profile.pet or not user_profile.pet.location:
+            print("No pet or location found for user")
+            return Response({'error': 'User pet location not found'}, status=400)
+            
+        user_location = user_profile.pet.location
+        print(f"User pet location: {user_location}")
+        
+        all_pets = Pet.objects.exclude(owner=request.user)
+        print(f"Total pets found (excluding user's): {all_pets.count()}")
+        
+        # Print all pets for debugging
+        for pet in all_pets:
+            print(f"""
+                Pet Details:
+                - Name: {pet.name}
+                - Breed: {pet.breed}
+                - Location: {pet.location}
+                - Owner: {pet.owner.username}
+                - Birth Date: {pet.birth_date}
+                - Weight: {pet.weight}
+                - Preferred Time: {pet.preferred_time}
+                - Health States: {pet.health_states}
+            """)
+        
+        profiles = []
+        for pet in all_pets:
+            try:
+                distance = calculate_distance(user_location, pet.location)
+                print(f"Calculated distance for {pet.name}: {distance} miles")
+                
+                profile_data = {
+                    'name': pet.name,
+                    'breed': pet.breed,
+                    'age': (datetime.now().date() - pet.birth_date).days // 365,
+                    'weight': pet.weight,
+                    'distance': round(distance, 1),
+                    'location': pet.location,
+                    'preferred_time': pet.preferred_time,
+                    'health_states': pet.health_states
+                }
+                profiles.append(profile_data)
+                print(f"Added profile: {profile_data}")
+                
+            except Exception as e:
+                print(f"Error calculating distance for pet {pet.name}: {str(e)}")
+                continue
+                
+        sorted_profiles = sorted(profiles, key=lambda x: x['distance'])
+        print(f"Final number of profiles: {len(sorted_profiles)}")
+        print("=== Debug: Ending get_sorted_profiles ===")
+        
+        return Response(sorted_profiles)
+    except Exception as e:
+        print(f"Error in get_sorted_profiles: {str(e)}")
+        return Response({'error': str(e)}, status=400)

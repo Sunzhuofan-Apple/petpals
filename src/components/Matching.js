@@ -1,19 +1,78 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Matching.css";
-
-const profiles = [
-    { name: "Kiwi", breed: "Yorkshire Terrier", age: 7, weight: 8, distance: 5 },
-    { name: "Cake", breed: "Welsh Corgi", age: 2, weight: 10, distance: 36.8 },
-    { name: "Buddy", breed: "Golden Retriever", age: 3, weight: 70, distance: 10 },
-    { name: "Max", breed: "Labrador", age: 4, weight: 65, distance: 12 },
-    { name: "Bella", breed: "Poodle", age: 5, weight: 50, distance: 8 },
-    { name: "Charlie", breed: "Beagle", age: 6, weight: 25, distance: 15 },
-    { name: "Lucy", breed: "Bulldog", age: 3, weight: 40, distance: 20 },
-    { name: "Daisy", breed: "Boxer", age: 4, weight: 60, distance: 18 }
-];
 
 export const Matching = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userPet, setUserPet] = useState(null);
+    const [profiles, setProfiles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+            method: 'GET',
+            credentials: 'include',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('未登录');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.is_authenticated) {
+                setCurrentUser(data.user);
+                return fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+            } else {
+                throw new Error('未登录');
+            }
+        })
+        .then(response => {
+            if (!response || !response.ok) {
+                throw new Error('Failed to fetch pet data');
+            }
+            return response.json();
+        })
+        .then(petData => {
+            if (petData) {
+                setUserPet(petData);
+                return fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+            }
+            throw new Error('No pet data found');
+        })
+        .then(response => {
+            if (!response || !response.ok) {
+                throw new Error('Failed to fetch sorted profiles');
+            }
+            return response.json();
+        })
+        .then(sortedProfiles => {
+            if (sortedProfiles) {
+                setProfiles(sortedProfiles);
+            }
+            setIsLoading(false);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            setIsLoading(false);
+            if (error.message === '未登录') {
+                window.location.href = '/Register?next=/Matching';
+            }
+        });
+    }, []);
+
+    // Add sort by distance function
+    const handleSortByDistance = () => {
+        const sortedProfiles = [...profiles].sort((a, b) => a.distance - b.distance);
+        setProfiles(sortedProfiles);
+        setCurrentIndex(0);
+    };
 
     const showPreviousProfile = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
@@ -24,51 +83,79 @@ export const Matching = () => {
     };
 
     const getProfile = (index) => {
-        return profiles[(currentIndex + index) % profiles.length];
+        if (!profiles.length) return null;
+        const profile = profiles[(currentIndex + index) % profiles.length];
+        return {
+            ...profile,
+            matchScore: calculateMatchScore(userPet, profile)
+        };
+    };
+
+    const calculateMatchScore = (userPet, profile) => {
+        let score = 0;
+        
+        if (userPet.preferred_time === profile.preferred_time) {
+            score += 30;
+        }
+        
+        const distanceScore = Math.max(0, 40 - (profile.distance * 2)); // 距离越近分数越高
+        score += distanceScore;
+        
+        const userHealthStates = userPet.health_states.split(',');
+        const profileHealthStates = profile.health_states.split(',');
+        const commonHealth = userHealthStates.filter(health => 
+            profileHealthStates.includes(health)
+        ).length;
+        score += commonHealth * 10;
+        
+        return Math.min(100, score);
     };
 
     return (
         <div className="matching-container">
-            <div className="controls">
-                <button className="sort-button">Sort by destination</button>
-                <button className="filter-button">Filter</button>
-            </div>
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : !userPet ? (
+                <div className="no-pet-message">
+                    <h2>Please set up your pet profile first</h2>
+                    <button onClick={() => window.location.href = '/ProfileSignUp'}>
+                        Set Up Profile
+                    </button>
+                </div>
+            ) : profiles.length === 0 ? (
+                <div className="no-matches-message">
+                    <h2>No matches found</h2>
+                    <p>Check back later for new potential matches!</p>
+                </div>
+            ) : (
+                <>
+                    <div className="controls">
+                        <button className="sort-button" onClick={handleSortByDistance}>Sort by distance</button>
+                        <button className="filter-button">Filter</button>
+                    </div>
 
-            <div className="profile-card small">
-                <div className="profile-image" />
-                <div className="profile-name">{getProfile(0).name}</div>
-                <p className="profile-details">
-                    {getProfile(0).breed}, {getProfile(0).age} years old, {getProfile(0).weight} lbs
-                    <br />
-                    {getProfile(0).distance} miles away from you
-                </p>
-                <button className="wag-button">Wag your tail</button>
-            </div>
+                    {[0, 1, 2].map((offset) => {
+                        const profile = getProfile(offset);
+                        if (!profile) return null;
 
-            <div className="profile-card large">
-                <div className="profile-image" />
-                <div className="profile-name">{getProfile(1).name}</div>
-                <p className="profile-details">
-                    {getProfile(1).breed}, {getProfile(1).age} years old, {getProfile(1).weight} lbs
-                    <br />
-                    {getProfile(1).distance} miles away from you
-                </p>
-                <button className="wag-button">Wag your tail</button>
-            </div>
+                        return (
+                            <div key={offset} className={`profile-card ${offset === 1 ? 'large' : 'small'}`}>
+                                <div className="profile-image" />
+                                <div className="profile-name">{profile.name}</div>
+                                <p className="profile-details">
+                                    {profile.breed}, {profile.age} years old, {profile.weight} lbs
+                                    <br />
+                                    {profile.distance} miles away from you
+                                </p>
+                                <button className="wag-button">Wag your tail</button>
+                            </div>
+                        );
+                    })}
 
-            <div className="profile-card small">
-                <div className="profile-image" />
-                <div className="profile-name">{getProfile(2).name}</div>
-                <p className="profile-details">
-                    {getProfile(2).breed}, {getProfile(2).age} years old, {getProfile(2).weight} lbs
-                    <br />
-                    {getProfile(2).distance} miles away from you
-                </p>
-                <button className="wag-button">Wag your tail</button>
-            </div>
-
-            <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
-            <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
+                    <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
+                    <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
+                </>
+            )}
         </div>
     );
 };
