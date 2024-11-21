@@ -1,0 +1,69 @@
+.profile {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #FEDCD2;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.photo-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+.shots-followers {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.text-wrapper, .text-wrapper-2, .text-wrapper-3, .text-wrapper-4 {
+    margin: 0 10px;
+    font-size: 18px;
+    color: #6C6C6C;
+    text-align: center;
+}
+
+.edit-profile, .text-wrapper-3, .text-wrapper-4 {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.divider {
+    width: 2px;
+    height: 30px;
+    background: #6C6C6C;
+    margin: 0 10px;
+}
+
+.group {
+    margin-top: 20px;
+}
+
+.kiwi-sex-man-breed {
+    font-size: 16px;
+    color: #201F1F;
+}
+
+.text-wrapper-6 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+    .shots-followers {
+        flex-direction: column;
+    }
+    .divider {
+        display: none;
+    }
+}
+  
