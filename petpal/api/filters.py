@@ -173,13 +173,14 @@ def get_model_json(model_name: str, fullcode:str, stream: bool = False):
 
 def ask(target_pet, pets_data):
     fullcode = get_full_prompt(target_pet, pets_data)
-    response = get_model_json("gpt-3.5-turbo", fullcode)
+    response = get_model_json("gpt-3.5-turbo", fullcode) # alternative: gpt-4o-mini, gpt-4o
     string = response.choices[0].message.content
     print("pet string", string)
     pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}')
     a = pattern.findall(string)
     json_load =  json.loads(a[0])
 
+    # save the result for debug
     with open('gpt_result.json', 'w') as f:
         json.dump(json_load, f, indent=4)
     
@@ -191,58 +192,68 @@ def id_to_display(json_load, target_pet):
     target_location = target_pet["location"]
     print("ready to process json_load")
 
-    for pet_id, pet_data in json_load.items():
+    # for json data
+    # for pet_id, pet_data in json_load.items():
+    #     try:
+    #         score = pet_data["score"]
+    #         reason = pet_data["reason"]
+
+    #         with open(file_path, 'r') as f:
+    #             pets_data = json.load(f)
+            
+    #         pet = pets_data[pet_id]
+
+    #         print("ready to process pet")
+
+    #         name = pet["name"]
+    #         breed = pet["breed"]
+    #         birth_date = datetime.strptime(pet["birth_date"], '%Y-%m-%d')
+    #         weight = pet["weight"]
+    #         pet_location = pet["location"]
+    #         photo = pet.get("photo")
+            
+
+    #         age = calculate_age(birth_date)
+    #         distance = calculate_distance(target_location, pet_location)
+
+    #         pet_details.append({
+    #             "id": pet_id,
+    #             "name": name,
+    #             "breed": breed,
+    #             "age": age,
+    #             "weight": weight,
+    #             "distance": round(distance, 2),
+    #             "photo": photo,
+    #             "score": score,
+    #             "reason": reason,
+    #         })
+
+    #         print("add pet" + pet_id + name)
+            
+
+    # for database data
+    for pet_data in pet_details:
         try:
+            pet_id = pet_data["id"]
             score = pet_data["score"]
             reason = pet_data["reason"]
-
-            with open(file_path, 'r') as f:
-                pets_data = json.load(f)
             
-            pet = pets_data[pet_id]
+            pet = Pet.objects.get(id=pet_id)
 
-            print("ready to process pet")
-
-            name = pet["name"]
-            breed = pet["breed"]
-            birth_date = datetime.strptime(pet["birth_date"], '%Y-%m-%d')
-            weight = pet["weight"]
-            pet_location = pet["location"]
-            photo = pet.get("photo")
-            
-            # pet = Pet.objects.get(id=pet_id)
-
-            age = calculate_age(birth_date)
+            pet_location = pet.location
             distance = calculate_distance(target_location, pet_location)
 
             pet_details.append({
-                "id": pet_id,
-                "name": name,
-                "breed": breed,
-                "age": age,
-                "weight": weight,
-                "distance": round(distance, 2),
-                "photo": photo,
+                "id": pet.id,
+                "name": pet.name,
+                "breed": pet.breed,
+                "age": (datetime.now().date() - pet.birth_date).days // 365,
+                "weight": pet.weight,
+                "distance": round(distance, 1),
+                "photo": pet.photos[0],
                 "score": score,
                 "reason": reason,
             })
-
-            print("add pet" + pet_id + name)
-            
-            # pet_location = pet.location
-            # distance = calculate_distance(target_location, pet_location)
-
-            # pet_details.append({
-            #     "id": pet.id,
-            #     "name": pet.name,
-            #     "breed": pet.breed,
-            #     "age": age,
-            #     "weight": pet.weight,
-            #     "distance": round(distance, 2),
-            #     "photo": pet.photo.url if pet.photo else None,
-            #     "score": score,
-            #     "reason": reason,
-            # })
 
         except Pet.DoesNotExist:
             print(f"Pet with ID {pet_id} does not exist.")
