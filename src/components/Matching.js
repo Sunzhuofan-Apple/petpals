@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Matching.css";
 
+const profiles = [
+    { name: "Kiwi", breed: "Yorkshire Terrier", age: 7, weight: 8, distance: 5 },
+    { name: "Cake", breed: "Welsh Corgi", age: 2, weight: 10, distance: 36.8 },
+    { name: "Buddy", breed: "Golden Retriever", age: 3, weight: 70, distance: 10 },
+    { name: "Max", breed: "Labrador", age: 4, weight: 65, distance: 12 },
+    { name: "Bella", breed: "Poodle", age: 5, weight: 50, distance: 8 },
+    { name: "Charlie", breed: "Beagle", age: 6, weight: 25, distance: 15 },
+    { name: "Lucy", breed: "Bulldog", age: 3, weight: 40, distance: 20 },
+    { name: "Daisy", breed: "Boxer", age: 4, weight: 60, distance: 18 }
+];
+
 export const Matching = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentUser, setCurrentUser] = useState(null);
@@ -111,6 +122,15 @@ export const Matching = () => {
         return Math.min(100, score);
     };
 
+    // 修改卡片位置控制函数
+    const getCardPosition = (index) => {
+        const diff = (index - currentIndex + profiles.length) % profiles.length;
+        if (diff === 0) return 'center';
+        if (diff === 1) return 'right';
+        if (diff === profiles.length - 1) return 'left';
+        return 'hidden';
+    };
+
     return (
         <div className="matching-container">
             {isLoading ? (
@@ -134,23 +154,31 @@ export const Matching = () => {
                         <button className="filter-button">Filter</button>
                     </div>
 
-                    {[0, 1, 2].map((offset) => {
-                        const profile = getProfile(offset);
-                        if (!profile) return null;
+                    <div className="cards-container">
+                        {[0, 1, 2].map((offset) => {
+                            const profile = getProfile(offset);
+                            if (!profile) return null;
 
-                        return (
-                            <div key={offset} className={`profile-card ${offset === 1 ? 'large' : 'small'}`}>
-                                <div className="profile-image" />
-                                <div className="profile-name">{profile.name}</div>
-                                <p className="profile-details">
-                                    {profile.breed}, {profile.age} years old, {profile.weight} lbs
-                                    <br />
-                                    {profile.distance} miles away from you
-                                </p>
-                                <button className="wag-button">Wag your tail</button>
-                            </div>
-                        );
-                    })}
+                            return (
+                                <div 
+                                    key={offset} 
+                                    className={`profile-card ${getCardPosition(offset)}`}
+                                >
+                                    <div className="profile-image" />
+                                    <div className="profile-name">{profile.name}</div>
+                                    <p className="profile-details">
+                                        {profile.breed}, {profile.age} years old, {profile.weight} lbs
+                                        <br />
+                                        {profile.distance} miles away from you
+                                    </p>
+                                    <div className="match-score">
+                                        Match: {profile.matchScore}%
+                                    </div>
+                                    <button className="wag-button">Wag your tail</button>
+                                </div>
+                            );
+                        })}
+                    </div>
 
                     <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
                     <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
