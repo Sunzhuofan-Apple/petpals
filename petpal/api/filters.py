@@ -258,7 +258,8 @@ def process_target_pet(target_pet):
         # combile database
         # pets_data = pets_data + list(Pet.objects.all().values())
         print("finished reading pets_data")
-        filtered_pets = apply_filters(pets_data, target_pet)
+        filtered_pets = pets_data
+        # filtered_pets = apply_filters(pets_data, target_pet)
         gpt_result = ask(target_pet, filtered_pets)
         detailed_results = id_to_display(gpt_result, target_pet)
         return detailed_results
