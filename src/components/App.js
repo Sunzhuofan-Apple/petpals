@@ -10,6 +10,7 @@ import ProfileSignUp from './ProfileSignUp';
 import AddPhoto from './AddPhoto';
 import MyProfile from './MyProfile';
 import OtherProfile from './OtherProfile';
+import Friends from './Friends';
 
 function App() {
     const [petName, setPetName] = useState("");
@@ -33,6 +34,7 @@ function App() {
                     <Route path="/Matching" element={<Matching />} />
                     <Route path="/MyProfile" element={<MyProfile />} />
                     <Route path="/OtherProfile" element={<OtherProfile />} />
+                    <Route path="/Friends" element={<Friends />} />
                 </Routes>
             </div>
         </Router>

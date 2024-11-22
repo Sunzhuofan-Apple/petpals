@@ -12,3 +12,6 @@ python petpal\manage.py migrate
 
 REM Start Django development server
 python petpal\manage.py runserver
+
+REM python petpal\manage.py create_fake_pets   # Uncomment to create fake pets
+REM python petpal\manage.py createsuperuser

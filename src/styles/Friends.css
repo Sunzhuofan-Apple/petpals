@@ -1,0 +1,176 @@
+.friends-container {
+    background: #fedcd2;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.friends-content {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.friends-column {
+    flex: 1;
+    max-width: 500px;
+}
+
+.column-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.count {
+    color: #ec847c;
+    font-weight: 700;
+}
+
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.friend-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.friend-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.friend-avatar {
+    width: 60px;
+    height: 60px;
+    background: #e0bfb8;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.friend-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.friend-text {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.4;
+}
+
+.wag-back-button {
+    background-color: #ec847c;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: auto;
+}
+
+.wag-back-button:hover {
+    background-color: #e67067;
+    transform: translateY(-1px);
+}
+
+.wag-back-button:active {
+    transform: translateY(0);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .friends-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .friends-column {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .column-title {
+        justify-content: center;
+    }
+
+    .friend-item {
+        padding: 0.8rem;
+    }
+
+    .friend-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .friend-text {
+        font-size: 0.9rem;
+    }
+
+    .wag-back-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .friends-container {
+        padding: 1rem;
+    }
+
+    .friend-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .friend-text {
+        font-size: 0.8rem;
+    }
+}
+
+/* 添加加载状态样式 */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+/* 添加错误状态样式 */
+.error {
+    color: #ec847c;
+    text-align: center;
+    padding: 1rem;
+}
+  
