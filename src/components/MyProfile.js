@@ -1,7 +1,15 @@
 import React from "react";
 import "../styles/MyProfile.css";
 
-export const MyProfile = () => {
+export const MyProfile = ({ birthDate, followers = 0, following = 0 }) => {
+    const calculateAge = (birthDate) => {
+        const birthYear = new Date(birthDate).getFullYear();
+        const currentYear = 2024;
+        return currentYear - birthYear;
+    };
+
+    const age = calculateAge(birthDate);
+
     return (
         <div className="profile">
             <div className="photo-placeholder" />
@@ -13,7 +21,7 @@ export const MyProfile = () => {
                         Sex: Man<br />
                         Breed: Yorkshire Terrier<br />
                         Dog-walking time slot:<br />
-                        Age: 7 years old<br />
+                        Age: {age} years old<br />
                         Weight: 8 lbs<br />
                         Character:<br />
                         Redflag:
@@ -23,9 +31,9 @@ export const MyProfile = () => {
             <div className="shots-followers">
                 <div className="edit-profile">Edit Profile</div>
                 <div className="divider" />
-                <div className="text-wrapper-3">238<br /><span>Followers</span></div>
+                <div className="text-wrapper-3">{followers}<br /><span>Followers</span></div>
                 <div className="divider" />
-                <div className="text-wrapper-4">101<br /><span>Following</span></div>
+                <div className="text-wrapper-4">{following}<br /><span>Following</span></div>
             </div>
         </div>
     );

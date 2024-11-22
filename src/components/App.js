@@ -9,6 +9,7 @@ import Matching from './Matching';
 import ProfileSignUp from './ProfileSignUp';
 import AddPhoto from './AddPhoto';
 import MyProfile from './MyProfile';
+import OtherProfile from './OtherProfile';
 
 function App() {
     const [petName, setPetName] = useState("");
@@ -31,6 +32,7 @@ function App() {
                     <Route path="/Transition" element={<Transition />} />
                     <Route path="/Matching" element={<Matching />} />
                     <Route path="/MyProfile" element={<MyProfile />} />
+                    <Route path="/OtherProfile" element={<OtherProfile />} />
                 </Routes>
             </div>
         </Router>
