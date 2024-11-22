@@ -85,6 +85,17 @@ export const Matching = () => {
         setCurrentIndex(0);
     };
 
+    // 添加按match排序的函数
+    const handleSortByMatch = () => {
+        const sortedProfiles = [...profiles].sort((a, b) => {
+            const scoreA = calculateMatchScore(userPet, a);
+            const scoreB = calculateMatchScore(userPet, b);
+            return scoreB - scoreA; // 降序排列，匹配度高的在前
+        });
+        setProfiles(sortedProfiles);
+        setCurrentIndex(0);
+    };
+
     const showPreviousProfile = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
     };
