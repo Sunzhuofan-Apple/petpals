@@ -103,19 +103,37 @@ const ProfileSignUp = () => {
     };
 
     // 上传照片事件处理函数
-    const handlePhotoUpload = (event) => {
-        const files = Array.from(event.target.files);
-        const updatedPhotos = [...photos];
-
-        files.forEach((file) => {
-            const firstEmptyIndex = updatedPhotos.indexOf(null);
-            if (firstEmptyIndex !== -1) {
-                updatedPhotos[firstEmptyIndex] = URL.createObjectURL(file);
-            }
+    const handlePhotoUpload = async (event) => {
+        const files = event.target.files;
+        const formData = new FormData();
+    
+        Array.from(files).forEach((file) => {
+            formData.append("photos", file);
         });
-
-        setPhotos(updatedPhotos);
+    
+        try {
+            const csrfToken = getCSRFToken();
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/upload-photos/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                },
+                credentials: 'include',
+                body: formData, // 上传文件
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Uploaded photo URLs:", data.photos);
+                setPhotos(data.photos); // 更新照片 URL
+            } else {
+                console.error("Failed to upload photos.");
+            }
+        } catch (error) {
+            console.error("Photo upload error:", error);
+        }
     };
+    
 
     const triggerFileInput = () => {
         fileInputRef.current.click();

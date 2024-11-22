@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Matching.css";
 
+const profiles = [
+    { name: "Kiwi", breed: "Yorkshire Terrier", age: 7, weight: 8, distance: 5 },
+    { name: "Cake", breed: "Welsh Corgi", age: 2, weight: 10, distance: 36.8 },
+    { name: "Buddy", breed: "Golden Retriever", age: 3, weight: 70, distance: 10 },
+    { name: "Max", breed: "Labrador", age: 4, weight: 65, distance: 12 },
+    { name: "Bella", breed: "Poodle", age: 5, weight: 50, distance: 8 },
+    { name: "Charlie", breed: "Beagle", age: 6, weight: 25, distance: 15 },
+    { name: "Lucy", breed: "Bulldog", age: 3, weight: 40, distance: 20 },
+    { name: "Daisy", breed: "Boxer", age: 4, weight: 60, distance: 18 }
+];
+
 export const Matching = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentUser, setCurrentUser] = useState(null);
@@ -74,6 +85,17 @@ export const Matching = () => {
         setCurrentIndex(0);
     };
 
+    // 添加按match排序的函数
+    const handleSortByMatch = () => {
+        const sortedProfiles = [...profiles].sort((a, b) => {
+            const scoreA = calculateMatchScore(userPet, a);
+            const scoreB = calculateMatchScore(userPet, b);
+            return scoreB - scoreA; // 降序排列，匹配度高的在前
+        });
+        setProfiles(sortedProfiles);
+        setCurrentIndex(0);
+    };
+
     const showPreviousProfile = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
     };
@@ -111,6 +133,15 @@ export const Matching = () => {
         return Math.min(100, score);
     };
 
+    // 修改卡片位置控制函数
+    const getCardPosition = (index) => {
+        const diff = (index - currentIndex + profiles.length) % profiles.length;
+        if (diff === 0) return 'center';
+        if (diff === 1) return 'right';
+        if (diff === profiles.length - 1) return 'left';
+        return 'hidden';
+    };
+
     return (
         <div className="matching-container">
             {
@@ -132,27 +163,38 @@ export const Matching = () => {
             (
                 <>
                     <div className="controls">
-                        <button className="sort-button" onClick={handleSortByDistance}>Sort by distance</button>
-                        <button className="filter-button">Filter</button>
+                        <button className="sort-button" onClick={handleSortByDistance}>
+                            Sort by distance
+                        </button>
+                        <button className="sort-button" onClick={handleSortByMatch}>
+                            Sort by match
+                        </button>
                     </div>
 
-                    {[0, 1, 2].map((offset) => {
-                        const profile = getProfile(offset);
-                        if (!profile) return null;
+                    <div className="cards-container">
+                        {profiles.map((profile, index) => {
+                            const position = getCardPosition(index);
+                            if (position === 'hidden') return null;
 
-                        return (
-                            <div key={offset} className={`profile-card ${offset === 1 ? 'large' : 'small'}`}>
-                                <div className="profile-image" />
-                                <div className="profile-name">{profile.name}</div>
-                                <p className="profile-details">
-                                    {profile.breed}, {profile.age} years old, {profile.weight} lbs
-                                    <br />
-                                    {profile.distance} miles away from you
-                                </p>
-                                <button className="wag-button">Wag your tail</button>
-                            </div>
-                        );
-                    })}
+                            return (
+                                <div 
+                                    key={profile.id || index}
+                                    className={`profile-card ${position}`}
+                                >
+                                    <div className="match-score">
+                                        Match: {calculateMatchScore(userPet, profile)}%
+                                    </div>
+                                    <div className="profile-name">{profile.name}</div>
+                                    <p className="profile-details">
+                                        {profile.breed}, {profile.age} years old, {profile.weight} lbs
+                                        <br />
+                                        {profile.distance} miles away from you
+                                    </p>
+                                    <button className="wag-button">Wag your tail</button>
+                                </div>
+                            );
+                        })}
+                    </div>
 
                     <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
                     <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>

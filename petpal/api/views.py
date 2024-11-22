@@ -1,58 +1,35 @@
-from django.conf import settings
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework import viewsets
-from .models import Pet
-from .forms import PetForm
-from .serializers import PetSerializer
-from django.http import HttpResponse
-
-from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
-from django.shortcuts import render, redirect
-from django.views import View
-from .forms import RegisterForm
-from .models import Pet
-from .serializers import PetSerializer
-from django.utils.decorators import method_decorator
-
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-
-from django.contrib.auth import login
-from django.http import JsonResponse, HttpResponseRedirect
-
-from django.contrib.auth.models import User
-from .models import UserProfile
-
-from django.views.decorators.http import require_GET
+from datetime import datetime
 from urllib.parse import urlencode
-
-from django.urls import reverse
-from django.http import JsonResponse
-from django.contrib.auth import logout
-
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 import json
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
 
-import googlemaps
+from django.conf import settings
+from django.core.files.storage import default_storage
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
+
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.db.models import Q
-from datetime import datetime
-from django.core.files.storage import default_storage
-from django.http import JsonResponse
-
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+
+from .models import Pet, UserProfile
+from .forms import PetForm, RegisterForm
+from .serializers import PetSerializer
 from .filters import process_target_pet
+import googlemaps
+from rest_framework.viewsets import ModelViewSet
+
+
 
 # --- authentication methods ---
 
@@ -388,3 +365,21 @@ class MatchingAPIView(APIView):
     
     def get(self, request):
         return Response({'error': 'Invalid request method'}, status=405)
+    
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_photos(request):
+    try:
+        uploaded_files = request.FILES.getlist('photos')  # 获取多个文件
+        photo_urls = []
+
+        for file in uploaded_files:
+            # 保存文件
+            file_path = default_storage.save(f'photos/{file.name}', file)
+            # 拼接完整 URL
+            photo_url = f"{request.build_absolute_uri(settings.MEDIA_URL)}{file_path.split('/')[-1]}"
+            photo_urls.append(photo_url)
+
+        return Response({'photos': photo_urls}, status=200)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
