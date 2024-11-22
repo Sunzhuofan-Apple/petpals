@@ -66,4 +66,11 @@
         display: none;
     }
 }
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* 圆形头像 */
+    object-fit: cover; /* 确保图片内容适配 */
+}
+
   

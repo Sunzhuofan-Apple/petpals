@@ -15,15 +15,14 @@ from .views import (
     get_user_pet,
     get_matching_recommendations,
     get_sorted_profiles,
-    upload_photos,  # 添加 upload_photos 视图
+    upload_photos,  
 )
 from . import views
 
-# 注册路由
 router = DefaultRouter()
 router.register(r'pets', PetViewSet)
 
-# 定义路由
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('api/', include(router.urls)),
@@ -42,6 +41,8 @@ urlpatterns = [
     path('matching-recommendations/', views.get_matching_recommendations, name='matching-recommendations'),
     path('api/sorted-profiles/', get_sorted_profiles, name='sorted-profiles'),
     path('api/upload-photos/', views.upload_photos, name='upload-photos'),  
+    path('api/user-pet/', get_user_pet, name='get_user_pet'),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:  
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
