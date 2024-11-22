@@ -15,7 +15,7 @@ class Command(BaseCommand):
         
         fake_pets = [
             {
-                'name': '77',
+                'name': 'Dry',
                 'breed': 'Golden Retriever',
                 'sex': 'Female',
                 'birth_date': datetime.now() - timedelta(days=365*2),
