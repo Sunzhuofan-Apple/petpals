@@ -3,11 +3,11 @@ from django.db import models
 
 # Create your models here.
 
-from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import User
 
 class Pet(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pets') 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='pets')
     name = models.CharField(max_length=100)
     sex = models.CharField(max_length=10, choices=[
         ('Male', 'Male'),
@@ -21,10 +21,13 @@ class Pet(models.Model):
         ('Evening', 'Evening (6-9 PM)')
     ])
     breed = models.CharField(max_length=100)
-    birth_date = models.DateField()  
-    location = models.CharField(max_length=200)  
+    birth_date = models.DateField()
+    location = models.CharField(max_length=200)
     weight = models.FloatField()
-    health_states = models.TextField()
+    health_states = models.TextField()  
+    characters = models.TextField() 
+    red_flags = models.TextField()  
+    photos = models.JSONField(default=list) 
 
     def __str__(self):
         return f"{self.name} ({self.breed})"

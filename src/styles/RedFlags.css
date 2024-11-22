@@ -7,7 +7,7 @@
     justify-content: center;
 }
 
-.content-wrapper {
+.redflags-page .content-wrapper {
     width: 100%;
     max-width: 1200px;
     display: flex;
@@ -16,7 +16,7 @@
     padding: 20px;
 }
 
-.page-title {
+.redflags-page .page-title {
     color: #725757;
     font-family: "Open Sans", Helvetica, sans-serif;
     font-size: 2rem;
@@ -25,7 +25,7 @@
     margin-bottom: 3rem;
 }
 
-.flag-grid {
+.redflags-page .flag-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -36,7 +36,7 @@
     padding: 0 20px;
 }
 
-.flag-card {
+.redflags-page .flag-card {
     background-color: #e0bfb8;
     border-radius: 16px;
     padding: 12px 24px;
@@ -51,7 +51,7 @@
     margin: 0;
 }
 
-.flag-name {
+.redflags-page .flag-name {
     color: #725757;
     font-family: "Open Sans", Helvetica, sans-serif;
     font-size: 16px;
@@ -60,21 +60,21 @@
     line-height: 1;
 }
 
-.flag-card.selected {
+.redflags-page .flag-card.selected {
     background-color: #f2968f99;
 }
 
-.flag-card:hover:not(.disabled) {
+.redflags-page .flag-card:hover:not(.disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.flag-card.disabled {
+.redflags-page .flag-card.disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.selection-counter {
+.redflags-page .selection-counter {
     color: #725757;
     font-family: "Open Sans", Helvetica, sans-serif;
     font-size: 20px;
@@ -83,7 +83,7 @@
     margin: 2rem 0;
 }
 
-.next-button {
+.redflags-page .next-button {
     background-color: #f2968f;
     border-radius: 100px;
     border: none;
@@ -93,69 +93,70 @@
     transition: all 0.3s ease;
 }
 
-.button-text {
+.redflags-page .button-text {
     color: #ffffff;
     font-family: "Open Sans", Helvetica, sans-serif;
     font-size: 16px;
     font-weight: 600;
 }
 
-.next-button:disabled {
+.redflags-page .next-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
-    .content-wrapper {
+    .redflags-container .content-wrapper {
         padding: 16px;
     }
 
-    .page-title {
+    .redflags-container .page-title {
         font-size: 24px;
         margin-bottom: 2rem;
     }
 
-    .flag-grid {
+    .redflags-container .flag-grid {
         gap: 12px;
         padding: 0 12px;
     }
 
-    .flag-card {
+    .redflags-container .flag-card {
         height: 40px;
         padding: 8px 20px;
     }
 
-    .flag-name {
+    .redflags-container .flag-name {
         font-size: 14px;
     }
 
-    .selection-counter {
+    .redflags-container .selection-counter {
         font-size: 18px;
         margin: 1.5rem 0;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .flag-grid {
+    .redflags-container .flag-grid {
         gap: 8px;
         padding: 0 8px;
     }
 
-    .flag-card {
+    .redflags-container .flag-card {
         height: 36px;
         padding: 6px 16px;
     }
 
-    .flag-name {
+    .redflags-container .flag-name {
         font-size: 13px;
     }
 
-    .next-button {
+    .redflags-container .next-button {
         padding: 12px 32px;
     }
 
-    .button-text {
+    .redflags-container .button-text {
         font-size: 14px;
     }
 }
+

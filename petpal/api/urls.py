@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from rest_framework.routers import DefaultRouter
-from .views import PetViewSet, RegisterView, LoginView, PetFormView, home, login
+from .views import PetViewSet, RegisterView, LoginView, PetFormView, home, login, match_pet, get_user_pet, get_matching_recommendations, get_sorted_profiles
 from . import views
 
 router = DefaultRouter()
@@ -31,4 +31,10 @@ urlpatterns = [
     # path('api/google-login-link/', views.google_login_link, name='google-login-link'),
 
     path('api/matching/', views.MatchingAPIView.as_view(), name='matching'),
+    path('api/user-pet/', views.get_user_pet, name='user-pet'),
+
+    path('Matching/', views.matching_redirect, name='matching_redirect'),
+    path('api/match-pet/', views.match_pet, name='match_pet'),
+    path('matching-recommendations/', views.get_matching_recommendations, name='matching-recommendations'),
+    path('api/sorted-profiles/', get_sorted_profiles, name='sorted-profiles'),
 ]
