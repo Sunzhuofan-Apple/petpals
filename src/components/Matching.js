@@ -150,30 +150,33 @@ export const Matching = () => {
             ) : (
                 <>
                     <div className="controls">
-                        <button className="sort-button" onClick={handleSortByDistance}>Sort by distance</button>
-                        <button className="filter-button">Filter</button>
+                        <button className="sort-button" onClick={handleSortByDistance}>
+                            Sort by distance
+                        </button>
+                        <button className="sort-button" onClick={handleSortByMatch}>
+                            Sort by match
+                        </button>
                     </div>
 
                     <div className="cards-container">
-                        {[0, 1, 2].map((offset) => {
-                            const profile = getProfile(offset);
-                            if (!profile) return null;
+                        {profiles.map((profile, index) => {
+                            const position = getCardPosition(index);
+                            if (position === 'hidden') return null;
 
                             return (
                                 <div 
-                                    key={offset} 
-                                    className={`profile-card ${getCardPosition(offset)}`}
+                                    key={profile.id || index}
+                                    className={`profile-card ${position}`}
                                 >
-                                    <div className="profile-image" />
+                                    <div className="match-score">
+                                        Match: {calculateMatchScore(userPet, profile)}%
+                                    </div>
                                     <div className="profile-name">{profile.name}</div>
                                     <p className="profile-details">
                                         {profile.breed}, {profile.age} years old, {profile.weight} lbs
                                         <br />
                                         {profile.distance} miles away from you
                                     </p>
-                                    <div className="match-score">
-                                        Match: {profile.matchScore}%
-                                    </div>
                                     <button className="wag-button">Wag your tail</button>
                                 </div>
                             );

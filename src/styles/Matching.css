@@ -1,39 +1,33 @@
 .matching-container {
     background-color: #fedcd2;
+    min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100%;
     position: relative;
     padding: 40px;
     overflow: hidden;
-    perspective: 1000px;
 }
 
-.controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1;
-}
-
-.sort-button, .filter-button {
-    background-color: #ffffff;
-    border: 1px solid #4a4a4a;
-    border-radius: 100px;
-    padding: 10px 20px;
-    margin: 5px;
-    cursor: pointer;
-    font-size: 14px;
+.cards-container {
+    position: relative;
+    width: 900px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
 }
 
 .profile-card {
     position: absolute;
-    transition: all 0.5s ease;
+    width: 280px;
+    height: 400px;
     background: white;
     border-radius: 20px;
     padding: 20px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -41,127 +35,41 @@
 
 .profile-card.left {
     transform: translateX(-290px) scale(0.8);
-    opacity: 0.8;
-    z-index: 1;
+    opacity: 0.6;
+    z-index: 0;
 }
 
 .profile-card.center {
     transform: translateX(0) scale(1);
+    opacity: 1;
     z-index: 2;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .profile-card.right {
     transform: translateX(290px) scale(0.8);
-    opacity: 0.8;
-    z-index: 1;
+    opacity: 0.6;
+    z-index: 0;
 }
 
 .profile-card.hidden {
     opacity: 0;
+    transform: translateX(290px) scale(0.7);
     pointer-events: none;
-    transform: translateX(0) scale(0.8);
-}
-
-.profile-image {
-    background-color: #ccc;
-    width: 100%;
-    height: 60%;
-    border-radius: 15px;
-    margin-bottom: 10px;
 }
 
 .profile-name {
-    font-size: 2rem;
+    color: #333;
+    font-size: 24px;
     font-weight: bold;
-    margin: 0;
-    padding: 10px 0 5px 0;
+    margin: 15px 0;
 }
 
 .profile-details {
-    font-size: 1.1rem;
-    color: #2b2b2d;
-    opacity: 0.7;
-    line-height: 1.4;
-    margin: 5px 0;
-    padding: 0 10px;
-}
-
-.wag-button {
-    background-color: #ec847c;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 12px 25px;
-    cursor: pointer;
-    font-size: 1.1rem;
-    width: 80%;
-    margin: 10px auto 0;
-}
-
-.arrow {
-    background: none;
-    border: none;
-    font-size: 2.5rem;
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #4a4a4a;
-    padding: 20px;
-    z-index: 1;
-}
-
-.left-arrow {
-    left: 20px;
-}
-
-.right-arrow {
-    right: 20px;
-}
-
-@media (max-width: 1024px) {
-    .cards-container {
-        width: 700px;
-    }
-    
-    .profile-card.left {
-        transform: translateX(-250px) scale(0.9);
-    }
-    
-    .profile-card.right {
-        transform: translateX(250px) scale(0.9);
-    }
-
-    .profile-name {
-        font-size: 1.7rem;
-    }
-
-    .profile-details {
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .cards-container {
-        width: 500px;
-    }
-    
-    .profile-card.left {
-        transform: translateX(-230px) scale(0.9);
-    }
-    
-    .profile-card.right {
-        transform: translateX(230px) scale(0.9);
-    }
-
-    .profile-name {
-        font-size: 1.5rem;
-    }
-
-    .profile-details {
-        font-size: 0.9rem;
-    }
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
 }
 
 .match-score {
@@ -170,17 +78,116 @@
     right: 20px;
     background-color: #ec847c;
     color: white;
-    padding: 8px 12px;
-    border-radius: 15px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
     font-weight: bold;
 }
 
-.cards-container {
-    position: relative;
-    width: 900px;
-    height: 500px;
-    margin: 0 auto;
+.wag-button {
+    background-color: #ec847c;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.wag-button:hover {
+    background-color: #d67670;
+}
+
+@media (max-width: 1024px) {
+    .profile-card {
+        width: 240px;
+        height: 360px;
+    }
+    
+    .profile-card.left {
+        transform: translateX(-250px) scale(0.8);
+    }
+    
+    .profile-card.right {
+        transform: translateX(250px) scale(0.8);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-card {
+        width: 220px;
+        height: 340px;
+    }
+    
+    .profile-card.left {
+        transform: translateX(-230px) scale(0.8);
+    }
+    
+    .profile-card.right {
+        transform: translateX(230px) scale(0.8);
+    }
+}
+
+/* 控制按钮样式 */
+.controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     display: flex;
-    justify-content: center;
+    gap: 10px;
+    z-index: 3;
+}
+
+.sort-button, .filter-button {
+    background-color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #725757;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sort-button:hover, .filter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 左右箭头按钮样式 */
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: #725757;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+.arrow:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.left-arrow {
+    left: 20px;
+}
+
+.right-arrow {
+    right: 20px;
 }
