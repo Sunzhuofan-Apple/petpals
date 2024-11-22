@@ -34,7 +34,7 @@ class Pet(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.photos or len(self.photos) == 0:
-            self.photos = ["\static\images\default.png"]
+            self.photos = ["http://localhost:8000/media/photos/default_jQldxId.jpg"]
         super().save(*args, **kwargs)
     
     @property
