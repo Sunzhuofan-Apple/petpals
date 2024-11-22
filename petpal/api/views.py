@@ -217,6 +217,7 @@ def match_pet(request):
                 'location': user_profile.pet.location,
                 'preferred_time': user_profile.pet.preferred_time,
                 'health_states': user_profile.pet.health_states,
+                'photos': user_profile.pet.photos,
             })
         print("No pet found for user profile")
         return Response({'error': 'No pet found'}, status=404)
@@ -329,6 +330,7 @@ def get_sorted_profiles(request):
                 - Weight: {pet.weight}
                 - Preferred Time: {pet.preferred_time}
                 - Health States: {pet.health_states}
+                - Photos: {pet.photos}
             """)
         
         profiles = []
@@ -345,7 +347,8 @@ def get_sorted_profiles(request):
                     'distance': round(distance, 1),
                     'location': pet.location,
                     'preferred_time': pet.preferred_time,
-                    'health_states': pet.health_states
+                    'health_states': pet.health_states,
+                    'photos': pet.photos,
                 }
                 profiles.append(profile_data)
                 print(f"Added profile: {profile_data}")

@@ -32,6 +32,11 @@ class Pet(models.Model):
     def __str__(self):
         return f"{self.name} ({self.breed})"
     
+    def save(self, *args, **kwargs):
+        if not self.photos or len(self.photos) == 0:
+            self.photos = ["\static\images\default.png"]
+        super().save(*args, **kwargs)
+    
     @property
     def preferred_time_index(self):
         # get preferred_time index
