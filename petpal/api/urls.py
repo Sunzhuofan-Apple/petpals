@@ -30,7 +30,8 @@ urlpatterns = [
 
     # path('api/google-login-link/', views.google_login_link, name='google-login-link'),
 
-    path('user-pet/', views.get_user_pet, name='user-pet'),
+    path('api/user-pet/', views.get_user_pet, name='user-pet'),
+
 
     path('Matching/', views.matching_redirect, name='matching_redirect'),
     path('api/match-pet/', views.match_pet, name='match_pet'),

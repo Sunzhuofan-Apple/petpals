@@ -235,10 +235,15 @@ def get_user_pet(request):
                 'location': user_profile.pet.location,
                 'preferred_time': user_profile.pet.preferred_time,
                 'health_states': user_profile.pet.health_states,
+                'characters': user_profile.pet.characters,
+                'red_flags': user_profile.pet.red_flags,
+                'photos': user_profile.pet.photos,
             })
+
         return Response({'error': 'No pet found'}, status=404)
     except UserProfile.DoesNotExist:
         return Response({'error': 'User profile not found'}, status=404)
+
 
 @login_required
 def matching_redirect(request):
