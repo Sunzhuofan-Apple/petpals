@@ -95,7 +95,7 @@ const ProfileSignUp = () => {
     };
 
     const handleSelectChange = (selectedOptions) => {
-        const healthStates = selectedOptions.map((option) => option.value).join(",");
+        const healthStates = selectedOptions.map((option) => option.value);
         setFormData({
             ...formData,
             health_states: healthStates
@@ -129,32 +129,53 @@ const ProfileSignUp = () => {
     // 表单提交
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Log form data before submission
+        console.log("Form Data before submission:", formData);
+        console.log("Selected Characters:", selectedCharacters);
+        console.log("Selected Flags:", selectedFlags);
+        console.log("Photos:", photos);
+
         const payload = {
             ...formData,
-            health_states: formData.health_states.join(','), // 转换为逗号分隔字符串
-            characters: formData.characters,               // 直接发送数组
-            red_flags: formData.red_flags,                 // 直接发送数组
-            photos: formData.photos                        // 直接发送照片的 URL 数组
+            health_states: Array.isArray(formData.health_states) ? formData.health_states.join(',') : formData.health_states,
+            characters: selectedCharacters.map(c => c.name),
+            red_flags: selectedFlags.map(f => f.name),
+            photos: photos.filter(p => p !== null)
         };
-    
+
+        // Log the final payload
+        console.log("Final Payload:", payload);
+        console.log("CSRF Token:", getCSRFToken());
+
         try {
+            const csrfToken = getCSRFToken();
+            console.log("Making fetch request to:", `${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`);
+            
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRFToken": getCSRFToken()
+                    "X-CSRFToken": csrfToken,
                 },
+                credentials: 'include',
                 body: JSON.stringify(payload)
             });
-    
+
+            console.log("Response status:", response.status);
+            console.log("Response headers:", Object.fromEntries(response.headers));
+
             if (response.ok) {
                 alert("Pet profile created successfully!");
+                window.location.href = '/Matching';
             } else {
                 const data = await response.json();
-                alert(data.error || "Failed to create profile.");
+                console.error("Server error response:", data);
+                alert(data.error || "Failed to create profile. Please check all required fields.");
             }
         } catch (error) {
-            console.error("Error submitting profile:", error);
+            console.error("Fetch error:", error);
+            alert("Error submitting profile. Please try again.");
         }
     };
     
