@@ -1,0 +1,70 @@
+{
+    "120": {
+        "score": 7,
+        "reason": "Kiki and Kiki are of the same breed, adding 3 points. Kiki and Kiki both have the characteristics 'Friendly' and 'Curious', adding 4 points. Kiki and Kiki are both located in Pittsburgh, PA, adding 2 points. Kiki's red flag 'Not Trained' conflicts with Xavier's characteristic 'Protective', deducting 3 points."
+    },
+    "100": {
+        "score": 2,
+        "reason": "Kiki and Xavier have the same weight and matching health state 'dhlpp', adding 2 points."
+    },
+    "111": {
+        "score": 2,
+        "reason": "Kiki and Shawn have the matching characteristic 'Curious', adding 2 points."
+    },
+    "106": {
+        "score": 0,
+        "reason": "Kiki and Dawn do not have any matching characteristics or location relevance."
+    },
+    "107": {
+        "score": -1,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Luke's red flag 'Not Socialized', deducting 3 points."
+    },
+    "108": {
+        "score": -1,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Matthew's red flag 'Barks a Lot', deducting 3 points."
+    },
+    "101": {
+        "score": -4,
+        "reason": "Kiki's red flag 'Not Trained' conflicts with Ricardo's red flag 'Not Trained' and 'Barks a Lot', deducting 3 points. Kiki and Ricardo do not have any matching characteristics or location relevance."
+    },
+    "102": {
+        "score": -5,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Susan's red flag 'Big Dog', deducting 3 points. Kiki and Susan do not have any matching characteristics or location relevance."
+    },
+    "103": {
+        "score": -5,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Katherine's characteristic 'Gentle', deducting 3 points. Kiki and Katherine do not have any matching characteristics or location relevance."
+    },
+    "104": {
+        "score": -6,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Ronald's red flag 'Barks a Lot' and 'Big Dog', deducting 3 points. Kiki and Ronald do not have any matching characteristics or location relevance."
+    },
+    "114": {
+        "score": -6,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Samantha's red flags 'Not Trained' and 'Too Energetic', deducting 3 points. Kiki and Samantha do not have any matching characteristics or location relevance."
+    },
+    "115": {
+        "score": -9,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Brian's characteristics 'Playful' and 'Social', deducting 3 points. Kiki and Brian do not have any matching characteristics or location relevance."
+    },
+    "112": {
+        "score": -10,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Charles's red flag 'Not Active Dog', deducting 3 points. Kiki and Charles do not have any matching characteristics or location relevance."
+    },
+    "113": {
+        "score": -11,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Colleen's red flag 'Not Socialized', deducting 3 points. Kiki and Colleen do not have any matching characteristics or location relevance."
+    },
+    "116": {
+        "score": -11,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Dana's red flags 'Aggressive' and 'Not Active Dog', deducting 3 points. Kiki and Dana do not have any matching characteristics or location relevance."
+    },
+    "117": {
+        "score": -11,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Trevor's characteristics 'Active', 'Curious', and 'Independent', deducting 3 points. Kiki and Trevor do not have any matching characteristics or location relevance."
+    },
+    "119": {
+        "score": -12,
+        "reason": "Kiki's red flag 'Aggressive' conflicts with Tina's red flag 'Big Dog', deducting 3 points. Kiki and Tina do not have any matching characteristics or location relevance."
+    }
+}

@@ -40,7 +40,11 @@ import json
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
+from .filters import process_target_pet
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 # --- authentication methods ---
 
@@ -173,3 +177,26 @@ def calculate_distance(start, end):
     gmaps = googlemaps.Client(key=settings.GOOGLE_MAPS_API_KEY)
     distance = gmaps.distance_matrix(start, end)
     return distance['rows'][0]['elements'][0]['distance']['value'] / 1609.34 # convert to miles
+
+def matching(request):
+    if request.method == 'POST':
+        try:
+            target_pet = json.loads(request.body)
+            result = process_target_pet(target_pet)
+            return JsonResponse({'results': result}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    
+class MatchingAPIView(APIView):
+    def post(self, request):
+        try:
+            target_pet = request.data
+            result = process_target_pet(target_pet)
+            return Response({'results': result}, status=200)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+    
+    def get(self, request):
+        return Response({'error': 'Invalid request method'}, status=405)

@@ -184,3 +184,5 @@ except KeyError:
     print("Error: 'client_id' not found in config.ini under [GoogleOAuth2] section.")
 
 GOOGLE_MAPS_API_KEY = CONFIG.get("GoogleMaps", "API_KEY")
+
+OPENAI_API_KEY = CONFIG.get("OpenAI", "API_KEY")

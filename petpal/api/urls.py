@@ -29,4 +29,6 @@ urlpatterns = [
     path('api/ProfileSignUp/', views.profile_setup, name='profile_setup'),
 
     # path('api/google-login-link/', views.google_login_link, name='google-login-link'),
+
+    path('api/matching/', views.MatchingAPIView.as_view(), name='matching'),
 ]

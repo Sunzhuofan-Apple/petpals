@@ -1,0 +1,490 @@
+{
+    "100": {
+        "owner": "diana_lane",
+        "name": "Xavier",
+        "sex": "Neutered",
+        "preferred_time": "Afternoon",
+        "breed": "Labrador",
+        "birth_date": "2024-10-04",
+        "location": "100 Art Rooney Ave, Pittsburgh, PA 15212",
+        "weight": 16.8,
+        "health_states": [
+            "dhlpp"
+        ],
+        "characteristics": [
+            "Protective"
+        ],
+        "red_flags": [
+            "Aggressive",
+            "Not Trained"
+        ],
+        "photo": "/media/pet_photos/xavier.jpg",
+        "id": 100
+    },
+    "101": {
+        "owner": "mark_avery",
+        "name": "Ricardo",
+        "sex": "Female",
+        "preferred_time": "Evening",
+        "breed": "Beagle",
+        "birth_date": "2018-05-04",
+        "location": "200 Ross St, Pittsburgh, PA 15219",
+        "weight": 8.3,
+        "health_states": [
+            "bordetella",
+            "heartworm",
+            "rabies",
+            "leptospirosis"
+        ],
+        "characteristics": [
+            "Active",
+            "Love Sleep"
+        ],
+        "red_flags": [
+            "Not Trained",
+            "Barks a Lot"
+        ],
+        "photo": "/media/pet_photos/ricardo.jpg",
+        "id": 101
+    },
+    "102": {
+        "owner": "madison_ryan",
+        "name": "Susan",
+        "sex": "Female",
+        "preferred_time": "Midday",
+        "breed": "Labrador",
+        "birth_date": "2015-03-02",
+        "location": "4200 Fifth Ave, Pittsburgh, PA 15260",
+        "weight": 35.0,
+        "health_states": [
+            "dhlpp",
+            "leptospirosis",
+            "rabies"
+        ],
+        "characteristics": [
+            "Calm"
+        ],
+        "red_flags": [
+            "Big Dog"
+        ],
+        "photo": "/media/pet_photos/susan.jpg",
+        "id": 102
+    },
+    "103": {
+        "owner": "vincent_martinez",
+        "name": "Katherine",
+        "sex": "Male",
+        "preferred_time": "Midday",
+        "breed": "Labrador",
+        "birth_date": "2015-06-24",
+        "location": "625 Liberty Ave, Pittsburgh, PA 15222",
+        "weight": 16.9,
+        "health_states": [
+            "dhlpp",
+            "leptospirosis",
+            "lyme",
+            "influenza"
+        ],
+        "characteristics": [
+            "Gentle"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/katherine.jpg",
+        "id": 103
+    },
+    "104": {
+        "owner": "kim_hensley",
+        "name": "Ronald",
+        "sex": "Male",
+        "preferred_time": "Midday",
+        "breed": "Poodle",
+        "birth_date": "2022-04-25",
+        "location": "1 PPG Place, Pittsburgh, PA 15222",
+        "weight": 20.0,
+        "health_states": [
+            "dhlpp",
+            "leptospirosis",
+            "rabies"
+        ],
+        "characteristics": [
+            "Protective",
+            "Social"
+        ],
+        "red_flags": [
+            "Barks a Lot",
+            "Big Dog"
+        ],
+        "photo": "/media/pet_photos/ronald.jpg",
+        "id": 104
+    },
+    "105": {
+        "owner": "thomas_ramos",
+        "name": "Eric",
+        "sex": "Male",
+        "preferred_time": "Morning",
+        "breed": "Labrador",
+        "birth_date": "2018-06-14",
+        "location": "5800 Baum Blvd, Pittsburgh, PA 15206",
+        "weight": 47.7,
+        "health_states": [
+            "influenza"
+        ],
+        "characteristics": [
+            "Protective",
+            "Independent",
+            "Calm"
+        ],
+        "red_flags": [
+            "Not Trained"
+        ],
+        "photo": "/media/pet_photos/eric.jpg",
+        "id": 105
+    },
+    "106": {
+        "owner": "elizabeth_hancock",
+        "name": "Dawn",
+        "sex": "Neutered",
+        "preferred_time": "Midday",
+        "breed": "Bulldog",
+        "birth_date": "2019-04-12",
+        "location": "4400 Forbes Ave, Pittsburgh, PA 15213",
+        "weight": 30.3,
+        "health_states": [
+            "rabies",
+            "lyme",
+            "bordetella"
+        ],
+        "characteristics": [
+            "Calm"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/dawn.jpg",
+        "id": 106
+    },
+    "107": {
+        "owner": "christian_hernandez",
+        "name": "Luke",
+        "sex": "Neutered",
+        "preferred_time": "Afternoon",
+        "breed": "Dachshund",
+        "birth_date": "2017-01-11",
+        "location": "100 Art Rooney Ave, Pittsburgh, PA 15212",
+        "weight": 12.4,
+        "health_states": [
+            "lyme",
+            "bordetella",
+            "leptospirosis",
+            "heartworm"
+        ],
+        "characteristics": [
+            "Love Sleep",
+            "Playful"
+        ],
+        "red_flags": [
+            "Big Dog",
+            "Not Socialized"
+        ],
+        "photo": "/media/pet_photos/luke.jpg",
+        "id": 107
+    },
+    "108": {
+        "owner": "laurie_smith",
+        "name": "Matthew",
+        "sex": "Female",
+        "preferred_time": "Evening",
+        "breed": "Dachshund",
+        "birth_date": "2023-10-16",
+        "location": "200 Ross St, Pittsburgh, PA 15219",
+        "weight": 9.3,
+        "health_states": [
+            "influenza",
+            "leptospirosis",
+            "heartworm",
+            "dhlpp"
+        ],
+        "characteristics": [
+            "Social",
+            "Active"
+        ],
+        "red_flags": [
+            "Barks a Lot"
+        ],
+        "photo": "/media/pet_photos/matthew.jpg",
+        "id": 108
+    },
+    "109": {
+        "owner": "randall_miller",
+        "name": "Jason",
+        "sex": "Female",
+        "preferred_time": "Morning",
+        "breed": "Labrador",
+        "birth_date": "2020-02-29",
+        "location": "4200 Fifth Ave, Pittsburgh, PA 15260",
+        "weight": 27.0,
+        "health_states": [
+            "lyme"
+        ],
+        "characteristics": [
+            "Social"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/jason.jpg",
+        "id": 109
+    },
+    "110": {
+        "owner": "susan_carter",
+        "name": "Crystal",
+        "sex": "Female",
+        "preferred_time": "Morning",
+        "breed": "Poodle",
+        "birth_date": "2018-11-01",
+        "location": "200 Ross St, Pittsburgh, PA 15219",
+        "weight": 47.2,
+        "health_states": [
+            "lyme",
+            "rabies",
+            "bordetella",
+            "influenza"
+        ],
+        "characteristics": [
+            "Friendly",
+            "Active",
+            "Calm"
+        ],
+        "red_flags": [
+            "Not Neutered"
+        ],
+        "photo": "/media/pet_photos/crystal.jpg",
+        "id": 110
+    },
+    "111": {
+        "owner": "scott_adams",
+        "name": "Shawn",
+        "sex": "Male",
+        "preferred_time": "Afternoon",
+        "breed": "Dachshund",
+        "birth_date": "2023-10-14",
+        "location": "2118 Murray Ave, Pittsburgh, PA 15217",
+        "weight": 9.2,
+        "health_states": [
+            "rabies",
+            "influenza"
+        ],
+        "characteristics": [
+            "Curious",
+            "Love Sleep",
+            "Gentle"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/shawn.jpg",
+        "id": 111
+    },
+    "112": {
+        "owner": "kimberly_johnson",
+        "name": "Charles",
+        "sex": "Female",
+        "preferred_time": "Afternoon",
+        "breed": "Dachshund",
+        "birth_date": "2022-12-31",
+        "location": "5000 Forbes Ave, Pittsburgh, PA 15213",
+        "weight": 42.6,
+        "health_states": [
+            "dhlpp",
+            "bordetella"
+        ],
+        "characteristics": [
+            "Active"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/charles.jpg",
+        "id": 112
+    },
+    "113": {
+        "owner": "brian_richards",
+        "name": "Colleen",
+        "sex": "Male",
+        "preferred_time": "Midday",
+        "breed": "Beagle",
+        "birth_date": "2020-06-03",
+        "location": "5000 Forbes Ave, Pittsburgh, PA 15213",
+        "weight": 10.1,
+        "health_states": [
+            "leptospirosis",
+            "heartworm"
+        ],
+        "characteristics": [
+            "Friendly"
+        ],
+        "red_flags": [
+            "Not Socialized"
+        ],
+        "photo": "/media/pet_photos/colleen.jpg",
+        "id": 113
+    },
+    "114": {
+        "owner": "thomas_cox",
+        "name": "Samantha",
+        "sex": "Female",
+        "preferred_time": "Evening",
+        "breed": "Labrador",
+        "birth_date": "2018-12-29",
+        "location": "100 Art Rooney Ave, Pittsburgh, PA 15212",
+        "weight": 30.3,
+        "health_states": [
+            "heartworm",
+            "lyme"
+        ],
+        "characteristics": [
+            "Gentle",
+            "Curious"
+        ],
+        "red_flags": [
+            "Not Trained",
+            "Too Energetic"
+        ],
+        "photo": "/media/pet_photos/samantha.jpg",
+        "id": 114
+    },
+    "115": {
+        "owner": "randall_knight",
+        "name": "Brian",
+        "sex": "Male",
+        "preferred_time": "Evening",
+        "breed": "Bulldog",
+        "birth_date": "2018-08-13",
+        "location": "625 Liberty Ave, Pittsburgh, PA 15222",
+        "weight": 36.1,
+        "health_states": [
+            "bordetella"
+        ],
+        "characteristics": [
+            "Playful",
+            "Social"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/brian.jpg",
+        "id": 115
+    },
+    "116": {
+        "owner": "jasmine_rodriguez",
+        "name": "Dana",
+        "sex": "Female",
+        "preferred_time": "Evening",
+        "breed": "Dachshund",
+        "birth_date": "2023-11-24",
+        "location": "100 Art Rooney Ave, Pittsburgh, PA 15212",
+        "weight": 20.9,
+        "health_states": [
+            "lyme"
+        ],
+        "characteristics": [
+            "Curious",
+            "Calm",
+            "Playful"
+        ],
+        "red_flags": [
+            "Aggressive",
+            "Not Active Dog"
+        ],
+        "photo": "/media/pet_photos/dana.jpg",
+        "id": 116
+    },
+    "117": {
+        "owner": "chelsea_cameron",
+        "name": "Trevor",
+        "sex": "Female",
+        "preferred_time": "Evening",
+        "breed": "Golden Retriever",
+        "birth_date": "2023-09-19",
+        "location": "625 Liberty Ave, Pittsburgh, PA 15222",
+        "weight": 7.0,
+        "health_states": [
+            "rabies",
+            "bordetella"
+        ],
+        "characteristics": [
+            "Active",
+            "Curious",
+            "Independent"
+        ],
+        "red_flags": [],
+        "photo": "/media/pet_photos/trevor.jpg",
+        "id": 117
+    },
+    "118": {
+        "owner": "lynn_evans",
+        "name": "Carolyn",
+        "sex": "Female",
+        "preferred_time": "Morning",
+        "breed": "Poodle",
+        "birth_date": "2015-07-03",
+        "location": "1212 Smallman St, Pittsburgh, PA 15222",
+        "weight": 21.3,
+        "health_states": [
+            "lyme",
+            "rabies",
+            "influenza",
+            "leptospirosis"
+        ],
+        "characteristics": [
+            "Independent"
+        ],
+        "red_flags": [
+            "Barks a Lot"
+        ],
+        "photo": "/media/pet_photos/carolyn.jpg",
+        "id": 118
+    },
+    "119": {
+        "owner": "patrick_miller",
+        "name": "Tina",
+        "sex": "Female",
+        "preferred_time": "Midday",
+        "breed": "Poodle",
+        "birth_date": "2023-12-29",
+        "location": "1 PPG Place, Pittsburgh, PA 15222",
+        "weight": 19.3,
+        "health_states": [
+            "heartworm",
+            "dhlpp"
+        ],
+        "characteristics": [
+            "Gentle",
+            "Calm",
+            "Independent"
+        ],
+        "red_flags": [
+            "Big Dog"
+        ],
+        "photo": "/media/pet_photos/tina.jpg",
+        "id": 119
+    },
+    "120": {
+        "owner": "yamyee999",
+        "name": "kiki",
+        "sex": "Female",
+        "preferred_time": "Afternoon",
+        "breed": "Eskimo",
+        "birth_date": "2019-09-09",
+        "location": "5819 Centre Ave, Pittsburgh, PA 15206",
+        "weight": 16.8,
+        "health_states": [
+            "rabies",
+            "influenza",
+            "dhlpp",
+            "bordetella"
+        ],
+        "characteristics": [
+            "Friendly",
+            "Curious",
+            "Active"
+        ],
+        "red_flags": [
+            "Aggressive",
+            "Not Trained",
+            "Not Neutered"
+        ],
+        "photo": "/media/pet_photos/kiki.jpg",
+        "id": 120
+    }
+}

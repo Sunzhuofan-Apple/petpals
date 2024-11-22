@@ -28,6 +28,12 @@ class Pet(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.breed})"
+    
+    @property
+    def preferred_time_index(self):
+        # get preferred_time index
+        value_to_index = {value: index for index, (value, label) in enumerate(self.PREFERRED_TIME_CHOICES)}
+        return value_to_index.get(self.preferred_time, None)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
