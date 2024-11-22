@@ -8,64 +8,64 @@ export const Matching = () => {
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
-            method: 'GET',
-            credentials: 'include',
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('未登录');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.is_authenticated) {
-                setCurrentUser(data.user);
-                return fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-            } else {
-                throw new Error('未登录');
-            }
-        })
-        .then(response => {
-            if (!response || !response.ok) {
-                throw new Error('Failed to fetch pet data');
-            }
-            return response.json();
-        })
-        .then(petData => {
-            if (petData) {
-                setUserPet(petData);
-                return fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-            }
-            throw new Error('No pet data found');
-        })
-        .then(response => {
-            if (!response || !response.ok) {
-                throw new Error('Failed to fetch sorted profiles');
-            }
-            return response.json();
-        })
-        .then(sortedProfiles => {
-            if (sortedProfiles) {
-                setProfiles(sortedProfiles);
-            }
-            setIsLoading(false);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            setIsLoading(false);
-            if (error.message === '未登录') {
-                window.location.href = '/Register?next=/Matching';
-            }
-        });
-    }, []);
+    // useEffect(() => {
+    //     fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+    //         method: 'GET',
+    //         credentials: 'include',
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('未登录');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         if (data.is_authenticated) {
+    //             setCurrentUser(data.user);
+    //             return fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
+    //                 method: 'GET',
+    //                 credentials: 'include',
+    //             });
+    //         } else {
+    //             throw new Error('未登录');
+    //         }
+    //     })
+    //     .then(response => {
+    //         if (!response || !response.ok) {
+    //             throw new Error('Failed to fetch pet data');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(petData => {
+    //         if (petData) {
+    //             setUserPet(petData);
+    //             return fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
+    //                 method: 'GET',
+    //                 credentials: 'include',
+    //             });
+    //         }
+    //         throw new Error('No pet data found');
+    //     })
+    //     .then(response => {
+    //         if (!response || !response.ok) {
+    //             throw new Error('Failed to fetch sorted profiles');
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(sortedProfiles => {
+    //         if (sortedProfiles) {
+    //             setProfiles(sortedProfiles);
+    //         }
+    //         setIsLoading(false);
+    //     })
+    //     .catch(error => {
+    //         console.error('Error:', error);
+    //         setIsLoading(false);
+    //         if (error.message === '未登录') {
+    //             window.location.href = '/Register?next=/Matching';
+    //         }
+    //     });
+    // }, []);
 
     // Add sort by distance function
     const handleSortByDistance = () => {
@@ -113,21 +113,23 @@ export const Matching = () => {
 
     return (
         <div className="matching-container">
-            {isLoading ? (
-                <div>Loading...</div>
-            ) : !userPet ? (
-                <div className="no-pet-message">
-                    <h2>Please set up your pet profile first</h2>
-                    <button onClick={() => window.location.href = '/ProfileSignUp'}>
-                        Set Up Profile
-                    </button>
-                </div>
-            ) : profiles.length === 0 ? (
-                <div className="no-matches-message">
-                    <h2>No matches found</h2>
-                    <p>Check back later for new potential matches!</p>
-                </div>
-            ) : (
+            {
+            // isLoading ? (
+            //     <div>Loading...</div>
+            // ) : !userPet ? (
+            //     <div className="no-pet-message">
+            //         <h2>Please set up your pet profile first</h2>
+            //         <button onClick={() => window.location.href = '/ProfileSignUp'}>
+            //             Set Up Profile
+            //         </button>
+            //     </div>
+            // ) : profiles.length === 0 ? (
+            //     <div className="no-matches-message">
+            //         <h2>No matches found</h2>
+            //         <p>Check back later for new potential matches!</p>
+            //     </div>
+            // ) : 
+            (
                 <>
                     <div className="controls">
                         <button className="sort-button" onClick={handleSortByDistance}>Sort by distance</button>
