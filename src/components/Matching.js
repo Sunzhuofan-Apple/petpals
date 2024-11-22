@@ -19,64 +19,52 @@ export const Matching = () => {
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // useEffect(() => {
-    //     fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
-    //         method: 'GET',
-    //         credentials: 'include',
-    //     })
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error('未登录');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(data => {
-    //         if (data.is_authenticated) {
-    //             setCurrentUser(data.user);
-    //             return fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
-    //                 method: 'GET',
-    //                 credentials: 'include',
-    //             });
-    //         } else {
-    //             throw new Error('未登录');
-    //         }
-    //     })
-    //     .then(response => {
-    //         if (!response || !response.ok) {
-    //             throw new Error('Failed to fetch pet data');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(petData => {
-    //         if (petData) {
-    //             setUserPet(petData);
-    //             return fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
-    //                 method: 'GET',
-    //                 credentials: 'include',
-    //             });
-    //         }
-    //         throw new Error('No pet data found');
-    //     })
-    //     .then(response => {
-    //         if (!response || !response.ok) {
-    //             throw new Error('Failed to fetch sorted profiles');
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(sortedProfiles => {
-    //         if (sortedProfiles) {
-    //             setProfiles(sortedProfiles);
-    //         }
-    //         setIsLoading(false);
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //         setIsLoading(false);
-    //         if (error.message === '未登录') {
-    //             window.location.href = '/Register?next=/Matching';
-    //         }
-    //     });
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const authResponse = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!authResponse.ok) throw new Error('Not logged in');
+                const authData = await authResponse.json();
+                if (!authData.is_authenticated) throw new Error('Not logged in');
+                
+                setCurrentUser(authData.user);
+
+                const petResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!petResponse.ok) throw new Error('Failed to fetch pet data');
+                const petData = await petResponse.json();
+                if (!petData) throw new Error('No pet data found');
+                
+                setUserPet(petData);
+
+                const profilesResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!profilesResponse.ok) throw new Error('Failed to fetch sorted profiles');
+                const sortedProfiles = await profilesResponse.json();
+                if (sortedProfiles) setProfiles(sortedProfiles);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                if (error.message === 'Not logged in') {
+                    window.location.href = '/Register?next=/Matching';
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     // Add sort by distance function
     const handleSortByDistance = () => {
@@ -120,7 +108,7 @@ export const Matching = () => {
             score += 30;
         }
         
-        const distanceScore = Math.max(0, 40 - (profile.distance * 2)); // 距离越近分数越高
+        const distanceScore = Math.max(0, 40 - (profile.distance * 2));
         score += distanceScore;
         
         const userHealthStates = userPet.health_states.split(',');

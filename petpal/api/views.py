@@ -28,6 +28,10 @@ from .serializers import PetSerializer
 from .filters import process_target_pet
 import googlemaps
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Pet, UserProfile
 
 
 
@@ -370,16 +374,53 @@ class MatchingAPIView(APIView):
 @permission_classes([IsAuthenticated])
 def upload_photos(request):
     try:
-        uploaded_files = request.FILES.getlist('photos')  # 获取多个文件
+        uploaded_files = request.FILES.getlist('photos')  
         photo_urls = []
 
         for file in uploaded_files:
-            # 保存文件
             file_path = default_storage.save(f'photos/{file.name}', file)
-            # 拼接完整 URL
-            photo_url = f"{request.build_absolute_uri(settings.MEDIA_URL)}{file_path.split('/')[-1]}"
+
+            photo_url = request.build_absolute_uri(f"{settings.MEDIA_URL}{file_path}")
             photo_urls.append(photo_url)
 
         return Response({'photos': photo_urls}, status=200)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+
+
+from django.utils.http import urlencode
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_pet(request):
+    try:
+        user = request.user
+        pet = Pet.objects.filter(owner=user).first()
+
+        if not pet:
+            return Response({"error": "No pet found for the current user."}, status=404)
+
+        photos_with_full_url = []
+        for photo in pet.photos:
+            if photo.startswith("http://") or photo.startswith("https://"):
+                photos_with_full_url.append(photo)
+            else:
+                photos_with_full_url.append(request.build_absolute_uri(f"{settings.MEDIA_URL}{photo}"))
+
+        pet_data = {
+            "name": pet.name,
+            "sex": pet.sex,
+            "preferred_time": pet.preferred_time,
+            "breed": pet.breed,
+            "birth_date": pet.birth_date,
+            "location": pet.location,
+            "weight": pet.weight,
+            "health_states": pet.health_states,
+            "characters": pet.characters,
+            "red_flags": pet.red_flags,
+            "photos": photos_with_full_url, 
+        }
+
+        return Response(pet_data, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
