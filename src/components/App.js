@@ -33,7 +33,7 @@ function App() {
                     <Route path="/Transition" element={<Transition />} />
                     <Route path="/Matching" element={<Matching />} />
                     <Route path="/MyProfile" element={<MyProfile />} />
-                    <Route path="/OtherProfile" element={<OtherProfile />} />
+                    <Route path="/OtherProfile/:id" element={<OtherProfile />} />
                     <Route path="/Friends" element={<Friends />} />
                 </Routes>
             </div>

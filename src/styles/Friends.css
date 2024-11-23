@@ -182,4 +182,16 @@
     text-align: center;
     padding: 1rem;
 }
+
+.friend-name {
+    color: #ec847c;
+    cursor: pointer;
+    font-weight: 600;
+    display: inline;
+}
+
+.friend-name:hover {
+    color: #e67067;
+    text-decoration: underline;
+}
   
