@@ -11,10 +11,43 @@ export const Matching = () => {
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isTransitioning, setIsTransitioning] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
+    const [username, setUsername] = useState("");
+    const [showMenu, setShowMenu] = useState(false);
 
     const handleTransition = () => {{
         setIsTransitioning(false);
     }}
+
+    const handleMouseEnter = () => setShowMenu(true);
+    const handleMouseLeave = () => setShowMenu(false);
+
+    const navigateTo = (path) => {
+        if (path === "Homepage") {
+            window.location.href = "http://localhost:3000/";
+        } else {
+            window.location.href = path;
+        }
+        setShowMenu(false);
+    };
+
+    const handleLogout = () => {
+        fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken(),
+            },
+            credentials: "include",
+        })
+            .then((response) => {
+                if (response.ok) {
+                    setIsLogin(false);
+                    setUsername("");
+                }
+            })
+            .catch((err) => console.error("Logout error:", err));
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,6 +62,8 @@ export const Matching = () => {
                 if (!authData.is_authenticated) throw new Error('Not logged in');
                 
                 setCurrentUser(authData.user);
+                setIsLogin(true);
+                setUsername(authData.username);
 
                 const petResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/match-pet/`, {
                     method: 'GET',
@@ -214,44 +249,62 @@ export const Matching = () => {
     };
 
     return (
-        <div className="container">
+        <div className="matching-container">
             <header className="AppHeader">
-                <button className="header-button" onClick={() => window.location.href = "/"}>
-                    Home
+                <div
+                    className="header-button username"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    {username}
+                    {showMenu && (
+                        <div className="dropdown-menu">
+                            <button onClick={() => navigateTo("Homepage")}>Homepage</button>
+                            <button onClick={() => navigateTo("/Profile")}>Profile</button>
+                            <button onClick={() => navigateTo("/Friends")}>Friends</button>
+                        </div>
+                    )}
+                </div>
+                <button className="header-button" onClick={handleLogout}>
+                    {isLogin ? "Logout" : "Login"}
                 </button>
             </header>
-            <div className="matching-container">
-                {isTransitioning ? (
-                    <div className="transition-overlay">
-                        <Transition onFinish={handleTransition} />
-                    </div>
-                ) : isLoading ? (
-                    <div>
-                        <Loading />
-                    </div>
-                ) : !userPet ? (
-                    <div className="no-pet-message">
-                        <h2>Please set up your pet profile first</h2>
-                        <button onClick={() => window.location.href = '/ProfileSignUp'}>
-                            Set Up Profile
+
+            {
+            isTransitioning ? (
+                <div className="transition-overlay">
+                <Transition onFinish={handleTransition} /> 
+            </div>
+            ) : 
+             isLoading ? (
+                <div>
+                    <Loading />
+                </div>
+            ) : !userPet ? (
+                <div className="no-pet-message">
+                    <h2>Ple ase set up your pet profile first</h2>
+                    <button onClick={() => window.location.href = '/ProfileSignUp'}>
+                        Set Up Profile
+                    </button>
+                </div>
+            ) : profiles.length === 0 ? (
+                <div className="no-matches-message">
+                    <h2>No matches found</h2>
+                    <p>Check back later for new potential matches!</p>
+                </div>
+            ) : 
+            (
+                <>
+                    <div className="controls">
+                        <button className="sort-button" onClick={handleSortByDistance}>
+                            Sort by distance
+                        </button>
+                        <button className="sort-button" onClick={handleSortByMatch}>
+                            Sort by match
                         </button>
                     </div>
-                ) : profiles.length === 0 ? (
-                    <div className="no-matches-message">
-                        <h2>No matches found</h2>
-                        <p>Check back later for new potential matches!</p>
-                    </div>
-                ) : (
-                    <>
-                        <div className="controls">
-                            <button className="sort-button" onClick={handleSortByDistance}>
-                                Sort by distance
-                            </button>
-                            <button className="sort-button" onClick={handleSortByMatch}>
-                                Sort by match
-                            </button>
-                        </div>
-                        <div className="cards-container">
+
+                    <div className="cards-container">
                             {profiles.map((profile, index) => {
                                 const position = getCardPosition(index);
                                 if (position === 'hidden') return null;
@@ -268,13 +321,15 @@ export const Matching = () => {
                                             alt={`${name}'s photo`}
                                             className="profile-photo"
                                         />
-                                        <div className="profile-name">{name}</div>
-                                        <p className="profile-details">
-                                            {breed}, {age} years old, {weight} lbs
-                                            <br />
-                                            {distance} miles away from you
-                                        </p>
-                                        <button
+                                        <div className="profile-info">
+                                            <div className="profile-name">{name}</div>
+                                            <p className="profile-details">
+                                                {breed}, {age} years old, {weight} lbs
+                                                <br />
+                                                {distance} miles away from you
+                                            </p>
+                                        </div>
+                                        <button 
                                             className="wag-button"
                                             onClick={() => handleWagClick(profile.id)}
                                         >

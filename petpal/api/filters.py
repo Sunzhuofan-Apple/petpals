@@ -44,7 +44,6 @@ def filter_by_time_range(pets, target_time):
     
     target_index = valid_choices.index(target_time)
 
-    print("pet_data, ", pets[0])
     filtered_pets = [
         pet_data for pet_data in pets
         if abs(valid_choices.index(pet_data['preferred_time']) - target_index) <= 1
@@ -312,7 +311,6 @@ def process_target_pet(target_pet_id, user_id):
 
         filtered_pets = apply_filters(filtered_pets, target_pet)
         gpt_result = ask(target_pet, filtered_pets)
-        print("finished asking", gpt_result)
         
         detailed_results = id_to_display(gpt_result, target_pet, user_id)
         return detailed_results

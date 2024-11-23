@@ -1,12 +1,12 @@
 .matching-container {
+    padding-top: 20px;
     background-color: #fedcd2;
     min-height: 100vh;
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     position: relative;
-    padding: 40px;
     overflow: hidden;
     padding-top: 50px; /* 根据 AppHeader 的高度设置 */
     
@@ -14,8 +14,8 @@
 
 .cards-container {
     position: relative;
-    width: 900px;
-    height: 500px;
+    width: min(1200px, 90vw);
+    height: 700px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,19 +24,18 @@
 
 .profile-card {
     position: absolute;
-    width: 280px;
-    height: 400px;
+    width: 400px;
+    height: 560px;
     background: white;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 25px;
+    padding: 25px;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .profile-card.left {
-    transform: translateX(-290px) scale(0.8);
+    transform: translateX(-420px) scale(0.85);
     opacity: 0.6;
     z-index: 0;
 }
@@ -49,7 +48,7 @@
 }
 
 .profile-card.right {
-    transform: translateX(290px) scale(0.8);
+    transform: translateX(420px) scale(0.85);
     opacity: 0.6;
     z-index: 0;
 }
@@ -60,139 +59,332 @@
     pointer-events: none;
 }
 
+.profile-photo {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 20px;
+    margin-bottom: auto;
+}
+
+.profile-info {
+    margin-bottom: 25px;
+}
+
 .profile-name {
     color: #333;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
-    margin: 15px 0;
+    margin-bottom: 12px;
 }
 
 .profile-details {
     color: #666;
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 0;
 }
-
 
 .match-score {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 15px;
+    right: 15px;
     background-color: #ec847c;
     color: white;
-    padding: 8px 15px;
+    padding: 8px 16px;
     border-radius: 20px;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 600;
+    z-index: 1;
 }
 
 .wag-button {
+    margin-top: auto;
     background-color: #ec847c;
     color: white;
     border: none;
     border-radius: 25px;
-    padding: 12px 0;
+    padding: 15px 0;
     width: 100%;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .wag-button:hover {
     background-color: #d67670;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
+    .cards-container {
+        width: 95vw;
+    }
+    
     .profile-card {
-        width: 240px;
-        height: 360px;
+        width: 340px;
+        height: 480px;
+        padding: 20px;
+    }
+    
+    .profile-photo {
+        height: 250px;
+    }
+    
+    .profile-name {
+        font-size: 24px;
+    }
+    
+    .profile-details {
+        font-size: 16px;
     }
     
     .profile-card.left {
-        transform: translateX(-250px) scale(0.8);
+        transform: translateX(-360px) scale(0.85);
     }
     
     .profile-card.right {
-        transform: translateX(250px) scale(0.8);
+        transform: translateX(360px) scale(0.85);
+    }
+    
+    .left-arrow {
+        left: calc(50% - 600px);
+    }
+    
+    .right-arrow {
+        right: calc(50% - 600px);
+    }
+}
+
+@media (max-width: 992px) {
+    .profile-card {
+        width: 300px;
+        height: 420px;
+        padding: 20px;
+    }
+    
+    .profile-photo {
+        height: 200px;
+    }
+    
+    .profile-name {
+        font-size: 22px;
+    }
+    
+    .profile-details {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .wag-button {
+        padding: 12px 0;
+        font-size: 16px;
+    }
+    
+    .profile-card.left {
+        transform: translateX(-320px) scale(0.85);
+    }
+    
+    .profile-card.right {
+        transform: translateX(320px) scale(0.85);
+    }
+    
+    .left-arrow {
+        left: 20px;
+    }
+    
+    .right-arrow {
+        right: 20px;
     }
 }
 
 @media (max-width: 768px) {
+    .cards-container {
+        width: 95vw;
+        height: 500px;
+    }
+    
     .profile-card {
-        width: 220px;
-        height: 340px;
+        width: 280px;
+        height: 400px;
+        padding: 15px;
+    }
+    
+    .profile-photo {
+        height: 200px;
+    }
+    
+    .profile-name {
+        font-size: 22px;
+    }
+    
+    .profile-details {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .wag-button {
+        padding: 12px 0;
+        font-size: 16px;
     }
     
     .profile-card.left {
-        transform: translateX(-230px) scale(0.8);
+        transform: translateX(-290px) scale(0.85);
     }
     
     .profile-card.right {
-        transform: translateX(230px) scale(0.8);
+        transform: translateX(290px) scale(0.85);
+    }
+    
+    .controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0 30px;
+    }
+    
+    .sort-button {
+        width: 200px;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .left-arrow {
+        left: 10px;
+    }
+    
+    .right-arrow {
+        right: 10px;
     }
 }
 
 .controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    position: relative;
+    margin: 20px 0 40px;
     display: flex;
-    gap: 10px;
+    gap: 20px;
     z-index: 3;
 }
 
-.sort-button, .filter-button {
+.sort-button {
     background-color: white;
-    border: none;
-    border-radius: 100px;
-    padding: 10px 20px;
-    font-size: 14px;
-    color: #725757;
+    border: 2px solid #ec847c;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ec847c;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.sort-button:hover, .filter-button:hover {
+.sort-button:hover {
+    background-color: #ec847c;
+    color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 
+.sort-button.active {
+    background-color: #ec847c;
+    color: white;
+}
+
+/* 基础箭头样式 */
 .arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: white;
+    background: #ec847c;
     border: none;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 20px;
-    color: #725757;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 3;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 4;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .arrow:hover {
+    background: #d67670;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* 默认大屏幕布局 */
 .left-arrow {
-    left: 20px;
+    left: 5vw;
 }
 
 .right-arrow {
-    right: 20px;
+    right: 5vw;
 }
+
+/* 响应式调整 */
+@media (max-width: 1400px) {
+    .left-arrow {
+        left: 4vw;
+    }
+    
+    .right-arrow {
+        right: 4vw;
+    }
+}
+
+@media (max-width: 1200px) {
+    .left-arrow {
+        left: 3vw;
+    }
+    
+    .right-arrow {
+        right: 3vw;
+    }
+}
+
+@media (max-width: 992px) {
+    .arrow {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    .left-arrow {
+        left: 2vw;
+    }
+    
+    .right-arrow {
+        right: 2vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .left-arrow {
+        left: 10px;
+    }
+    
+    .right-arrow {
+        right: 10px;
+    }
+}
+
 .profile-avatar {
     width: 100px;
     height: 100px;
@@ -260,3 +452,76 @@
 }
 
 
+
+/* 添加Header样式 */
+header.AppHeader {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2 !important;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0;
+    width: 100%;
+}
+
+.header-button {
+    background: none;
+    border: none;
+    color: #735858;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.header-button:hover {
+    text-decoration: underline;
+}
+
+.username {
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #FEDCD2;
+    border: 1px solid #FFC0CB;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+}
+
+.dropdown-menu button {
+    padding: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    color: #735858;
+}
+
+.dropdown-menu button:hover {
+    background-color: #F2968F;
+}
+
+.AppHeader {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2;
+    z-index: 1000;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
