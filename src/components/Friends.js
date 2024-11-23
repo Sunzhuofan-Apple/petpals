@@ -93,6 +93,51 @@ const Friends = () => {
     setShowMenu(false);
   };
 
+  const handleWagBack = async (followerId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/wag-back/${followerId}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+        credentials: "include",
+        body: JSON.stringify({ followerId }),
+      });
+      if (response.ok) {
+        const updatedFollower = await response.json();
+        setFollowers((prevFollowers) =>
+          prevFollowers.map((follower) =>
+            follower.id === updatedFollower.id ? updatedFollower : follower
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error wagging back:", err);
+    }
+  };
+  
+  const handleUnfollow = async (followingId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/unfollow-pet/${followingId}/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRFToken(),
+        },
+        credentials: "include",
+        body: JSON.stringify({ followingId }),
+      });
+      if (response.ok) {
+        setFollowing((prevFollowing) =>
+          prevFollowing.filter((follow) => follow.id !== followingId)
+        );
+      }
+    } catch (err) {
+      console.error("Error unfollowing:", err);
+    }
+  };
+  
   if (isLoading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -136,7 +181,7 @@ const Friends = () => {
                   </div>
                   <button
                     className={`wag-back-button ${follower.hasWaggedBack ? "wagging" : ""}`}
-                    onClick={() => console.log("Wag back", follower.id)}
+                    onClick={() => handleWagBack(follower.id)}
                   >
                     {follower.hasWaggedBack ? "Wagging" : "Wag back"}
                   </button>
@@ -161,7 +206,7 @@ const Friends = () => {
                   </div>
                   <button
                     className="wag-back-button wagging"
-                    onClick={() => console.log("Unfollow", follow.id)}
+                    onClick={() => handleUnfollow(follow.id)}
                   >
                     Unfollow
                   </button>
