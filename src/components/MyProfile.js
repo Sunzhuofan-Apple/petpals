@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../styles/MyProfile.css";
 import getCSRFToken from "./getCSRFToken";
-import Header from "./Header"; // 导入 Header 组件
 
 const MyProfile = () => {
   const [petData, setPetData] = useState(null);
@@ -60,7 +59,6 @@ const MyProfile = () => {
   }, []);
 
   const handleLogout = () => {
-    // 登出逻辑，例如清除用户状态
     fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
       method: "POST",
       headers: {
@@ -133,11 +131,6 @@ const MyProfile = () => {
           {isLogin ? "Logout" : "Login"}
         </button>
       </header>
-      <Header
-        username="zhuofans" // 替换为动态用户名
-        isLogin={true} // 传递登录状态
-        handleLogin={handleLogout} // 登出逻辑
-      />
 
       {/* Profile Content */}
       <div className="photo-placeholder">
