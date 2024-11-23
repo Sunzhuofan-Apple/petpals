@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../styles/HomePage.css';
 import protectRedirect from './protectRedirect';
 import getCSRFToken from './getCSRFToken';
-import Header from './Header'; // 导入新的 Header 组件
 
 function HomePage() {
   const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,12 +31,25 @@ function HomePage() {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();  
+    fetchData();
   }, []);
+
+  const handleMouseEnter = () => {
+    setShowMenu(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowMenu(false);
+  };
+
+  const navigateTo = (path) => {
+    window.location.href = path; 
+    setShowMenu(false);
+  };
 
   const handleGetStarted = () => {
     protectRedirect("", "/ProfileSignUp");
-  }
+  };
 
   const handleLogin = () => {
     if (!isLogin) {
@@ -50,18 +63,37 @@ function HomePage() {
         },
         credentials: 'include',
       })
-      .then(response => {
-        if (response.ok) {
-          setIsLogin(false);
-          setUsername("");
-        }
-      })
+        .then((response) => {
+          if (response.ok) {
+            setIsLogin(false);
+            setUsername("");
+          }
+        });
     }
-  }
+  };
 
   return (
     <div className="HomePage">
-      <Header username={username} isLogin={isLogin} handleLogin={handleLogin} />
+      <header className="AppHeader">
+        <div
+          className="header-button username"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {username}
+          {showMenu && (
+            <div className="dropdown-menu">
+              <button onClick={() => navigateTo('/MyProfile')}>Profile</button>
+              <button onClick={() => navigateTo('/Friends')}>Friends</button>
+            </div>
+          )}
+        </div>
+        <button className="header-button" onClick={handleLogin}>
+          {isLogin ? "Logout" : "Login"}
+        </button>
+      </header>
+
+      {/* 其余内容 */}
       <div className="HeaderSection">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
         <div className="IntroText">
@@ -102,5 +134,6 @@ function HomePage() {
 }
 
 export default HomePage;
+
 
 
