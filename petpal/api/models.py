@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 
 class Pet(models.Model):
@@ -24,10 +25,22 @@ class Pet(models.Model):
     birth_date = models.DateField()
     location = models.CharField(max_length=200)
     weight = models.FloatField()
-    health_states = models.TextField()  
-    characters = models.TextField()  
-    red_flags = models.TextField()  
+    health_states = models.JSONField(default=list, blank=False, null=False)
+    characters = models.JSONField(default=list, blank=False, null=False)
+    red_flags = models.JSONField(default=list, blank=False, null=False) 
     photos = models.JSONField(default=list) 
+    
+
+    def clean(self):
+        super().clean()
+        if not isinstance(self.health_states, list) or not self.health_states:
+            raise ValidationError({'health_states': 'Health states must be a non-empty list.'})
+        if not isinstance(self.characters, list) or not self.characters:
+            raise ValidationError({'characters': 'Characters must be a non-empty list.'})
+        if not isinstance(self.red_flags, list) or not self.red_flags:
+            raise ValidationError({'red_flags': 'Red flags must be a non-empty list.'})
+
+
 
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
     following = models.ManyToManyField(User, related_name='following', blank=True)
@@ -50,3 +63,8 @@ class UserProfile(models.Model):
     pet = models.OneToOneField(Pet, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.user.username
+    
+class WagHistory(models.Model):
+    wagger = models.ForeignKey(User, related_name='wagged', on_delete=models.CASCADE)
+    wagged_to = models.ForeignKey(User, related_name='received_wags', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)

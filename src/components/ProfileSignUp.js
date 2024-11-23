@@ -76,7 +76,6 @@ const ProfileSignUp = () => {
 
     const fileInputRef = useRef(null);
 
-    // 页面加载后检查是否需要重定向
     useEffect(() => {
         const path = "/ProfileSignUp";
         const isRedirectNeeded = protectRedirect(path, path);
@@ -85,7 +84,6 @@ const ProfileSignUp = () => {
         }
     }, []);
 
-    // 更新表单数据
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -146,12 +144,7 @@ const ProfileSignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Log form data before submission
-        console.log("Form Data before submission:", formData);
-        console.log("Selected Characters:", selectedCharacters);
-        console.log("Selected Flags:", selectedFlags);
-        console.log("Photos:", photos);
+    
         if (formData.health_states.length === 0) {
             alert("Health states cannot be empty.");
             return;
@@ -164,23 +157,19 @@ const ProfileSignUp = () => {
             alert("Please select at least one red flag.");
             return;
         }
-
+    
         const payload = {
             ...formData,
-            health_states: Array.isArray(formData.health_states) ? formData.health_states.join(',') : formData.health_states,
+            health_states: formData.health_states, // 确保是数组
             characters: selectedCharacters.map(c => c.name),
             red_flags: selectedFlags.map(f => f.name),
-            photos: photos.filter(p => p !== null)
+            photos: photos.filter(p => p !== null),
         };
-
-        // Log the final payload
+    
         console.log("Final Payload:", payload);
-        console.log("CSRF Token:", getCSRFToken());
-
+    
         try {
             const csrfToken = getCSRFToken();
-            console.log("Making fetch request to:", `${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`);
-            
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
                 method: "POST",
                 headers: {
@@ -188,25 +177,22 @@ const ProfileSignUp = () => {
                     "X-CSRFToken": csrfToken,
                 },
                 credentials: 'include',
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
             });
-
-            console.log("Response status:", response.status);
-            console.log("Response headers:", Object.fromEntries(response.headers));
-
+    
             if (response.ok) {
                 alert("Pet profile created successfully!");
                 window.location.href = '/Matching';
             } else {
                 const data = await response.json();
-                console.error("Server error response:", data);
-                alert(data.error || "Failed to create profile. Please check all required fields.");
+                alert(data.error || "Failed to create profile.");
             }
         } catch (error) {
             console.error("Fetch error:", error);
             alert("Error submitting profile. Please try again.");
         }
     };
+    
     
 
     // 切换页面

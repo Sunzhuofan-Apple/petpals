@@ -91,23 +91,34 @@ export const Matching = () => {
 
     const calculateMatchScore = (userPet, profile) => {
         let score = 0;
-        
+    
+        // Check preferred time match
         if (userPet.preferred_time === profile.preferred_time) {
             score += 30;
         }
-        
-        const distanceScore = Math.max(0, 40 - (profile.distance * 2));
+    
+        // Calculate distance score
+        const distanceScore = Math.max(0, 40 - (profile.distance * 2)); // Score decreases with distance
         score += distanceScore;
-        
-        const userHealthStates = userPet.health_states.split(',');
-        const profileHealthStates = profile.health_states.split(',');
-        const commonHealth = userHealthStates.filter(health => 
+    
+        // Ensure health_states are arrays
+        const userHealthStates = Array.isArray(userPet.health_states) 
+            ? userPet.health_states 
+            : userPet.health_states.split(',');
+    
+        const profileHealthStates = Array.isArray(profile.health_states) 
+            ? profile.health_states 
+            : profile.health_states.split(',');
+    
+        // Calculate common health states score
+        const commonHealth = userHealthStates.filter(health =>
             profileHealthStates.includes(health)
         ).length;
-        score += commonHealth * 10;
-        
-        return Math.min(100, score);
+        score += commonHealth * 10; // Each common health state adds 10 points
+    
+        return Math.min(100, score); // Cap score at 100
     };
+    
 
     const getCardPosition = (index) => {
         const diff = (index - currentIndex + profiles.length) % profiles.length;

@@ -31,7 +31,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .models import Pet, UserProfile
+from .models import Pet, UserProfile, WagHistory
 
 
 
@@ -139,18 +139,17 @@ class PetFormView(View):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-@login_required
 def profile_setup(request):
     try:
-        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
-        
         pet_data = request.data
-        if not pet_data.get('health_states', '').strip():
-            return Response({'error': 'Health states cannot be empty.'}, status=400)
-        if not pet_data.get('characters', '').strip():
-            return Response({'error': 'Characters cannot be empty.'}, status=400)
-        if not pet_data.get('red_flags', '').strip():
-            return Response({'error': 'Red flags cannot be empty.'}, status=400)
+        # 检查health_states, characters, red_flags是否为列表
+        if not isinstance(pet_data.get('health_states'), list):
+            return Response({'error': 'Health states must be a list.'}, status=400)
+        if not isinstance(pet_data.get('characters'), list):
+            return Response({'error': 'Characters must be a list.'}, status=400)
+        if not isinstance(pet_data.get('red_flags'), list):
+            return Response({'error': 'Red flags must be a list.'}, status=400)
+        
         pet = Pet.objects.create(
             owner=request.user,
             name=pet_data['name'],
@@ -160,18 +159,21 @@ def profile_setup(request):
             birth_date=pet_data['birth_date'],
             location=pet_data['location'],
             weight=float(pet_data['weight']),
-            health_states=pet_data.get('health_states', ''),
-            characters=pet_data.get('characters', ''),
-            red_flags=pet_data.get('red_flags', ''),
-            photos=pet_data.get('photos', [])
+            health_states=pet_data['health_states'],
+            characters=pet_data['characters'],
+            red_flags=pet_data['red_flags'],
+            photos=pet_data.get('photos', []),
         )
+
         user_profile, created = UserProfile.objects.get_or_create(user=request.user)
         user_profile.pet = pet
         user_profile.save()
-        
+
         return Response({'message': 'Profile created successfully'}, status=201)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+
+        
 
 
 # helper function to check path suffix:
@@ -406,13 +408,6 @@ def get_user_pet(request):
         if not pet:
             return Response({"error": "No pet found for the current user."}, status=404)
 
-        photos_with_full_url = []
-        for photo in pet.photos:
-            if photo.startswith("http://") or photo.startswith("https://"):
-                photos_with_full_url.append(photo)
-            else:
-                photos_with_full_url.append(request.build_absolute_uri(f"{settings.MEDIA_URL}{photo}"))
-
         pet_data = {
             "name": pet.name,
             "sex": pet.sex,
@@ -421,10 +416,10 @@ def get_user_pet(request):
             "birth_date": pet.birth_date,
             "location": pet.location,
             "weight": pet.weight,
-            "health_states": pet.health_states,
-            "characters": pet.characters,
-            "red_flags": pet.red_flags,
-            "photos": photos_with_full_url, 
+            "health_states": pet.health_states if isinstance(pet.health_states, list) else pet.health_states.split(','),
+            "characters": pet.characters if isinstance(pet.characters, list) else pet.characters.split(','),
+            "red_flags": pet.red_flags if isinstance(pet.red_flags, list) else pet.red_flags.split(','),
+            "photos": pet.photos,
         }
 
         return Response(pet_data, status=200)
