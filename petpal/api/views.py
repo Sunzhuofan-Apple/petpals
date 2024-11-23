@@ -482,3 +482,37 @@ def get_following(request):
         return Response({'following': following_data}, status=200)
     except Pet.DoesNotExist:
         return Response({'error': 'Pet not found'}, status=404)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unfollow_pet(request, pet_id):
+    print(f"Received unfollow request for pet {pet_id}")
+    print(f"User authenticated: {request.user.is_authenticated}")
+    print(f"User: {request.user.username}")
+    
+    try:
+        pet_to_unfollow = Pet.objects.get(id=pet_id)
+        print(f"Found pet to unfollow: {pet_to_unfollow.name}")
+        
+        user_pet = Pet.objects.get(owner=request.user)
+        print(f"Found user's pet: {user_pet.name}")
+        
+        if request.user not in pet_to_unfollow.followers.all():
+            print("User is not following this pet")
+            return Response({'message': 'Not following this pet'}, status=200)
+            
+        pet_to_unfollow.followers.remove(request.user)
+        user_pet.following.remove(pet_to_unfollow.owner)
+        print("Successfully removed follower relationship")
+        
+        return Response({
+            'message': 'Successfully unfollowed pet',
+            'isFollowing': False
+        }, status=200)
+        
+    except Pet.DoesNotExist as e:
+        print(f"Pet not found error: {str(e)}")
+        return Response({'error': 'Pet not found'}, status=404)
+    except Exception as e:
+        print(f"Unexpected error: {str(e)}")
+        return Response({'error': str(e)}, status=400)

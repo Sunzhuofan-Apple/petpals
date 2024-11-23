@@ -157,7 +157,10 @@ export const Matching = () => {
                 .find(row => row.startsWith('csrftoken='))
                 ?.split('=')[1];
 
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/follow-pet/${profileId}/`, {
+            const isFollowing = profiles.find(p => p.id === profileId)?.isFollowing;
+            const endpoint = isFollowing ? 'unfollow-pet' : 'follow-pet';
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${endpoint}/${profileId}/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -169,22 +172,22 @@ export const Matching = () => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`Failed to follow pet: ${response.status} ${errorText}`);
+                throw new Error(`Failed to ${isFollowing ? 'unfollow' : 'follow'} pet: ${response.status} ${errorText}`);
             }
 
             const data = await response.json();
             
             const updatedProfiles = profiles.map(profile => {
                 if (profile.id === profileId) {
-                    return { ...profile, isFollowing: true };
+                    return { ...profile, isFollowing: !isFollowing };
                 }
                 return profile;
             });
             setProfiles(updatedProfiles);
-            console.log('Successfully followed pet', profileId, 'following', updatedProfiles);
+            console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
         } catch (error) {
-            console.error('Error following pet:', error);
-            alert(`Unable to follow pet: ${error.message}. Please try again or contact support if the issue persists.`);
+            console.error('Error:', error);
+            alert(`Unable to ${isFollowing ? 'unfollow' : 'follow'} pet: ${error.message}. Please try again or contact support if the issue persists.`);
         }
     };
 
