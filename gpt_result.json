@@ -1,70 +1,62 @@
-{
-    "120": {
-        "score": 7,
-        "reason": "Kiki and Kiki are of the same breed, adding 3 points. Kiki and Kiki both have the characteristics 'Friendly' and 'Curious', adding 4 points. Kiki and Kiki are both located in Pittsburgh, PA, adding 2 points. Kiki's red flag 'Not Trained' conflicts with Xavier's characteristic 'Protective', deducting 3 points."
+[
+    {
+        "id": 26,
+        "score": 91.5,
+        "reason": "Brian has a total score of 91.5. They share the same preferred time, adding 10.0 points. They have 1 similar character (Social), adding 6.7 points. They are in the same location, adding 20.0 points. Brian does not have any red flags that conflict with targeted pet's red flags."
     },
-    "100": {
-        "score": 2,
-        "reason": "Kiki and Xavier have the same weight and matching health state 'dhlpp', adding 2 points."
+    {
+        "id": 22,
+        "score": 80.0,
+        "reason": "Shawn has a total score of 80.0. They share the same preferred time, adding 10.0 points. They have 1 similar character (Love Sleep), adding 6.7 points. They are in the same location, adding 20.0 points. Shawn does not have any red flags that conflict with targeted pet's red flags."
     },
-    "111": {
-        "score": 2,
-        "reason": "Kiki and Shawn have the matching characteristic 'Curious', adding 2 points."
+    {
+        "id": 15,
+        "score": 76.7,
+        "reason": "Ronald has a total score of 76.7. They share the same preferred time, adding 10.0 points. They have 1 similar character (Protective), adding 6.7 points. They are in the same location, adding 20.0 points. Ronald's red flag 'Big Dog' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "106": {
-        "score": 0,
-        "reason": "Kiki and Dawn do not have any matching characteristics or location relevance."
+    {
+        "id": 24,
+        "score": 76.7,
+        "reason": "Colleen has a total score of 76.7. They share the same preferred time, adding 10.0 points. They have 1 similar character (Friendly), adding 6.7 points. They are in the same location, adding 20.0 points. Colleen's red flag 'Not Socialized' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "107": {
-        "score": -1,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Luke's red flag 'Not Socialized', deducting 3 points."
+    {
+        "id": 27,
+        "score": 76.7,
+        "reason": "Dana has a total score of 76.7. They share the same preferred time, adding 10.0 points. They have 1 similar character (Love Sleep), adding 6.7 points. They are in the same location, adding 20.0 points. Dana's red flag 'Aggressive' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "108": {
-        "score": -1,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Matthew's red flag 'Barks a Lot', deducting 3 points."
+    {
+        "id": 30,
+        "score": 76.7,
+        "reason": "Tina has a total score of 76.7. They share the same preferred time, adding 10.0 points. They have 1 similar character (Gentle), adding 6.7 points. They are in the same location, adding 20.0 points. Tina's red flag 'Big Dog' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "101": {
-        "score": -4,
-        "reason": "Kiki's red flag 'Not Trained' conflicts with Ricardo's red flag 'Not Trained' and 'Barks a Lot', deducting 3 points. Kiki and Ricardo do not have any matching characteristics or location relevance."
+    {
+        "id": 28,
+        "score": 66.7,
+        "reason": "Trevor has a total score of 66.7. They share the same preferred time, adding 10.0 points. They have 1 similar character (Curious), adding 6.7 points. They are in the same location, adding 20.0 points. Trevor does not have any red flags that conflict with targeted pet's red flags."
     },
-    "102": {
-        "score": -5,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Susan's red flag 'Big Dog', deducting 3 points. Kiki and Susan do not have any matching characteristics or location relevance."
+    {
+        "id": 19,
+        "score": 60.0,
+        "reason": "Matthew has a total score of 60.0. They share the same preferred time, adding 10.0 points. They have 1 similar character (Social), adding 6.7 points. They are in the same location, adding 20.0 points. Matthew's red flag 'Barks a Lot' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "103": {
-        "score": -5,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Katherine's characteristic 'Gentle', deducting 3 points. Kiki and Katherine do not have any matching characteristics or location relevance."
+    {
+        "id": 17,
+        "score": 58.3,
+        "reason": "Dawn has a total score of 58.3. They share the same preferred time, adding 10.0 points. They have 1 similar character (Love Sleep), adding 6.7 points. They are in the same location, adding 20.0 points. Dawn does not have any red flags that conflict with targeted pet's red flags."
     },
-    "104": {
-        "score": -6,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Ronald's red flag 'Barks a Lot' and 'Big Dog', deducting 3 points. Kiki and Ronald do not have any matching characteristics or location relevance."
+    {
+        "id": 13,
+        "score": 46.7,
+        "reason": "Susan has a total score of 46.7. They share the same preferred time, adding 10.0 points. They have 0 similar characters. They are in the same location, adding 20.0 points. Susan's red flag 'Big Dog' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     },
-    "114": {
-        "score": -6,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Samantha's red flags 'Not Trained' and 'Too Energetic', deducting 3 points. Kiki and Samantha do not have any matching characteristics or location relevance."
+    {
+        "id": 14,
+        "score": 46.7,
+        "reason": "Katherine has a total score of 46.7. They share the same preferred time, adding 10.0 points. They have 0 similar characters. They are in the same location, adding 20.0 points. Katherine does not have any red flags that conflict with targeted pet's red flags."
     },
-    "115": {
-        "score": -9,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Brian's characteristics 'Playful' and 'Social', deducting 3 points. Kiki and Brian do not have any matching characteristics or location relevance."
-    },
-    "112": {
-        "score": -10,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Charles's red flag 'Not Active Dog', deducting 3 points. Kiki and Charles do not have any matching characteristics or location relevance."
-    },
-    "113": {
-        "score": -11,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Colleen's red flag 'Not Socialized', deducting 3 points. Kiki and Colleen do not have any matching characteristics or location relevance."
-    },
-    "116": {
-        "score": -11,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Dana's red flags 'Aggressive' and 'Not Active Dog', deducting 3 points. Kiki and Dana do not have any matching characteristics or location relevance."
-    },
-    "117": {
-        "score": -11,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Trevor's characteristics 'Active', 'Curious', and 'Independent', deducting 3 points. Kiki and Trevor do not have any matching characteristics or location relevance."
-    },
-    "119": {
-        "score": -12,
-        "reason": "Kiki's red flag 'Aggressive' conflicts with Tina's red flag 'Big Dog', deducting 3 points. Kiki and Tina do not have any matching characteristics or location relevance."
+    {
+        "id": 7,
+        "score": 40.0,
+        "reason": "Luna has a total score of 40.0. They share the same preferred time, adding 10.0 points. They have 1 similar character (Love Sleep), adding 6.7 points. They are in a different location, reducing the score by 20.0 points. Luna's red flag 'Big Dog' conflicts with targeted pet's red flags, reducing the score by 10.0 points."
     }
-}
+]

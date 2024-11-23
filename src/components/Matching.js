@@ -33,31 +33,38 @@ export const Matching = () => {
                 
                 setUserPet(petData);
 
-                const profilesResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
+                // const profilesResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/sorted-profiles/`, {
+                //     method: 'GET',
+                //     credentials: 'include',
+                // });
+
+                const profilesResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/matching/`, {
                     method: 'GET',
                     credentials: 'include',
                 });
                 
                 if (!profilesResponse.ok) throw new Error('Failed to fetch sorted profiles');
                 const sortedProfiles = await profilesResponse.json();
+
+                setProfiles(sortedProfiles.results);
                 
                 // Fetch following status for each profile
-                const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
-                    method: 'GET',
-                    credentials: 'include',
-                });
+                // const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
+                //     method: 'GET',
+                //     credentials: 'include',
+                // });
                 
-                if (!followingResponse.ok) throw new Error('Failed to fetch following status');
-                const followingData = await followingResponse.json();
-                const followingIds = followingData.following.map(pet => pet.id);
+                // if (!followingResponse.ok) throw new Error('Failed to fetch following status');
+                // const followingData = await followingResponse.json();
+                // const followingIds = followingData.following.map(pet => pet.id);
                 
-                // Add isFollowing property to each profile
-                const profilesWithFollowing = sortedProfiles.map(profile => ({
-                    ...profile,
-                    isFollowing: followingIds.includes(profile.id)
-                }));
+                // // Add isFollowing property to each profile
+                // const profilesWithFollowing = sortedProfiles.map(profile => ({
+                //     ...profile,
+                //     isFollowing: followingIds.includes(profile.id)
+                // }));
                 
-                if (profilesWithFollowing) setProfiles(profilesWithFollowing);
+                // if (profilesWithFollowing) setProfiles(profilesWithFollowing);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -81,13 +88,22 @@ export const Matching = () => {
 
     const handleSortByMatch = () => {
         const sortedProfiles = [...profiles].sort((a, b) => {
-            const scoreA = calculateMatchScore(userPet, a);
-            const scoreB = calculateMatchScore(userPet, b);
-            return scoreB - scoreA; 
+            return b.matchScore - a.matchScore; 
         });
         setProfiles(sortedProfiles);
         setCurrentIndex(0);
     };
+
+    // const handleSortByMatch = () => {
+    //     const sortedProfiles = [...profiles].sort((a, b) => {
+    //         const scoreA = calculateMatchScore(userPet, a);
+    //         const scoreB = calculateMatchScore(userPet, b);
+    //         return scoreB - scoreA; 
+    //     });
+    //     setProfiles(sortedProfiles);
+    //     setCurrentIndex(0);
+    // };
+
 
     const showPreviousProfile = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + profiles.length) % profiles.length);
@@ -106,35 +122,35 @@ export const Matching = () => {
         };
     };
 
-    const calculateMatchScore = (userPet, profile) => {
-        let score = 0;
+    // const calculateMatchScore = (userPet, profile) => {
+    //     let score = 0;
     
-        // Check preferred time match
-        if (userPet.preferred_time === profile.preferred_time) {
-            score += 30;
-        }
+    //     // Check preferred time match
+    //     if (userPet.preferred_time === profile.preferred_time) {
+    //         score += 30;
+    //     }
     
-        // Calculate distance score
-        const distanceScore = Math.max(0, 40 - (profile.distance * 2)); // Score decreases with distance
-        score += distanceScore;
+    //     // Calculate distance score
+    //     const distanceScore = Math.max(0, 40 - (profile.distance * 2)); // Score decreases with distance
+    //     score += distanceScore;
     
-        // Ensure health_states are arrays
-        const userHealthStates = Array.isArray(userPet.health_states) 
-            ? userPet.health_states 
-            : userPet.health_states.split(',');
+    //     // Ensure health_states are arrays
+    //     const userHealthStates = Array.isArray(userPet.health_states) 
+    //         ? userPet.health_states 
+    //         : userPet.health_states.split(',');
     
-        const profileHealthStates = Array.isArray(profile.health_states) 
-            ? profile.health_states 
-            : profile.health_states.split(',');
+    //     const profileHealthStates = Array.isArray(profile.health_states) 
+    //         ? profile.health_states 
+    //         : profile.health_states.split(',');
     
-        // Calculate common health states score
-        const commonHealth = userHealthStates.filter(health =>
-            profileHealthStates.includes(health)
-        ).length;
-        score += commonHealth * 10; // Each common health state adds 10 points
+    //     // Calculate common health states score
+    //     const commonHealth = userHealthStates.filter(health =>
+    //         profileHealthStates.includes(health)
+    //     ).length;
+    //     score += commonHealth * 10; // Each common health state adds 10 points
     
-        return Math.min(100, score); // Cap score at 100
-    };
+    //     return Math.min(100, score); // Cap score at 100
+    // };
     
 
     const getCardPosition = (index) => {
@@ -184,7 +200,8 @@ export const Matching = () => {
                 return profile;
             });
             setProfiles(updatedProfiles);
-            console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
+            console.log('profiles', profiles);
+            // console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
         } catch (error) {
             console.error('Error:', error);
             alert(`Unable to ${isFollowing ? 'unfollow' : 'follow'} pet: ${error.message}. Please try again or contact support if the issue persists.`);
@@ -226,6 +243,7 @@ export const Matching = () => {
                                 if (position === 'hidden') return null;
 
                                 const { photos = [], name, breed, age, weight, distance } = profile; 
+                                console.log('photos', photos);
 
                                 return (
                                     <div 
@@ -233,7 +251,8 @@ export const Matching = () => {
                                         className={`profile-card ${position}`}
                                     >
                                         <div className="match-score">
-                                            Match: {calculateMatchScore(userPet, profile)}%
+                                            {/* Match: {calculateMatchScore(userPet, profile)}% */}
+                                            Match: {profile.matchScore}%
                                         </div>
                                         <img
                                             src={photos.length > 0 ? photos[0] : 'default-avatar.png'} 

@@ -308,25 +308,25 @@ def get_sorted_profiles(request):
         print(f"Total pets found (excluding user's): {all_pets.count()}")
         
         # Print all pets for debugging
-        for pet in all_pets:
-            print(f"""
-                Pet Details:
-                - Name: {pet.name}
-                - Breed: {pet.breed}
-                - Location: {pet.location}
-                - Owner: {pet.owner.username}
-                - Birth Date: {pet.birth_date}
-                - Weight: {pet.weight}
-                - Preferred Time: {pet.preferred_time}
-                - Health States: {pet.health_states}
-                - Photos: {pet.photos}
-            """)
+        # for pet in all_pets:
+        #     print(f"""
+        #         Pet Details:
+        #         - Name: {pet.name}
+        #         - Breed: {pet.breed}
+        #         - Location: {pet.location}
+        #         - Owner: {pet.owner.username}
+        #         - Birth Date: {pet.birth_date}
+        #         - Weight: {pet.weight}
+        #         - Preferred Time: {pet.preferred_time}
+        #         - Health States: {pet.health_states}
+        #         - Photos: {pet.photos}
+        #     """)
         
         profiles = []
         for pet in all_pets:
             try:
                 distance = calculate_distance(user_location, pet.location)
-                print(f"Calculated distance for {pet.name}: {distance} miles")
+                # print(f"Calculated distance for {pet.name}: {distance} miles")
                 
                 profile_data = {
                     'id': pet.id,
@@ -341,7 +341,7 @@ def get_sorted_profiles(request):
                     'photos': pet.photos,
                 }
                 profiles.append(profile_data)
-                print(f"Added profile: {profile_data}")
+                # print(f"Added profile: {profile_data}")
                 
             except Exception as e:
                 print(f"Error calculating distance for pet {pet.name}: {str(e)}")
@@ -356,22 +356,31 @@ def get_sorted_profiles(request):
         print(f"Error in get_sorted_profiles: {str(e)}")
         return Response({'error': str(e)}, status=400)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def matching(request):
-    if request.method == 'POST':
-        try:
-            target_pet = json.loads(request.body)
-            result = process_target_pet(target_pet)
-            return JsonResponse({'results': result}, status=200)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        print(f"Found user profile for: {request.user.username}")
+        
+        if not user_profile.pet or not user_profile.pet.location:
+            print("No pet or location found for user")
+            return Response({'error': 'User pet location not found'}, status=400)
+
+        result = process_target_pet(user_profile.pet.id, request.user.id)
+        print(f"Matching result: {result}")
+        return JsonResponse({'results': result}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
     
 class MatchingAPIView(APIView):
     def post(self, request):
         try:
-            target_pet = request.data
-            result = process_target_pet(target_pet)
+            pet_id = request.data
+            print(f"Processing target pet: {pet_id}")
+            pet_info = Pet.objects.get(id=pet_id)
+            print(f"pet info: {pet_info.__dict__}")
+            result = process_target_pet(pet_id)
             return Response({'results': result}, status=200)
         except Exception as e:
             return Response({'error': str(e)}, status=400)
