@@ -5,11 +5,9 @@ import getCSRFToken from './getCSRFToken';
 import Header from './Header'; // 导入新的 Header 组件
 
 function HomePage() {
-  // Track user authentication state and username
   const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState("");
 
-  // Check if user is already logged in when the page loads
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,32 +20,28 @@ function HomePage() {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          // If authentication check passes, update the login state
+          const data = await response.json(); // Parse the JSON response
+          console.log("Fetched data:", data);
           if (data && data.is_authenticated) {
             setIsLogin(true);
             setUsername(data.username);
           }
         }
       } catch (error) {
-        console.error("Error fetching authentication status:", error);
+        console.error("Error fetching data:", error);
       }
     };
     fetchData();  
   }, []);
 
-  // Handle the "Get Started" button click - redirects to profile setup
   const handleGetStarted = () => {
     protectRedirect("", "/ProfileSignUp");
   }
 
-  // Toggle between login and logout functionality
   const handleLogin = () => {
     if (!isLogin) {
-      // If not logged in, redirect to registration page
       window.location.href = "/Register";
     } else {
-      // If logged in, handle logout process
       fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
         method: 'POST',
         headers: {
@@ -67,38 +61,28 @@ function HomePage() {
 
   return (
     <div className="HomePage">
-      {/* Top navigation bar */}
-      <header className="AppHeader">
-        <button className="header-button">{username}</button>
-        <button className="header-button" onClick={handleLogin}>
-          {isLogin ? "Logout" : "Login"}
-        </button>
-      </header>
-
-      {/* Hero section with main message and call-to-action */}
+      <Header username={username} isLogin={isLogin} handleLogin={handleLogin} />
       <div className="HeaderSection">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
         <div className="IntroText">
           <div className="Tagline">
-            <span className="home-black-text">Connect. </span>
-            <span className="home-highlighted-text">Match</span>
-            <span className="home-black-text">.Wag!</span>
+            <span className="black-text">Connect. </span>
+            <span className="highlighted-text">Match</span>
+            <span className="black-text">.Wag!</span>
           </div>
           <button className="GetStartedButton" onClick={handleGetStarted}>Get Started</button>
         </div>
       </div>
 
-      {/* Brand promise section with paw print */}
-      <div className="home-promise-section">
-        <div className="home-promise-text">Petpal Promise</div>
-        <div className="home-paw-print">
-          <div className="home-paw-image">
+      <div className="PromiseSection">
+        <div className="PromiseText">Petpal Promise</div>
+        <div className="PawPrint">
+          <div className="PawImage">
             <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
           </div>
         </div>
       </div>
 
-      {/* Feature cards showcasing main functionality */}
       <div className="FeaturesSection">
         <div className="FeatureCard">
           <img className="FeatureImage" src={`${process.env.PUBLIC_URL}/image/1.svg`} alt="Owner Profile" />
@@ -118,4 +102,5 @@ function HomePage() {
 }
 
 export default HomePage;
+
 

@@ -1,12 +1,12 @@
 .AppHeader {
     display: flex;
-    justify-content: flex-end; 
-    align-items: center;
+    justify-content: flex-end;
     padding: 10px 20px;
-    background-color: #FEDCD2;
-    border: none; 
+    background-color: #4CAF50; 
+    border: none;
     box-shadow: none; 
   }
+  
   
   .header-button {
     background: none;

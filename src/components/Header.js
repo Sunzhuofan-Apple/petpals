@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
 
 function Header({ username, isLogin, handleLogin }) {
-  const [showMenu, setShowMenu] = useState(false); // 控制下拉菜单显示
+  const [showMenu, setShowMenu] = useState(false); 
   const navigate = useNavigate();
 
   const handleMouseEnter = () => {
@@ -49,4 +49,3 @@ Header.propTypes = {
 };
 
 export default Header;
-
