@@ -116,12 +116,11 @@ const ProfileSignUp = () => {
 
         switch (name) {
             case 'name':
-                // 如果当前长度已经是20，且新输入的值更长，则保持原值
                 if (formData.name.length >= 20 && value.length > 20) {
-                    finalValue = formData.name;  // 保持原来的值，不允许新输入
+                    finalValue = formData.name;
                     error = 'Name must be less than 20 characters';
                 } else {
-                    finalValue = value.slice(0, 20);  // 允许输入但不超过20个字符
+                    finalValue = value.slice(0, 20);
                     if (finalValue.length === 20) {
                         error = 'Name must be less than 20 characters';
                     }
@@ -129,7 +128,6 @@ const ProfileSignUp = () => {
                 break;
 
             case 'weight':
-                // 限制重量不超过200
                 const weightNum = parseFloat(value);
                 if (weightNum > 200) {
                     finalValue = "200";
@@ -141,47 +139,26 @@ const ProfileSignUp = () => {
                     error = 'Location is too long';
                 } else if (value && !/^[a-zA-Z0-9\s,.-]+$/.test(value)) {
                     error = 'Please use English characters for location';
-
+                }
+                break;
             case 'birth_date':
-                // 限制年份不超过2024
                 const year = new Date(value).getFullYear();
                 if (year > 2024) {
                     error = 'Birth year cannot be later than 2024';
-                    finalValue = '';  // 清空无效日期
+                    finalValue = '';
                 }
                 break;
         }
 
-
-    const handleInputChange = (e) => {
-        let name, value;
-        
-        if (typeof e === 'string' && arguments.length === 2) {
-            name = e;
-            value = arguments[1];
-        } else {
-            ({ name, value } = e.target);
-        }
-        
-        const error = validateInput(name, value);
-        // 更新表单数据
         setFormData(prevState => ({
             ...prevState,
             [name]: finalValue,
         }));
 
-        // 更新错误信息
         setErrors(prev => ({
             ...prev,
             [name]: error
         }));
-
-        if (!error) {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
     };
     
 
@@ -198,10 +175,8 @@ const ProfileSignUp = () => {
                 const data = await response.json();
     
                 if (data.has_pet) {
-                    // 用户已注册宠物，跳转到 Matching 页面
                     navigate("/Matching");
                 } else {
-                    // 用户未注册宠物，允许页面渲染
                     setShouldRender(true);
                 }
             } catch (error) {
@@ -489,7 +464,10 @@ const ProfileSignUp = () => {
                                     onChange={handleInputChange}
                                     className="input-field"
                                     placeholder="Enter location"
+                                    ref={locationInputRef}
+                                    autoComplete="off"
                                 />
+                                {errors.location && <span className="error-text">{errors.location}</span>}
                             </label>
                             <label>
                                 Sex:

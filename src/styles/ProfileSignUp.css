@@ -327,6 +327,8 @@ select.input-field {
 
 .pac-item-selected {
     background-color: #f0f0f0;
+}
+
 input[type="date"].input-field {
     height: 64px;
 }
