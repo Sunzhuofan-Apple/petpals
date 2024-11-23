@@ -20,7 +20,8 @@ from .views import (
     follow_pet,
     get_following,
     unfollow_pet,
-
+    get_followers,
+    wag_back,
 )
 from . import views
 
@@ -42,16 +43,16 @@ urlpatterns = [
     # path('api/matching/', views.MatchingAPIView.as_view(), name='matching'),
     path('api/matching/', views.matching, name='matching'),
     path('api/user-pet/', views.get_user_pet, name='user-pet'),
-    path('Matching/', views.matching_redirect, name='matching_redirect'),
     path('api/match-pet/', views.match_pet, name='match_pet'),
-    path('matching-recommendations/', views.get_matching_recommendations, name='matching-recommendations'),
     path('api/sorted-profiles/', get_sorted_profiles, name='sorted-profiles'),
     path('api/upload-photos/', views.upload_photos, name='upload-photos'),  
     path('api/user-pet/', get_user_pet, name='get_user_pet'),
     path('api/check-pet-exists/', check_pet_exists, name='check-pet-exists'),
     path('api/follow-pet/<int:pet_id>/', views.follow_pet, name='follow-pet'),
     path('api/following/', views.get_following, name='get-following'),
+    path('api/followers/', views.get_followers, name='get-followers'),
     path('api/unfollow-pet/<int:pet_id>/', views.unfollow_pet, name='unfollow-pet'),
+    path('api/wag-back/<int:follower_id>/', views.wag_back, name='wag-back'),
 ]
 
 if settings.DEBUG:  

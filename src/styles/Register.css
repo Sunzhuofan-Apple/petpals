@@ -1,112 +1,280 @@
-.login-page {
-  background-color: #ffddd2;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 100vh;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
-  flex-direction: row; /* 默认情况下为横向排列 */
+.RegisterPage {
+    width: 100%;
+    min-height: 100vh;
+    background: #FEDCD2;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
 }
 
-.left-section,
-.right-section {
-  flex: 1;
-  max-width: 600px;
-  padding: 20px;
-  box-sizing: border-box;
+.AppHeader {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2;
+    z-index: 1000;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.header-button {
+    background: none;
+    border: none;
+    color: #735858;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    padding: 0.5vh 1vw;
+    transition: all 0.3s ease;
+}
+
+.header-button:hover {
+    color: #FF7578;
+    transform: translateY(-2px);
+}
+
+.login-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2vw;
+    margin-top: 60px;
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .left-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+    flex: 1;
+    max-width: 50%;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
-
-.right-section {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.login-box {
-  background-color: #fff1ee;
-  border-radius: 20px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-  padding: 60px 40px; /* 增加顶部内边距，以容纳猫爪图标 */
-  text-align: center;
-  width: 100%;
-  max-width: 400px;
-  background-image: url('../assets/overlay-background.svg');
-  background-repeat: no-repeat;
-  background-position: top center; /* 使猫爪图标位于顶部居中 */
-  background-size: 50px; /* 根据需要调整图标大小 */
-}
-
 
 .tagline {
-  font-family: "Open Sans", sans-serif;
-  font-size: 64px;
-  font-weight: 700;
-  color: #3d2828;
-  line-height: 1.2; 
-  margin-bottom: 40px;
-  text-align: left; 
+    font-family: 'Open Sans', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 2vw;
+    text-align: center;
+    align-self: center;
+    animation: fadeInOut 3s infinite;
+    display: inline-block;
+}
+
+.black-text {
+    color: #3d2828;
+    animation: fadeInOut 3s infinite;
+    display: inline-block;
+}
+
+.highlighted-text {
+    color: #FF7578;
+    animation: fadeInOut 3s infinite 1.5s;
+    display: inline-block;
 }
 
 .illustration-image {
-  width: 100%;
-  max-width: 400px;
-  height: auto;
-  object-fit: cover;
+    width: 90%;
+    max-width: 450px;
+    height: auto;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.right-section {
+    flex: 1;
+    max-width: 45%;
+    padding: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    padding: clamp(20px, 4vw, 40px);
+    width: 100%;
+    max-width: 400px;
+    min-width: 280px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.WelcomeText {
+    color: #735858;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    white-space: nowrap;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.register-paw-print {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.register-paw-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.register-paw-image img {
+    width: 80px;
+    height: auto;
+    opacity: 0.3;
+}
+
+.welcome-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .google-signin-button {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  background: white;
-  justify-content: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+    width: 100%;
+    padding: clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px);
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .google-signin-button:hover {
-  background-color: #d4d4d4; /* 鼠标悬停时改变背景颜色 */
-  border-color: #ccc; /* 可以同时调整边框颜色 */
-  color: #202124;
+    background: white;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.google-signin-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .google-signin-button-icon {
-  margin-right: 8px;
-}
-
-.google-signin-button-text {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 8px;
 }
 
 .google-icon {
-  width: 24px;
-  height: 24px;
+    width: 18px;
+    height: 18px;
+}
+
+.google-signin-button-text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: clamp(14px, 1.5vw, 16px);
+    font-weight: 500;
+    color: #3c4043;
 }
 
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
+.google-signin-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    margin-top: 0;
+}
+
+@keyframes fadeInOut {
+    0% { 
+        opacity: 0.7;
+        transform: translateY(5px);
+    }
+    50% { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% { 
+        opacity: 0.7;
+        transform: translateY(5px);
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .login-container {
+        padding: 1vw;
+    }
+    
+    .left-section, .right-section {
+        padding: 1vw;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .left-section, .right-section {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .tagline {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+    }
+
+    .illustration-image {
+        width: 70%;
+    }
+
+    .WelcomeText {
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
+    }
+}

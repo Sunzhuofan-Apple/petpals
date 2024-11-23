@@ -22,7 +22,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Pet, UserProfile
+from .models import Pet, UserProfile, WagHistory
 from .forms import PetForm, RegisterForm
 from .serializers import PetSerializer
 from .filters import process_target_pet
@@ -191,30 +191,24 @@ def calculate_distance(start, end):
 @permission_classes([IsAuthenticated])
 def match_pet(request):
     try:
-        print(f"Checking user profile for: {request.user.username}")
-        user_profile = UserProfile.objects.get(user=request.user)
-        print(f"Found user profile: {user_profile}")
-        
-        if user_profile.pet:
-            print(f"Found pet: {user_profile.pet.__dict__}")
-            return Response({
-                'name': user_profile.pet.name,
-                'breed': user_profile.pet.breed,
-                'sex': user_profile.pet.sex,
-                'birth_date': user_profile.pet.birth_date,
-                'weight': user_profile.pet.weight,
-                'location': user_profile.pet.location,
-                'preferred_time': user_profile.pet.preferred_time,
-                'health_states': user_profile.pet.health_states,
-                'photos': user_profile.pet.photos,
-            })
-        print("No pet found for user profile")
-        return Response({'error': 'No pet found'}, status=404)
-    except UserProfile.DoesNotExist:
-        print(f"UserProfile does not exist for user: {request.user.username}")
-        return Response({'error': 'User profile not found'}, status=404)
+        user_pet = Pet.objects.get(owner=request.user)
+        return Response({
+            'id': user_pet.id,
+            'name': user_pet.name,
+            'breed': user_pet.breed,
+            'sex': user_pet.sex,
+            'birth_date': user_pet.birth_date,
+            'weight': user_pet.weight,
+            'location': user_pet.location,
+            'preferred_time': user_pet.preferred_time,
+            'health_states': user_pet.health_states,
+            'characters': user_pet.characters,
+            'red_flags': user_pet.red_flags,
+            'photos': user_pet.photos,
+        })
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)
     except Exception as e:
-        print(f"Unexpected error: {str(e)}")
         return Response({'error': str(e)}, status=500)
 
 @api_view(['GET'])
@@ -524,6 +518,55 @@ def unfollow_pet(request, pet_id):
         return Response({'error': 'Pet not found'}, status=404)
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
+        return Response({'error': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_followers(request):
+    try:
+        user_pet = Pet.objects.get(owner=request.user)
+        followers_data = []
+        
+        for follower in user_pet.followers.all():
+            try:
+                follower_pet = Pet.objects.get(owner=follower)
+                followers_data.append({
+                    'id': follower_pet.id,
+                    'name': follower_pet.name,
+                    'hasWaggedBack': WagHistory.objects.filter(
+                        wagger=request.user,
+                        wagged_to=follower
+                    ).exists()
+                })
+            except Pet.DoesNotExist:
+                continue
+                
+        return Response({'followers': followers_data}, status=200)
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def wag_back(request, follower_id):
+    try:
+        follower_pet = Pet.objects.get(id=follower_id)
+        user_pet = Pet.objects.get(owner=request.user)
+        
+        WagHistory.objects.create(
+            wagger=request.user,
+            wagged_to=follower_pet.owner
+        )
+        
+        follower_pet.followers.add(request.user)
+        user_pet.following.add(follower_pet.owner)
+        
+        return Response({
+            'message': 'Successfully wagged back',
+            'isFollowing': True
+        }, status=200)
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)
+    except Exception as e:
         return Response({'error': str(e)}, status=400)
     
 @api_view(['GET'])

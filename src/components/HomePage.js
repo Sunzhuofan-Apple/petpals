@@ -1,35 +1,35 @@
-// src/components/HomePage.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/HomePage.css';
 import protectRedirect from './protectRedirect';
-import { useState, useEffect } from 'react';
 import getCSRFToken from './getCSRFToken';
+import Header from './Header'; // 导入新的 Header 组件
 
 function HomePage() {
   const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-            });
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
 
-            if (response.ok) {
-                const data = await response.json(); // Parse the JSON response
-                console.log("Fetched data:", data);
-                if (data && data.is_authenticated) {
-                    setIsLogin(true);
-                    setUsername(data.username);
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
+        if (response.ok) {
+          const data = await response.json(); // Parse the JSON response
+          console.log("Fetched data:", data);
+          if (data && data.is_authenticated) {
+            setIsLogin(true);
+            setUsername(data.username);
+          }
         }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
     fetchData();  
   }, []);
@@ -61,11 +61,7 @@ function HomePage() {
 
   return (
     <div className="HomePage">
-      <header className="AppHeader">
-        <button className="header-button">{username}</button>
-        <button className="header-button" onClick= {handleLogin}>{isLogin ? "Logout" : "Login"}</button>
-      </header>
-
+      <Header username={username} isLogin={isLogin} handleLogin={handleLogin} />
       <div className="HeaderSection">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
         <div className="IntroText">
@@ -106,4 +102,5 @@ function HomePage() {
 }
 
 export default HomePage;
+
 

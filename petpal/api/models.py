@@ -69,3 +69,9 @@ class WagHistory(models.Model):
     wagger = models.ForeignKey(User, related_name='wagged', on_delete=models.CASCADE)
     wagged_to = models.ForeignKey(User, related_name='received_wags', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('wagger', 'wagged_to')
+        
+    def __str__(self):
+        return f"{self.wagger.username} wagged to {self.wagged_to.username}"

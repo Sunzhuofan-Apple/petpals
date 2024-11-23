@@ -7,7 +7,16 @@ import protectRedirect from "./protectRedirect";
 import getCSRFToken from "./getCSRFToken";
 import "../styles/RedFlags.css"; 
 
+const sexOptions = [
+    { value: "male", label: "Male" },
+    { value: "female", label: "Female" }
+];
 
+const timeOptions = [
+    { value: "morning", label: "Morning" },
+    { value: "afternoon", label: "Afternoon" },
+    { value: "evening", label: "Evening" }
+];
 
 
 const charactersList = [
@@ -80,12 +89,94 @@ const ProfileSignUp = () => {
 
     const fileInputRef = useRef(null);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
+    useEffect(() => {
+        const path = "/ProfileSignUp";
+        const isRedirectNeeded = protectRedirect(path, path);
+        if (!isRedirectNeeded) {
+            setShouldRender(true);
+        }
+    }, []);
+
+    // 添加错误状态
+    const [errors, setErrors] = useState({
+        name: '',
+        weight: '',
+        birth_date: ''
+    });
+
+    // 验证函数
+    const validateInput = (name, value) => {
+        let error = '';
+        switch (name) {
+            case 'name':
+                if (value.length > 20) {
+                    error = 'Pet name cannot exceed 20 characters';
+                } else if (value && !/^[a-zA-Z0-9\s-]+$/.test(value)) {
+                    error = 'Pet name can only contain letters, numbers, spaces and hyphens';
+                }
+                break;
+            case 'weight':
+                if (value === '') {
+                    error = '';
+                } else {
+                    const weightNum = parseFloat(value);
+                    if (isNaN(weightNum)) {
+                        error = 'Please enter a valid number';
+                    } else if (weightNum < 1) {
+                        error = 'Weight must be at least 1 LB';
+                    } else if (weightNum > 200) {
+                        error = 'Weight cannot exceed 200 LBS';
+                    }
+                }
+                break;
+            case 'birth_date':
+                if (value) {
+                    const date = new Date(value);
+                    const year = date.getFullYear();
+                    const currentYear = new Date().getFullYear();
+                    if (year > currentYear) {
+                        error = 'Birth year cannot be in the future';
+                    } else if (year < currentYear - 30) {
+                        error = 'Please enter a valid birth year';
+                    }
+                }
+                break;
+            case 'breed':
+                if (value && value.length > 30) {
+                    error = 'Breed name is too long';
+                }
+                break;
+            case 'location':
+                if (value && value.length > 50) {
+                    error = 'Location is too long';
+                } else if (value && !/^[a-zA-Z0-9\s,.-]+$/.test(value)) {
+                    error = 'Location contains invalid characters';
+                }
+                break;
+            default:
+                break;
+        }
+        return error;
+    };
+
+    // 修改输入处理函数
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        
+        // 验证输入
+        const error = validateInput(name, value);
+        setErrors(prev => ({
+            ...prev,
+            [name]: error
         }));
+
+        // 只有在没有错误时才更新表单数据
+        if (!error) {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
     
 
@@ -224,7 +315,29 @@ const ProfileSignUp = () => {
         }
     };
     
-    const handleNext = () => setCurrentPage((prevPage) => prevPage + 1);
+    
+
+    // 切换页面
+    const handleNext = () => {
+        // 在第一页时进行表单验证
+        if (currentPage === 1) {
+            const requiredFields = ['name', 'birth_date', 'breed', 'sex', 'weight', 'location'];
+            const hasEmptyFields = requiredFields.some(field => !formData[field]);
+            const hasErrors = Object.values(errors).some(error => error);
+
+            if (hasEmptyFields) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (hasErrors) {
+                alert('Please correct the errors before proceeding');
+                return;
+            }
+        }
+        
+        setCurrentPage(prev => prev + 1);
+    };
     const handlePrevious = () => setCurrentPage((prevPage) => prevPage - 1);
 
     if (!shouldRender) return null;
@@ -240,9 +353,21 @@ const ProfileSignUp = () => {
   
     return (
         <div className="profile-signup">
+            <header className="AppHeader">
+                <button className="header-button" onClick={() => window.location.href = "/"}>Home</button>
+            </header>
+            
+            <div className="profile-title-container">
+                <h1 className="profile-title">Profile Sign Up</h1>
+                <div className="profile-paw-print">
+                    <div className="profile-paw-image">
+                        <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                    </div>
+                </div>
+            </div>
+            
             {currentPage === 1 && (
                 <div className="form-container">
-                    <h2 className="profile-title">Profile Sign Up</h2>
                     <form className="form-grid">
                         <label>
                             Pet Name:
@@ -252,8 +377,9 @@ const ProfileSignUp = () => {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 className="input-field"
-                                placeholder="Enter pet's name"
+                                maxLength={30} // 添加最大长度限制
                             />
+                            {errors.name && <span className="error-message">{errors.name}</span>}
                         </label>
                         <label>
                             Birth Date:
@@ -263,7 +389,9 @@ const ProfileSignUp = () => {
                                 value={formData.birth_date}
                                 onChange={handleInputChange}
                                 className="input-field"
+                                max="2024-12-31" // 添加最大日期限制
                             />
+                            {errors.birth_date && <span className="error-message">{errors.birth_date}</span>}
                         </label>
                         <label>
                             Breed:
@@ -289,32 +417,25 @@ const ProfileSignUp = () => {
                         </label>
                         <label>
                             Sex:
-                            <select
-                                name="sex"
-                                value={formData.sex}
-                                onChange={handleInputChange}
-                                className="input-field"
-                            >
-                                <option value="">Select</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Neutered">Neutered</option>
-                            </select>
+                            <Select
+                                className="basic-select"
+                                classNamePrefix="select"
+                                value={sexOptions.find(option => option.value === formData.sex)}
+                                onChange={(option) => handleInputChange('sex', option.value)}
+                                options={sexOptions}
+                                placeholder="Select sex"
+                            />
                         </label>
                         <label>
                             Preferred Time:
-                            <select
-                                name="preferred_time"
-                                value={formData.preferred_time}
-                                onChange={handleInputChange}
-                                className="input-field"
-                            >
-                                <option value="">Select</option>
-                                <option value="Morning">Morning</option>
-                                <option value="Midday">Midday</option>
-                                <option value="Afternoon">Afternoon</option>
-                                <option value="Evening">Evening</option>
-                            </select>
+                            <Select
+                                className="basic-select"
+                                classNamePrefix="select"
+                                value={timeOptions.find(option => option.value === formData.preferred_time)}
+                                onChange={(option) => handleInputChange('preferred_time', option.value)}
+                                options={timeOptions}
+                                placeholder="Select time"
+                            />
                         </label>
                         <label>
                             Weight (LBS):
@@ -324,8 +445,10 @@ const ProfileSignUp = () => {
                                 value={formData.weight}
                                 onChange={handleInputChange}
                                 className="input-field"
-                                placeholder="Enter weight"
+                                min="0"
+                                max="200" // 添加最大重量限制
                             />
+                            {errors.weight && <span className="error-message">{errors.weight}</span>}
                         </label>
                         <label>
                             Health State:
@@ -346,10 +469,12 @@ const ProfileSignUp = () => {
                             />
                             
                         </label>
+                    </form>
+                    <div className="button-container">
                         <button type="button" className="next-button" onClick={handleNext}>
                             Next
                         </button>
-                    </form>
+                    </div>
                 </div>
             )}
             {currentPage === 2 && (
