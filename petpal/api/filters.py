@@ -124,7 +124,7 @@ def get_full_prompt(target_pet, pets_data):
     - Same preferred time add 10.0 points.
     - The more sharing or similar characters, the higher the score. Adds 0.0 to 20.0 points.
     - The closer the location, the higher the score, adding points from 0.0 to 20.0. If the city is not the same, the score will be reduced by 20.0 points.
-    - According to the red flags, focus on the targeted pet's red flags. If the characters or other attributes of a pet matches the targeted pet's red flags, the score will be reduced. The more things match, the lower the score. The score will be reduced by 0.0 to 20.0 points.
+    - According to the red flags, focus on the targeted pet's red flags. If the characters or other attributes of a pet matches the targeted pet's red flags, the score will be reduced. The more things match, the lower the score. The score will be reduced by 0.0 to 20.0 points.Do not compare one's red flags with another's red flags!!!
     - Provide a **detailed explanation** for each score, including:
         - Matching or similar characters.
         - Location relevance (same area or not).
@@ -216,44 +216,6 @@ def id_to_display(matching_pets, target_pet, user_id):
         
     target_location = target_pet["location"]
 
-    # for json data
-    # for pet_id, pet_data in json_load.items():
-    #     try:
-    #         score = pet_data["score"]
-    #         reason = pet_data["reason"]
-
-    #         with open(file_path, 'r') as f:
-    #             pets_data = json.load(f)
-            
-    #         pet = pets_data[pet_id]
-
-    #         print("ready to process pet")
-
-    #         name = pet["name"]
-    #         breed = pet["breed"]
-    #         birth_date = datetime.strptime(pet["birth_date"], '%Y-%m-%d')
-    #         weight = pet["weight"]
-    #         pet_location = pet["location"]
-    #         photo = pet.get("photo")
-            
-
-    #         age = calculate_age(birth_date)
-    #         distance = calculate_distance(target_location, pet_location)
-
-    #         pet_details.append({
-    #             "id": pet_id,
-    #             "name": name,
-    #             "breed": breed,
-    #             "age": age,
-    #             "weight": weight,
-    #             "distance": round(distance, 2),
-    #             "photo": photo,
-    #             "score": score,
-    #             "reason": reason,
-    #         })
-
-    #         print("add pet" + pet_id + name)
-
     # for database data
     for pet_data in matching_pets:
         try:
@@ -263,6 +225,7 @@ def id_to_display(matching_pets, target_pet, user_id):
             
             pet = Pet.objects.get(id=pet_id)
             print(f"pet {pet_id}", pet)
+            # print(f"pet {pet_id}", pet, score, reason)
 
             pet_location = pet.location
             distance = calculate_distance(target_location, pet_location)
