@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Matching.css";
+import getCSRFToken from './getCSRFToken';
+import Loading from './Loading';
+import Transition from './Transition'; 
 
 export const Matching = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -7,6 +10,11 @@ export const Matching = () => {
     const [userPet, setUserPet] = useState(null);
     const [profiles, setProfiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isTransitioning, setIsTransitioning] = useState(true);
+
+    const handleTransition = () => {{
+        setIsTransitioning(false);
+    }}
 
     useEffect(() => {
         const fetchData = async () => {
@@ -170,10 +178,6 @@ export const Matching = () => {
         }
 
         try {
-            const csrfToken = document.cookie
-                .split('; ')
-                .find(row => row.startsWith('csrftoken='))
-                ?.split('=')[1];
 
             const isFollowing = profiles.find(p => p.id === profileId)?.isFollowing;
             const endpoint = isFollowing ? 'unfollow-pet' : 'follow-pet';
@@ -184,7 +188,7 @@ export const Matching = () => {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken
+                    'X-CSRFToken': getCSRFToken(),
                 }
             });
 
@@ -212,21 +216,28 @@ export const Matching = () => {
     return (
         <div className="matching-container">
             {
-            // isLoading ? (
-            //     <div>Loading...</div>
-            // ) : !userPet ? (
-            //     <div className="no-pet-message">
-            //         <h2>Please set up your pet profile first</h2>
-            //         <button onClick={() => window.location.href = '/ProfileSignUp'}>
-            //             Set Up Profile
-            //         </button>
-            //     </div>
-            // ) : profiles.length === 0 ? (
-            //     <div className="no-matches-message">
-            //         <h2>No matches found</h2>
-            //         <p>Check back later for new potential matches!</p>
-            //     </div>
-            // ) : 
+            isTransitioning ? (
+                <div className="transition-overlay">
+                <Transition onFinish={handleTransition} /> 
+            </div>
+            ) : 
+             isLoading ? (
+                <div>
+                    <Loading />
+                </div>
+            ) : !userPet ? (
+                <div className="no-pet-message">
+                    <h2>Ple ase set up your pet profile first</h2>
+                    <button onClick={() => window.location.href = '/ProfileSignUp'}>
+                        Set Up Profile
+                    </button>
+                </div>
+            ) : profiles.length === 0 ? (
+                <div className="no-matches-message">
+                    <h2>No matches found</h2>
+                    <p>Check back later for new potential matches!</p>
+                </div>
+            ) : 
             (
                 <>
                     <div className="controls">
@@ -281,7 +292,7 @@ export const Matching = () => {
                 </>
             )}
         </div>
-    );
+        );
 };
 
 export default Matching;

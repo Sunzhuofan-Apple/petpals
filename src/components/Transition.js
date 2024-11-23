@@ -2,7 +2,7 @@ import React from "react";
 import "../styles/Transition.css";
 import illustrationImage from "../assets/illustration-image.png";
 
-const Transition = () => {
+const Transition = ({ onFinish }) => {
     return (
         <div className="transition-container">
             <div className="content-wrapper">
@@ -22,7 +22,7 @@ const Transition = () => {
                         />
                     </div>
                 </div>
-                <button className="match-button">
+                <button className="match-button" onClick={onFinish}>
                     Match with friends!
                 </button>
             </div>
