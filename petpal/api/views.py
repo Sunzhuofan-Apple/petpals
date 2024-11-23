@@ -1,22 +1,14 @@
-from datetime import datetime
-from urllib.parse import urlencode
-import json
-
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET
 
-from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -33,24 +25,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Pet, UserProfile, WagHistory
 
-
-
 # --- authentication methods ---
-
-# # get oauth redirect link
-# def google_login_link(request):
-#     google_login_url = reverse('social:begin', args=['google-oauth2'])
-#     return JsonResponse({'google_login_url': google_login_url})
-
-# # custom oauth complete
-# def oauth_complete(request):
-#     print("oauth_complete")
-#     # add additional user data
-#     if request.user.is_authenticated:
-#         return JsonResponse({"message": "User is authenticated",
-#                              "user": request.user}, status=200)
-#     return JsonResponse({"message": "User is not authenticated"}, status=401)
-    
 # Custom login required decorator, return json response
 def custom_login_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -240,109 +215,109 @@ def get_user_pet(request):
 def matching_redirect(request):
     return redirect('http://localhost:3000/Matching')
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_matching_recommendations(request):
-    try:
-        # Get the current user's pet location
-        user_profile = UserProfile.objects.get(user=request.user)
-        if not user_profile.pet:
-            return Response({'error': 'User has no pet'}, status=404)
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_matching_recommendations(request):
+#     try:
+#         # Get the current user's pet location
+#         user_profile = UserProfile.objects.get(user=request.user)
+#         if not user_profile.pet:
+#             return Response({'error': 'User has no pet'}, status=404)
         
-        user_location = user_profile.pet.location
+#         user_location = user_profile.pet.location
         
-        # Get all pets except the user's own pet
-        other_pets = Pet.objects.exclude(owner=request.user)
+#         # Get all pets except the user's own pet
+#         other_pets = Pet.objects.exclude(owner=request.user)
         
-        # Calculate distances and create recommendation list
-        recommendations = []
-        for pet in other_pets:
-            try:
-                distance = calculate_distance(user_location, pet.location)
-                recommendations.append({
-                    'name': pet.name,
-                    'breed': pet.breed,
-                    'sex': pet.sex,
-                    'birth_date': pet.birth_date,
-                    'weight': pet.weight,
-                    'location': pet.location,
-                    'preferred_time': pet.preferred_time,
-                    'health_states': pet.health_states,
-                    'distance': round(distance, 1)  # Round to 1 decimal place
-                })
-            except Exception as e:
-                print(f"Error calculating distance for pet {pet.name}: {str(e)}")
-                continue
+#         # Calculate distances and create recommendation list
+#         recommendations = []
+#         for pet in other_pets:
+#             try:
+#                 distance = calculate_distance(user_location, pet.location)
+#                 recommendations.append({
+#                     'name': pet.name,
+#                     'breed': pet.breed,
+#                     'sex': pet.sex,
+#                     'birth_date': pet.birth_date,
+#                     'weight': pet.weight,
+#                     'location': pet.location,
+#                     'preferred_time': pet.preferred_time,
+#                     'health_states': pet.health_states,
+#                     'distance': round(distance, 1)  # Round to 1 decimal place
+#                 })
+#             except Exception as e:
+#                 print(f"Error calculating distance for pet {pet.name}: {str(e)}")
+#                 continue
         
-        # Sort recommendations by distance
-        recommendations.sort(key=lambda x: x['distance'])
+#         # Sort recommendations by distance
+#         recommendations.sort(key=lambda x: x['distance'])
         
-        return Response(recommendations)
-    except UserProfile.DoesNotExist:
-        return Response({'error': 'User profile not found'}, status=404)
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+#         return Response(recommendations)
+#     except UserProfile.DoesNotExist:
+#         return Response({'error': 'User profile not found'}, status=404)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=500)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_sorted_profiles(request):
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_sorted_profiles(request):
+#     try:
+#         user_profile = UserProfile.objects.get(user=request.user)
         
-        if not user_profile.pet or not user_profile.pet.location:
-            print("No pet or location found for user")
-            return Response({'error': 'User pet location not found'}, status=400)
+#         if not user_profile.pet or not user_profile.pet.location:
+#             print("No pet or location found for user")
+#             return Response({'error': 'User pet location not found'}, status=400)
             
-        user_location = user_profile.pet.location
+#         user_location = user_profile.pet.location
         
-        all_pets = Pet.objects.exclude(owner=request.user)
+#         all_pets = Pet.objects.exclude(owner=request.user)
         
-        # Print all pets for debugging
-        # for pet in all_pets:
-        #     print(f"""
-        #         Pet Details:
-        #         - Name: {pet.name}
-        #         - Breed: {pet.breed}
-        #         - Location: {pet.location}
-        #         - Owner: {pet.owner.username}
-        #         - Birth Date: {pet.birth_date}
-        #         - Weight: {pet.weight}
-        #         - Preferred Time: {pet.preferred_time}
-        #         - Health States: {pet.health_states}
-        #         - Photos: {pet.photos}
-        #     """)
+#         # Print all pets for debugging
+#         # for pet in all_pets:
+#         #     print(f"""
+#         #         Pet Details:
+#         #         - Name: {pet.name}
+#         #         - Breed: {pet.breed}
+#         #         - Location: {pet.location}
+#         #         - Owner: {pet.owner.username}
+#         #         - Birth Date: {pet.birth_date}
+#         #         - Weight: {pet.weight}
+#         #         - Preferred Time: {pet.preferred_time}
+#         #         - Health States: {pet.health_states}
+#         #         - Photos: {pet.photos}
+#         #     """)
         
-        profiles = []
-        for pet in all_pets:
-            try:
-                distance = calculate_distance(user_location, pet.location)
-                # print(f"Calculated distance for {pet.name}: {distance} miles")
+#         profiles = []
+#         for pet in all_pets:
+#             try:
+#                 distance = calculate_distance(user_location, pet.location)
+#                 # print(f"Calculated distance for {pet.name}: {distance} miles")
                 
-                profile_data = {
-                    'id': pet.id,
-                    'name': pet.name,
-                    'breed': pet.breed,
-                    'age': (datetime.now().date() - pet.birth_date).days // 365,
-                    'weight': pet.weight,
-                    'distance': round(distance, 1),
-                    'location': pet.location,
-                    'preferred_time': pet.preferred_time,
-                    'health_states': pet.health_states,
-                    'photos': pet.photos,
-                }
-                profiles.append(profile_data)
-                # print(f"Added profile: {profile_data}")
+#                 profile_data = {
+#                     'id': pet.id,
+#                     'name': pet.name,
+#                     'breed': pet.breed,
+#                     'age': (datetime.now().date() - pet.birth_date).days // 365,
+#                     'weight': pet.weight,
+#                     'distance': round(distance, 1),
+#                     'location': pet.location,
+#                     'preferred_time': pet.preferred_time,
+#                     'health_states': pet.health_states,
+#                     'photos': pet.photos,
+#                 }
+#                 profiles.append(profile_data)
+#                 # print(f"Added profile: {profile_data}")
                 
-            except Exception as e:
-                print(f"Error calculating distance for pet {pet.name}: {str(e)}")
-                continue
+#             except Exception as e:
+#                 print(f"Error calculating distance for pet {pet.name}: {str(e)}")
+#                 continue
                 
-        sorted_profiles = sorted(profiles, key=lambda x: x['distance'])
+#         sorted_profiles = sorted(profiles, key=lambda x: x['distance'])
         
-        return Response(sorted_profiles)
-    except Exception as e:
-        print(f"Error in get_sorted_profiles: {str(e)}")
-        return Response({'error': str(e)}, status=400)
+#         return Response(sorted_profiles)
+#     except Exception as e:
+#         print(f"Error in get_sorted_profiles: {str(e)}")
+#         return Response({'error': str(e)}, status=400)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -388,9 +363,6 @@ def upload_photos(request):
         return Response({'photos': photo_urls}, status=200)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
-
-
-from django.utils.http import urlencode
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
