@@ -139,7 +139,6 @@ const MyProfile = () => {
 
   return (
     <div className="profile">
-      {/* Header Section */}
       <header className="AppHeader">
         <div
           className="header-button username"
@@ -151,6 +150,7 @@ const MyProfile = () => {
             <div className="dropdown-menu">
               <button onClick={() => navigateTo("Homepage")}>Homepage</button>
               <button onClick={() => navigateTo("/Friends")}>Friends</button>
+              <button onClick={() => navigateTo("/Matching")}>Matching</button>
             </div>
           )}
         </div>
@@ -159,7 +159,8 @@ const MyProfile = () => {
         </button>
       </header>
 
-      {/* Profile Content */}
+      <div className="text-wrapper-6">My Profile</div>
+      
       <div className="photo-placeholder">
         {photos && photos.length > 0 && photos[0] ? (
           <img
@@ -172,21 +173,59 @@ const MyProfile = () => {
         )}
       </div>
 
-      <div className="text-wrapper-6">My Profile</div>
       <div className="group">
         <p className="kiwi-sex-man-breed">
-          <span className="span">{name} <br /></span>
-          <span className="text-wrapper-5">
-            Sex: {sex} <br />
-            Breed: {breed} <br />
-            Dog-walking time slot: {preferred_time} <br />
-            Age: {new Date().getFullYear() - new Date(birth_date).getFullYear()} years old <br />
-            Weight: {weight} lbs <br />
-            Location: {location} <br />
-            Health states: {health_states} <br />
-            Character: {characters} <br />
-            Red flags: {red_flags} <br />
-          </span>
+          <span className="span">{name}</span>
+          <div className="info-grid">
+            <div className="info-item">
+              <span className="label-text">Sex:</span>
+              <span className="info-value">{sex}</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Breed:</span>
+              <span className="info-value">{breed}</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Dog-walking time:</span>
+              <span className="info-value">{preferred_time}</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Age:</span>
+              <span className="info-value">{new Date().getFullYear() - new Date(birth_date).getFullYear()} years old</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Weight:</span>
+              <span className="info-value">{weight} lbs</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Location:</span>
+              <span className="info-value">{location}</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Health states:</span>
+              <span className="info-value">{health_states}</span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Character:</span>
+              <span className="info-value">
+                {Array.isArray(characters) 
+                  ? characters.join(', ')
+                  : typeof characters === 'string' 
+                    ? characters.split(',').join(', ') 
+                    : characters}
+              </span>
+            </div>
+            <div className="info-item">
+              <span className="label-text">Red flags:</span>
+              <span className="info-value">
+                {Array.isArray(red_flags)
+                  ? red_flags.join(', ')
+                  : typeof red_flags === 'string'
+                    ? red_flags.split(',').join(', ')
+                    : red_flags}
+              </span>
+            </div>
+          </div>
         </p>
       </div>
       <div className="shots-followers">
