@@ -540,7 +540,14 @@ const ProfileSignUp = () => {
                 )}
                 {currentPage === 2 && (
                     <div className="adding-photos">
-                        <h2 className="title">Adding photos for [Pet's name]!</h2>
+                        <div className="profile-title-container">
+                            <div className="profile-title">Adding photos for your pet!</div>
+                            <div className="profile-paw-print">
+                                <div className="profile-paw-image">
+                                    <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                                </div>
+                            </div>
+                        </div>
                         <div className="photo-grid">
                             {photos.map((photo, index) => (
                                 <div className="photo-frame" key={index}>
@@ -575,10 +582,10 @@ const ProfileSignUp = () => {
                             className="upload-input"
                         />
                         <div className="button-container">
-                            <button className="button" onClick={handlePrevious}>
+                            <button type="button" className="next-button" onClick={handlePrevious}>
                                 Previous
                             </button>
-                            <button className="button" onClick={handleNext}>
+                            <button type="button" className="next-button" onClick={handleNext}>
                                 Next
                             </button>
                         </div>
@@ -587,7 +594,14 @@ const ProfileSignUp = () => {
            {/* Page3: Characters */}
                 {currentPage === 3 && (
                     <div className="characters-page">
-                        <h2 className="page-title">Select Your Pet's Character</h2>
+                        <div className="profile-title-container">
+                            <div className="profile-title">Select Your Pet's Character</div>
+                            <div className="profile-paw-print">
+                                <div className="profile-paw-image">
+                                    <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                                </div>
+                            </div>
+                        </div>
                         <div className="character-grid">
                             {charactersList.map((character) => (
                                 <button
@@ -606,10 +620,10 @@ const ProfileSignUp = () => {
                         </div>
                         <p className="selection-counter">{selectedCharacters.length}/3</p>
                         <div className="button-container">
-                            <button className="button" onClick={handlePrevious}>
+                            <button type="button" className="next-button" onClick={handlePrevious}>
                                 Previous
                             </button>
-                            <button className="button" onClick={handleNext}>
+                            <button type="button" className="next-button" onClick={handleNext}>
                                 Next
                             </button>
                         </div>
@@ -618,7 +632,14 @@ const ProfileSignUp = () => {
             {/* Page4: Red Flags */}
                 {currentPage === 4 && (
                     <div className="redflags-page">
-                        <h1 className="page-title">Red Flags</h1>
+                        <div className="profile-title-container">
+                            <div className="profile-title">Red Flags</div>
+                            <div className="profile-paw-print">
+                                <div className="profile-paw-image">
+                                    <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                                </div>
+                            </div>
+                        </div>
                         <div className="flag-grid">
                             {redFlagsList.map((flag) => (
                                 <button
@@ -637,10 +658,10 @@ const ProfileSignUp = () => {
                         </div>
                         <p className="selection-counter">{selectedFlags.length}/3</p>
                         <div className="button-container">
-                            <button className="button" onClick={handlePrevious}>
+                            <button type="button" className="next-button" onClick={handlePrevious}>
                                 Previous
                             </button>
-                            <button className="button" onClick={handleSubmit}>
+                            <button type="button" className="next-button" onClick={handleSubmit}>
                                 Submit
                             </button>
                         </div>
