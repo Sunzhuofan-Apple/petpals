@@ -40,7 +40,24 @@ export const Matching = () => {
                 
                 if (!profilesResponse.ok) throw new Error('Failed to fetch sorted profiles');
                 const sortedProfiles = await profilesResponse.json();
-                if (sortedProfiles) setProfiles(sortedProfiles);
+                
+                // Fetch following status for each profile
+                const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!followingResponse.ok) throw new Error('Failed to fetch following status');
+                const followingData = await followingResponse.json();
+                const followingIds = followingData.following.map(pet => pet.id);
+                
+                // Add isFollowing property to each profile
+                const profilesWithFollowing = sortedProfiles.map(profile => ({
+                    ...profile,
+                    isFollowing: followingIds.includes(profile.id)
+                }));
+                
+                if (profilesWithFollowing) setProfiles(profilesWithFollowing);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -135,25 +152,27 @@ export const Matching = () => {
         }
 
         try {
+            const csrfToken = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('csrftoken='))
+                ?.split('=')[1];
+
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/follow-pet/${profileId}/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                },
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
             });
 
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                throw new Error('Server returned non-JSON response');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to follow pet: ${response.status} ${errorText}`);
             }
 
             const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to follow pet');
-            }
             
             const updatedProfiles = profiles.map(profile => {
                 if (profile.id === profileId) {
@@ -162,10 +181,10 @@ export const Matching = () => {
                 return profile;
             });
             setProfiles(updatedProfiles);
-            
+            console.log('Successfully followed pet', profileId, 'following', updatedProfiles);
         } catch (error) {
             console.error('Error following pet:', error);
-            alert(error.message || 'Failed to follow pet. Please try again.');
+            alert(`Unable to follow pet: ${error.message}. Please try again or contact support if the issue persists.`);
         }
     };
 
