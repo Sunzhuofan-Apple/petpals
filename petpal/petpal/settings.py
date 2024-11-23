@@ -23,7 +23,7 @@ DEFAULT_PHOTO_URL = 'https://my-bucket.s3.amazonaws.com/default.jpg'
 
 # switch to 'http://localhost:3000' for development
 FRONTEND_URL = "http://team20.cmu-webapps.com"
-BACKEND_URL = "http://team20.cmu-webapps.com"
+BACKEND_URL = "localhost:8000"
 
 # ========== Configuration ========== #
 CONFIG = ConfigParser()
@@ -32,7 +32,7 @@ CONFIG.read(BASE_DIR / "config.ini")
 # ========== Security ========== #
 SECRET_KEY = CONFIG.get("Django", "Secret")
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'team20.cmu-webapps.com','3.15.252.217']
 
 # ========== Applications ========== #
 INSTALLED_APPS = [
