@@ -1,0 +1,56 @@
+.AppHeader {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #FEDCD2;
+    border: none; 
+    box-shadow: none; 
+  }
+  
+  .header-button {
+    background: none;
+    border: none;
+    color: #735858; 
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px; 
+  }
+  
+  .header-button:hover {
+    text-decoration: underline;
+  }
+  
+  .username {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu {
+  position: absolute;
+  top: 100%; 
+  left: 0; 
+  background-color: #FEDCD2; 
+  border: 1px solid #FFC0CB; 
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  min-width: 120px; 
+}
+
+.dropdown-menu button {
+  padding: 10px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  color: #735858;
+}
+
+.dropdown-menu button:hover {
+  background-color: #F2968F; 
+}
+
+  
