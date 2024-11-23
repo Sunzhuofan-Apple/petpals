@@ -1,12 +1,42 @@
 import React, { useEffect, useState } from "react";
 import "../styles/MyProfile.css";
+import getCSRFToken from "./getCSRFToken";
 import Header from "./Header"; // 导入 Header 组件
 
 const MyProfile = () => {
   const [petData, setPetData] = useState(null);
   const [error, setError] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
+  const [username, setUsername] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
+    // Fetch login state and username
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.is_authenticated) {
+            setIsLogin(true);
+            setUsername(data.username);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
+
+    // Fetch pet data
     const fetchPetData = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/user-pet/`, {
@@ -31,7 +61,33 @@ const MyProfile = () => {
 
   const handleLogout = () => {
     // 登出逻辑，例如清除用户状态
-    console.log("Logging out...");
+    fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken(),
+      },
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setIsLogin(false);
+          setUsername("");
+        }
+      })
+      .catch((err) => console.error("Logout error:", err));
+  };
+
+  const handleMouseEnter = () => setShowMenu(true);
+  const handleMouseLeave = () => setShowMenu(false);
+
+  const navigateTo = (path) => {
+    if (path === "Homepage") {
+      window.location.href = "http://localhost:3000/"; 
+    } else {
+      window.location.href = path;
+    }
+    setShowMenu(false);
   };
 
   if (error) {
@@ -58,13 +114,32 @@ const MyProfile = () => {
 
   return (
     <div className="profile">
-      {/* 引入 Header */}
+      {/* Header Section */}
+      <header className="AppHeader">
+        <div
+          className="header-button username"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {username}
+          {showMenu && (
+            <div className="dropdown-menu">
+              <button onClick={() => navigateTo("Homepage")}>Homepage</button>
+              <button onClick={() => navigateTo("/Friends")}>Friends</button>
+            </div>
+          )}
+        </div>
+        <button className="header-button" onClick={handleLogout}>
+          {isLogin ? "Logout" : "Login"}
+        </button>
+      </header>
       <Header
         username="zhuofans" // 替换为动态用户名
         isLogin={true} // 传递登录状态
         handleLogin={handleLogout} // 登出逻辑
       />
 
+      {/* Profile Content */}
       <div className="photo-placeholder">
         {photos && photos.length > 0 && photos[0] ? (
           <img
@@ -99,5 +174,4 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
-
 
