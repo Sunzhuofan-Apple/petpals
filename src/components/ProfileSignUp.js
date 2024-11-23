@@ -242,7 +242,14 @@ const ProfileSignUp = () => {
         <div className="profile-signup">
             {currentPage === 1 && (
                 <div className="form-container">
-                    <h2 className="profile-title">Profile Sign Up</h2>
+                    <div className="profile-title-container">
+                        <div className="profile-title">Profile Sign Up</div>
+                        <div className="profile-paw-print">
+                            <div className="profile-paw-image">
+                                <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                            </div>
+                        </div>
+                    </div>
                     <form className="form-grid">
                         <label>
                             Pet Name:
@@ -346,10 +353,12 @@ const ProfileSignUp = () => {
                             />
                             
                         </label>
+                    </form>
+                    <div className="button-container">
                         <button type="button" className="next-button" onClick={handleNext}>
                             Next
                         </button>
-                    </form>
+                    </div>
                 </div>
             )}
             {currentPage === 2 && (
