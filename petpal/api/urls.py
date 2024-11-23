@@ -16,6 +16,7 @@ from .views import (
     get_matching_recommendations,
     get_sorted_profiles,
     upload_photos,  
+    check_pet_exists,
 )
 from . import views
 
@@ -42,6 +43,7 @@ urlpatterns = [
     path('api/sorted-profiles/', get_sorted_profiles, name='sorted-profiles'),
     path('api/upload-photos/', views.upload_photos, name='upload-photos'),  
     path('api/user-pet/', get_user_pet, name='get_user_pet'),
+    path('api/check-pet-exists/', check_pet_exists, name='check-pet-exists'),
 ]
 
 if settings.DEBUG:  

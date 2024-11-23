@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import "../styles/ProfileSignUp.css";
 import "../styles/AddPhoto.css";
 import protectRedirect from "./protectRedirect";
 import getCSRFToken from "./getCSRFToken";
 import "../styles/RedFlags.css"; 
+
 
 
 
@@ -38,8 +40,10 @@ const redFlagsList = [
 
 
 const ProfileSignUp = () => {
+    const navigate = useNavigate();
     const [shouldRender, setShouldRender] = useState(false);
     const [currentPage, setCurrentPage] = useState(1); 
+    const [isLoading, setIsLoading] = useState(true); 
     const [formData, setFormData] = useState({
         name: "",
         sex: "",
@@ -75,22 +79,50 @@ const ProfileSignUp = () => {
     };
 
     const fileInputRef = useRef(null);
+    
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+    
 
     useEffect(() => {
-        const path = "/ProfileSignUp";
-        const isRedirectNeeded = protectRedirect(path, path);
-        if (!isRedirectNeeded) {
-            setShouldRender(true);
-        }
-    }, []);
+        const checkPetExists = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/check-pet-exists/`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+    
+                if (!response.ok) throw new Error("Failed to check pet existence");
+    
+                const data = await response.json();
+    
+                if (data.has_pet) {
+                    // 用户已注册宠物，跳转到 Matching 页面
+                    navigate("/Matching");
+                } else {
+                    // 用户未注册宠物，允许页面渲染
+                    setShouldRender(true);
+                }
+            } catch (error) {
+                console.error("Error checking pet existence:", error);
+                navigate("/login"); // 跳转到登录页面
+            } finally {
+                setIsLoading(false); // 结束加载状态
+            }
+        };
+    
+        console.log("Checking pet existence...");
+        checkPetExists(); // 调用检查函数
+    }, [navigate]);
+    
+    
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    
 
     const handleSelectChange = (selectedOptions) => {
         const healthStates = selectedOptions.map((option) => option.value);
@@ -193,14 +225,20 @@ const ProfileSignUp = () => {
         }
     };
     
-    
-
-    // 切换页面
     const handleNext = () => setCurrentPage((prevPage) => prevPage + 1);
     const handlePrevious = () => setCurrentPage((prevPage) => prevPage - 1);
 
     if (!shouldRender) return null;
-
+    if (isLoading) {
+        console.log("Page is loading...");
+        return <div>Loading...</div>;
+    }
+    if (!shouldRender) {
+        console.log("User already has a pet, redirecting...");
+        return null;
+    }
+    
+  
     return (
         <div className="profile-signup">
             {currentPage === 1 && (
@@ -361,7 +399,7 @@ const ProfileSignUp = () => {
                     </div>
                 </div>
             )}
-       {/* 页面3: Characters */}
+       {/* Page3: Characters */}
             {currentPage === 3 && (
                 <div className="characters-page">
                     <h2 className="page-title">Select Your Pet's Character</h2>
@@ -392,7 +430,7 @@ const ProfileSignUp = () => {
                     </div>
                 </div>
             )}
-        {/* 页面4: Red Flags */}
+        {/* Page4: Red Flags */}
             {currentPage === 4 && (
                 <div className="redflags-page">
                     <h1 className="page-title">Red Flags</h1>
