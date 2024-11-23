@@ -321,6 +321,7 @@ const ProfileSignUp = () => {
                                 classNamePrefix="select"
                                 placeholder="Select health state"
                             />
+                            
                         </label>
                         <button type="button" className="next-button" onClick={handleNext}>
                             Next
