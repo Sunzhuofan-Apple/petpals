@@ -559,3 +559,13 @@ def wag_back(request, follower_id):
         return Response({'error': 'Pet not found'}, status=404)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_pet_exists(request):
+    try:
+        user_profile = UserProfile.objects.filter(user=request.user).first()
+        has_pet = user_profile and user_profile.pet is not None
+        return Response({"has_pet": has_pet}, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
