@@ -117,6 +117,31 @@ export const Matching = () => {
         return 'hidden';
     };
 
+    const handleWagClick = async (profileId) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/follow-pet/${profileId}/`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) throw new Error('Failed to follow pet');
+            
+            // Optionally update the UI to show the pet is now followed
+            const updatedProfiles = profiles.map(profile => {
+                if (profile.id === profileId) {
+                    return { ...profile, isFollowing: true };
+                }
+                return profile;
+            });
+            setProfiles(updatedProfiles);
+        } catch (error) {
+            console.error('Error following pet:', error);
+        }
+    };
+
     return (
         <div className="matching-container">
             {
@@ -172,7 +197,12 @@ export const Matching = () => {
                                             <br />
                                             {distance} miles away from you
                                         </p>
-                                        <button className="wag-button">Wag your tail</button>
+                                        <button 
+                                            className="wag-button"
+                                            onClick={() => handleWagClick(profile.id)}
+                                        >
+                                            {profile.isFollowing ? 'Wagging!' : 'Wag your tail'}
+                                        </button>
                                     </div>
                                 );
                             })}

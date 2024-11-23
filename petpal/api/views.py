@@ -430,3 +430,18 @@ def get_user_pet(request):
         return Response(pet_data, status=200)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow_pet(request, pet_id):
+    try:
+        pet_to_follow = Pet.objects.get(id=pet_id)
+        user_pet = Pet.objects.get(owner=request.user)
+        user_pet.following.add(pet_to_follow.owner)
+        pet_to_follow.followers.add(request.user)
+        
+        return Response({'message': 'Successfully followed pet'}, status=200)
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)
