@@ -6,6 +6,7 @@ import "../styles/AddPhoto.css";
 import protectRedirect from "./protectRedirect";
 import getCSRFToken from "./getCSRFToken";
 import "../styles/RedFlags.css"; 
+import loadGoogleMapsAPI from '../utils/loadGoogleMapsAPI';
 
 const sexOptions = [
     { value: "male", label: "Male" },
@@ -88,6 +89,9 @@ const ProfileSignUp = () => {
     };
 
     const fileInputRef = useRef(null);
+    const locationInputRef = useRef(null);
+    const [googleAPILoaded, setGoogleAPILoaded] = useState(false);
+    const [autocomplete, setAutocomplete] = useState(null);
 
     useEffect(() => {
         const path = "/ProfileSignUp";
@@ -97,14 +101,12 @@ const ProfileSignUp = () => {
         }
     }, []);
 
-    // 添加错误状态
     const [errors, setErrors] = useState({
         name: '',
         weight: '',
         birth_date: ''
     });
 
-    // 验证函数
     const validateInput = (name, value) => {
         let error = '';
         switch (name) {
@@ -147,10 +149,10 @@ const ProfileSignUp = () => {
                 }
                 break;
             case 'location':
-                if (value && value.length > 50) {
+                if (value && value.length > 100) {
                     error = 'Location is too long';
                 } else if (value && !/^[a-zA-Z0-9\s,.-]+$/.test(value)) {
-                    error = 'Location contains invalid characters';
+                    error = 'Please use English characters for location';
                 }
                 break;
             default:
@@ -159,18 +161,23 @@ const ProfileSignUp = () => {
         return error;
     };
 
-    // 修改输入处理函数
+
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        let name, value;
         
-        // 验证输入
+        if (typeof e === 'string' && arguments.length === 2) {
+            name = e;
+            value = arguments[1];
+        } else {
+            ({ name, value } = e.target);
+        }
+        
         const error = validateInput(name, value);
         setErrors(prev => ({
             ...prev,
             [name]: error
         }));
 
-        // 只有在没有错误时才更新表单数据
         if (!error) {
             setFormData(prev => ({
                 ...prev,
@@ -340,6 +347,76 @@ const ProfileSignUp = () => {
     };
     const handlePrevious = () => setCurrentPage((prevPage) => prevPage - 1);
 
+    useEffect(() => {
+        console.log('Loading Google Maps API...');
+        loadGoogleMapsAPI()
+            .then(() => {
+                console.log('Google Maps API loaded successfully');
+                setGoogleAPILoaded(true);
+            })
+            .catch(error => {
+                console.error('Failed to load Google Maps API:', error);
+            });
+    }, []);
+
+    useEffect(() => {
+        console.log('googleAPILoaded changed:', googleAPILoaded);
+        if (googleAPILoaded) {
+            initializeAutocomplete();
+        }
+    
+        return () => {
+            if (autocomplete) {
+                console.log('Cleaning up autocomplete listeners');
+                window.google?.maps?.event?.clearInstanceListeners(autocomplete);
+            }
+        };
+    }, [googleAPILoaded]);
+
+    const initializeAutocomplete = async () => {
+        console.log('Initializing autocomplete...');
+        try {
+            const maps = await loadGoogleMapsAPI();
+            console.log('Maps object received:', !!maps);
+            
+            if (locationInputRef.current && !autocomplete) {
+                console.log('Creating new autocomplete instance');
+                const newAutocomplete = new maps.places.Autocomplete(locationInputRef.current, {
+                    types: ['address'],
+                    fields: [
+                        'formatted_address',
+                        'address_components',
+                        'geometry'
+                    ],
+                    language: 'en',
+                    componentRestrictions: { country: 'us' }
+                });
+
+                newAutocomplete.addListener('place_changed', () => {
+                    console.log('Place selected');
+                    const place = newAutocomplete.getPlace();
+                    console.log('Selected place:', place);
+                    if (place.formatted_address) {
+                        setFormData(prevData => ({
+                            ...prevData,
+                            location: place.formatted_address
+                        }));
+                    }
+                });
+
+                setAutocomplete(newAutocomplete);
+                console.log('Autocomplete initialized successfully');
+            } else {
+                console.log('Skipping autocomplete initialization:', {
+                    hasInput: !!locationInputRef.current,
+                    hasExistingAutocomplete: !!autocomplete
+                });
+            }
+        } catch (error) {
+            console.error('Error initializing Google Maps:', error);
+        }
+    };
+
     if (!shouldRender) return null;
     if (isLoading) {
         console.log("Page is loading...");
@@ -410,10 +487,21 @@ const ProfileSignUp = () => {
                                 type="text"
                                 name="location"
                                 value={formData.location}
-                                onChange={handleInputChange}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    handleInputChange({
+                                        target: {
+                                            name: 'location',
+                                            value
+                                        }
+                                    });
+                                }}
                                 className="input-field"
                                 placeholder="Enter location"
+                                ref={locationInputRef}
+                                autoComplete="off"
                             />
+                            {errors.location && <span className="error-message">{errors.location}</span>}
                         </label>
                         <label>
                             Sex:

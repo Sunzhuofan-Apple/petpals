@@ -123,6 +123,13 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = CONFIG.get("GoogleOAuth2", "client_secret")
 SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {"prompt": "select_account"}
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ["fullname", "picture", "email"]
 
+# ========== API Keys ========== #
+try:
+    GOOGLE_MAPS_API_KEY = CONFIG.get("GoogleMaps", "API_KEY")
+except:
+    print("Error: 'API_KEY' not found in config.ini under [GoogleMaps] section.")
+    GOOGLE_MAPS_API_KEY = ""
+
 # ========== Login/Redirect Configuration ========== #
 LOGIN_URL = f"{CORS_ALLOWED_ORIGINS[0]}/Register"
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = "http://localhost:8000/auth/complete/google-oauth2/"
@@ -142,13 +149,14 @@ env_path = BASE_DIR.parent / ".env"
 try:
     with open(env_path, "w") as f:
         f.write(f"REACT_APP_GOOGLE_CLIENT_ID={SOCIAL_AUTH_GOOGLE_OAUTH2_KEY}\n")
+        if GOOGLE_MAPS_API_KEY:
+            f.write(f"REACT_APP_GOOGLE_MAPS_API_KEY={GOOGLE_MAPS_API_KEY}\n")
         f.write(f"REACT_APP_BACKEND=http://localhost:8000\n")
     print(f".env file generated successfully at {env_path} with client_id.")
 except KeyError:
     print("Error: 'client_id' not found in config.ini under [GoogleOAuth2] section.")
 
 # ========== API Keys ========== #
-GOOGLE_MAPS_API_KEY = CONFIG.get("GoogleMaps", "API_KEY")
 OPENAI_API_KEY = CONFIG.get("OpenAI", "API_KEY")
 
 # ========== CORS Policy for Development ========== #
