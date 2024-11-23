@@ -89,94 +89,58 @@ const ProfileSignUp = () => {
 
     const fileInputRef = useRef(null);
 
-    useEffect(() => {
-        const path = "/ProfileSignUp";
-        const isRedirectNeeded = protectRedirect(path, path);
-        if (!isRedirectNeeded) {
-            setShouldRender(true);
-        }
-    }, []);
-
-    // 添加错误状态
     const [errors, setErrors] = useState({
         name: '',
         weight: '',
         birth_date: ''
     });
 
-    // 验证函数
-    const validateInput = (name, value) => {
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        
+        // 处理不同字段的输入限制
+        let finalValue = value;
         let error = '';
+
         switch (name) {
             case 'name':
-                if (value.length > 20) {
-                    error = 'Pet name cannot exceed 20 characters';
-                } else if (value && !/^[a-zA-Z0-9\s-]+$/.test(value)) {
-                    error = 'Pet name can only contain letters, numbers, spaces and hyphens';
+                // 限制名字长度为20个字符
+                finalValue = value.slice(0, 20);
+                if (finalValue.length === 20) {
+                    error = 'Name must be less than 20 characters';
                 }
                 break;
+
             case 'weight':
-                if (value === '') {
-                    error = '';
-                } else {
-                    const weightNum = parseFloat(value);
-                    if (isNaN(weightNum)) {
-                        error = 'Please enter a valid number';
-                    } else if (weightNum < 1) {
-                        error = 'Weight must be at least 1 LB';
-                    } else if (weightNum > 200) {
-                        error = 'Weight cannot exceed 200 LBS';
-                    }
+                // 限制重量不超过200
+                const weightNum = parseFloat(value);
+                if (weightNum > 200) {
+                    finalValue = "200";
+                    error = 'Weight must be less than 200 lbs';
                 }
                 break;
+
             case 'birth_date':
-                if (value) {
-                    const date = new Date(value);
-                    const year = date.getFullYear();
-                    const currentYear = new Date().getFullYear();
-                    if (year > currentYear) {
-                        error = 'Birth year cannot be in the future';
-                    } else if (year < currentYear - 30) {
-                        error = 'Please enter a valid birth year';
-                    }
+                // 限制年份不超过2024
+                const year = new Date(value).getFullYear();
+                if (year > 2024) {
+                    error = 'Birth year cannot be later than 2024';
+                    finalValue = '';  // 清空无效日期
                 }
-                break;
-            case 'breed':
-                if (value && value.length > 30) {
-                    error = 'Breed name is too long';
-                }
-                break;
-            case 'location':
-                if (value && value.length > 50) {
-                    error = 'Location is too long';
-                } else if (value && !/^[a-zA-Z0-9\s,.-]+$/.test(value)) {
-                    error = 'Location contains invalid characters';
-                }
-                break;
-            default:
                 break;
         }
-        return error;
-    };
 
-    // 修改输入处理函数
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        
-        // 验证输入
-        const error = validateInput(name, value);
+        // 更新表单数据
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: finalValue,
+        }));
+
+        // 更新错误信息
         setErrors(prev => ({
             ...prev,
             [name]: error
         }));
-
-        // 只有在没有错误时才更新表单数据
-        if (!error) {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
     };
     
 
@@ -352,239 +316,248 @@ const ProfileSignUp = () => {
     
   
     return (
-        <div className="profile-signup">
+        <div>
             <header className="AppHeader">
-                <button className="header-button" onClick={() => window.location.href = "/"}>Home</button>
+                <button className="header-button" onClick={() => window.location.href = "/"}>
+                    Home
+                </button>
             </header>
-            
-            <div className="profile-title-container">
-                <h1 className="profile-title">Profile Sign Up</h1>
-                <div className="profile-paw-print">
-                    <div className="profile-paw-image">
-                        <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+            <div className="profile-signup">
+                {currentPage === 1 && (
+                    <div className="form-container">
+                        <div className="profile-title-container">
+                            <div className="profile-title">Profile Sign Up</div>
+                            <div className="profile-paw-print">
+                                <div className="profile-paw-image">
+                                    <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
+                                </div>
+                            </div>
+                        </div>
+                        <form className="form-grid">
+                            <label>
+                                Pet Name:
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                    maxLength="20"
+                                    className={`input-field ${errors.name ? 'error' : ''}`}
+                                    placeholder="Enter pet's name"
+                                />
+                                {errors.name && <div className="error-text">{errors.name}</div>}
+                            </label>
+                            <label>
+                                Birth Date:
+                                <input
+                                    type="date"
+                                    name="birth_date"
+                                    value={formData.birth_date}
+                                    onChange={handleInputChange}
+                                    className={`input-field ${errors.birth_date ? 'error' : ''}`}
+                                />
+                                {errors.birth_date && <div className="error-text">{errors.birth_date}</div>}
+                            </label>
+                            <label>
+                                Breed:
+                                <input
+                                    type="text"
+                                    name="breed"
+                                    value={formData.breed}
+                                    onChange={handleInputChange}
+                                    className="input-field"
+                                    placeholder="Enter breed"
+                                />
+                            </label>
+                            <label>
+                                Location:
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleInputChange}
+                                    className="input-field"
+                                    placeholder="Enter location"
+                                />
+                            </label>
+                            <label>
+                                Sex:
+                                <select
+                                    name="sex"
+                                    value={formData.sex}
+                                    onChange={handleInputChange}
+                                    className="input-field"
+                                >
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Neutered">Neutered</option>
+                                </select>
+                            </label>
+                            <label>
+                                Preferred Time:
+                                <select
+                                    name="preferred_time"
+                                    value={formData.preferred_time}
+                                    onChange={handleInputChange}
+                                    className="input-field"
+                                >
+                                    <option value="">Select</option>
+                                    <option value="Morning">Morning</option>
+                                    <option value="Midday">Midday</option>
+                                    <option value="Afternoon">Afternoon</option>
+                                    <option value="Evening">Evening</option>
+                                </select>
+                            </label>
+                            <label>
+                                Weight (LBS):
+                                <input
+                                    type="number"
+                                    name="weight"
+                                    value={formData.weight}
+                                    onChange={handleInputChange}
+                                    max="200"
+                                    className={`input-field ${errors.weight ? 'error' : ''}`}
+                                    placeholder="Enter weight"
+                                />
+                                {errors.weight && <div className="error-text">{errors.weight}</div>}
+                            </label>
+                            <label>
+                                Health State:
+                                <Select
+                                    isMulti
+                                    options={[
+                                        { value: "rabies", label: "Rabies" },
+                                        { value: "dhlpp", label: "DHLPP" },
+                                        { value: "bordetella", label: "Bordetella" },
+                                        { value: "heartworm", label: "Heartworm Prevention" },
+                                        { value: "lyme", label: "Lyme Disease" },
+                                        { value: "leptospirosis", label: "Leptospirosis" },
+                                        { value: "influenza", label: "Canine Influenza" }
+                                    ]}
+                                    onChange={handleSelectChange}
+                                    classNamePrefix="select"
+                                    placeholder="Select health state"
+                                />
+                                
+                            </label>
+                        </form>
+                        <div className="button-container">
+                            <button type="button" className="next-button" onClick={handleNext}>
+                                Next
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-            {currentPage === 1 && (
-                <div className="form-container">
-                    <form className="form-grid">
-                        <label>
-                            Pet Name:
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                                className="input-field"
-                                maxLength={30} // 添加最大长度限制
-                            />
-                            {errors.name && <span className="error-message">{errors.name}</span>}
-                        </label>
-                        <label>
-                            Birth Date:
-                            <input
-                                type="date"
-                                name="birth_date"
-                                value={formData.birth_date}
-                                onChange={handleInputChange}
-                                className="input-field"
-                                max="2024-12-31" // 添加最大日期限制
-                            />
-                            {errors.birth_date && <span className="error-message">{errors.birth_date}</span>}
-                        </label>
-                        <label>
-                            Breed:
-                            <input
-                                type="text"
-                                name="breed"
-                                value={formData.breed}
-                                onChange={handleInputChange}
-                                className="input-field"
-                                placeholder="Enter breed"
-                            />
-                        </label>
-                        <label>
-                            Location:
-                            <input
-                                type="text"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleInputChange}
-                                className="input-field"
-                                placeholder="Enter location"
-                            />
-                        </label>
-                        <label>
-                            Sex:
-                            <Select
-                                className="basic-select"
-                                classNamePrefix="select"
-                                value={sexOptions.find(option => option.value === formData.sex)}
-                                onChange={(option) => handleInputChange('sex', option.value)}
-                                options={sexOptions}
-                                placeholder="Select sex"
-                            />
-                        </label>
-                        <label>
-                            Preferred Time:
-                            <Select
-                                className="basic-select"
-                                classNamePrefix="select"
-                                value={timeOptions.find(option => option.value === formData.preferred_time)}
-                                onChange={(option) => handleInputChange('preferred_time', option.value)}
-                                options={timeOptions}
-                                placeholder="Select time"
-                            />
-                        </label>
-                        <label>
-                            Weight (LBS):
-                            <input
-                                type="number"
-                                name="weight"
-                                value={formData.weight}
-                                onChange={handleInputChange}
-                                className="input-field"
-                                min="0"
-                                max="200" // 添加最大重量限制
-                            />
-                            {errors.weight && <span className="error-message">{errors.weight}</span>}
-                        </label>
-                        <label>
-                            Health State:
-                            <Select
-                                isMulti
-                                options={[
-                                    { value: "rabies", label: "Rabies" },
-                                    { value: "dhlpp", label: "DHLPP" },
-                                    { value: "bordetella", label: "Bordetella" },
-                                    { value: "heartworm", label: "Heartworm Prevention" },
-                                    { value: "lyme", label: "Lyme Disease" },
-                                    { value: "leptospirosis", label: "Leptospirosis" },
-                                    { value: "influenza", label: "Canine Influenza" }
-                                ]}
-                                onChange={handleSelectChange}
-                                classNamePrefix="select"
-                                placeholder="Select health state"
-                            />
-                            
-                        </label>
-                    </form>
-                    <div className="button-container">
-                        <button type="button" className="next-button" onClick={handleNext}>
-                            Next
-                        </button>
-                    </div>
-                </div>
-            )}
-            {currentPage === 2 && (
-                <div className="adding-photos">
-                    <h2 className="title">Adding photos for [Pet's name]!</h2>
-                    <div className="photo-grid">
-                        {photos.map((photo, index) => (
-                            <div className="photo-frame" key={index}>
-                                {photo ? (
-                                    <div className="photo-container">
-                                        <img src={photo} alt={`Pet ${index + 1}`} className="photo" />
-                                        <button
-                                            className="delete-button"
-                                            onClick={() => handleDeletePhoto(index)}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" />
+                )}
+                {currentPage === 2 && (
+                    <div className="adding-photos">
+                        <h2 className="title">Adding photos for [Pet's name]!</h2>
+                        <div className="photo-grid">
+                            {photos.map((photo, index) => (
+                                <div className="photo-frame" key={index}>
+                                    {photo ? (
+                                        <div className="photo-container">
+                                            <img src={photo} alt={`Pet ${index + 1}`} className="photo" />
+                                            <button
+                                                className="delete-button"
+                                                onClick={() => handleDeletePhoto(index)}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path d="M18 6L6 18M6 6l12 12" strokeWidth="2" strokeLinecap="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <button className="add-photo-button" onClick={triggerFileInput}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 4V20M20 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                                             </svg>
                                         </button>
-                                    </div>
-                                ) : (
-                                    <button className="add-photo-button" onClick={triggerFileInput}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M12 4V20M20 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                        </svg>
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                    <p className="photo-count">{photos.filter((photo) => photo !== null).length}/6</p>
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handlePhotoUpload}
-                        className="upload-input"
-                    />
-                    <div className="button-container">
-                        <button className="button" onClick={handlePrevious}>
-                            Previous
-                        </button>
-                        <button className="button" onClick={handleNext}>
-                            Next
-                        </button>
-                    </div>
-                </div>
-            )}
-       {/* Page3: Characters */}
-            {currentPage === 3 && (
-                <div className="characters-page">
-                    <h2 className="page-title">Select Your Pet's Character</h2>
-                    <div className="character-grid">
-                        {charactersList.map((character) => (
-                            <button
-                                key={character.id}
-                                className={`character-card ${
-                                    selectedCharacters.includes(character) ? "selected" : ""
-                                } ${
-                                    selectedCharacters.length >= 3 &&
-                                    !selectedCharacters.includes(character) ? "disabled" : ""
-                                }`}
-                                onClick={() => handleCharacterSelect(character)}
-                            >
-                                <span className="character-name">{character.name}</span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        <p className="photo-count">{photos.filter((photo) => photo !== null).length}/6</p>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePhotoUpload}
+                            className="upload-input"
+                        />
+                        <div className="button-container">
+                            <button className="button" onClick={handlePrevious}>
+                                Previous
                             </button>
-                        ))}
-                    </div>
-                    <p className="selection-counter">{selectedCharacters.length}/3</p>
-                    <div className="button-container">
-                        <button className="button" onClick={handlePrevious}>
-                            Previous
-                        </button>
-                        <button className="button" onClick={handleNext}>
-                            Next
-                        </button>
-                    </div>
-                </div>
-            )}
-        {/* Page4: Red Flags */}
-            {currentPage === 4 && (
-                <div className="redflags-page">
-                    <h1 className="page-title">Red Flags</h1>
-                    <div className="flag-grid">
-                        {redFlagsList.map((flag) => (
-                            <button
-                                key={flag.id}
-                                className={`flag-card ${
-                                    selectedFlags.includes(flag) ? "selected" : ""
-                                } ${
-                                    selectedFlags.length >= 3 &&
-                                    !selectedFlags.includes(flag) ? "disabled" : ""
-                                }`}
-                                onClick={() => handleFlagSelect(flag)}
-                            >
-                                <span className="flag-name">{flag.name}</span>
+                            <button className="button" onClick={handleNext}>
+                                Next
                             </button>
-                        ))}
+                        </div>
                     </div>
-                    <p className="selection-counter">{selectedFlags.length}/3</p>
-                    <div className="button-container">
-                        <button className="button" onClick={handlePrevious}>
-                            Previous
-                        </button>
-                        <button className="button" onClick={handleSubmit}>
-                            Submit
-                        </button>
+                )}
+           {/* Page3: Characters */}
+                {currentPage === 3 && (
+                    <div className="characters-page">
+                        <h2 className="page-title">Select Your Pet's Character</h2>
+                        <div className="character-grid">
+                            {charactersList.map((character) => (
+                                <button
+                                    key={character.id}
+                                    className={`character-card ${
+                                        selectedCharacters.includes(character) ? "selected" : ""
+                                    } ${
+                                        selectedCharacters.length >= 3 &&
+                                        !selectedCharacters.includes(character) ? "disabled" : ""
+                                    }`}
+                                    onClick={() => handleCharacterSelect(character)}
+                                >
+                                    <span className="character-name">{character.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <p className="selection-counter">{selectedCharacters.length}/3</p>
+                        <div className="button-container">
+                            <button className="button" onClick={handlePrevious}>
+                                Previous
+                            </button>
+                            <button className="button" onClick={handleNext}>
+                                Next
+                            </button>
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
+            {/* Page4: Red Flags */}
+                {currentPage === 4 && (
+                    <div className="redflags-page">
+                        <h1 className="page-title">Red Flags</h1>
+                        <div className="flag-grid">
+                            {redFlagsList.map((flag) => (
+                                <button
+                                    key={flag.id}
+                                    className={`flag-card ${
+                                        selectedFlags.includes(flag) ? "selected" : ""
+                                    } ${
+                                        selectedFlags.length >= 3 &&
+                                        !selectedFlags.includes(flag) ? "disabled" : ""
+                                    }`}
+                                    onClick={() => handleFlagSelect(flag)}
+                                >
+                                    <span className="flag-name">{flag.name}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <p className="selection-counter">{selectedFlags.length}/3</p>
+                        <div className="button-container">
+                            <button className="button" onClick={handlePrevious}>
+                                Previous
+                            </button>
+                            <button className="button" onClick={handleSubmit}>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
