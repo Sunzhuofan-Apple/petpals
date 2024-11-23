@@ -8,21 +8,58 @@ const OtherProfile = () => {
   const [error, setError] = useState(null);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setIsLogin(data.is_authenticated);
+        }
+      } catch (err) {
+        console.error("Error checking login status:", err);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
   useEffect(() => {
     const fetchPetData = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/user-pet/${id}`, {
+          method: "GET",
           credentials: "include",
         });
         
         if (response.ok) {
-          const data = await response.json();
-          setPetData(data);
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            const data = await response.json();
+            setPetData(data);
+          } else {
+            throw new Error("Invalid response format from server");
+          }
         } else {
-          throw new Error("Failed to fetch pet data");
+          const text = await response.text();
+          try {
+            const errorData = JSON.parse(text);
+            throw new Error(errorData.error || `Failed to fetch pet data: ${response.status}`);
+          } catch (e) {
+            throw new Error(`Server error: ${response.status}`);
+          }
         }
       } catch (err) {
+        console.error("Error details:", err);
         setError(err.message);
       }
     };
