@@ -46,7 +46,7 @@ def oauth_redirect(request):
 # Custom redirect
 @login_required
 def profileSignUp(request):
-    return redirect('http://localhost:3000/ProfileSignUp')
+    return redirect(f'{settings.FRONTEND_URL}/ProfileSignUp')
 
 @login_required
 def api_logout(request):
@@ -213,7 +213,7 @@ def get_user_pet(request):
 
 @login_required
 def matching_redirect(request):
-    return redirect('http://localhost:3000/Matching')
+    return redirect(f"{settings.FRONTEND_URL}/Matching")
 
 # @api_view(['GET'])
 # @permission_classes([IsAuthenticated])

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Friends.css";
 import getCSRFToken from "./getCSRFToken";
+import { useNavigate } from "react-router-dom";
 
 const Friends = () => {
   const [followers, setFollowers] = useState([]);
@@ -83,12 +84,14 @@ const Friends = () => {
 
   const handleMouseEnter = () => setShowMenu(true);
   const handleMouseLeave = () => setShowMenu(false);
+  const navigate = useNavigate();
 
   const navigateTo = (path) => {
+    console.log("path", path);
     if (path === "Homepage") {
-      window.location.href = "http://localhost:3000/";
+      navigate(`/`);
     } else {
-      window.location.href = path;
+      navigate(`${path}`);
     }
     setShowMenu(false);
   };

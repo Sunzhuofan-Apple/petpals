@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/MyProfile.css";
 import getCSRFToken from "./getCSRFToken";
+import { useNavigate } from "react-router-dom";
 
 const MyProfile = () => {
   const [petData, setPetData] = useState(null);
@@ -105,12 +106,14 @@ const MyProfile = () => {
 
   const handleMouseEnter = () => setShowMenu(true);
   const handleMouseLeave = () => setShowMenu(false);
+  const navigate = useNavigate();
 
   const navigateTo = (path) => {
+    console.log("path", path);
     if (path === "Homepage") {
-      window.location.href = "http://localhost:3000/"; 
+      navigate(`/`);
     } else {
-      window.location.href = path;
+      navigate(`${path}`);
     }
     setShowMenu(false);
   };

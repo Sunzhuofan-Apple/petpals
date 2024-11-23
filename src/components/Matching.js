@@ -3,6 +3,7 @@ import "../styles/Matching.css";
 import getCSRFToken from './getCSRFToken';
 import Loading from './Loading';
 import Transition from './Transition'; 
+import { useNavigate } from 'react-router-dom';
 
 export const Matching = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,13 +23,16 @@ export const Matching = () => {
     const handleMouseEnter = () => setShowMenu(true);
     const handleMouseLeave = () => setShowMenu(false);
 
+    const navigate = useNavigate();
+
     const navigateTo = (path) => {
-        if (path === "Homepage") {
-            window.location.href = "http://localhost:3000/";
-        } else {
-            window.location.href = path;
-        }
-        setShowMenu(false);
+      console.log("path", path);
+      if (path === "Homepage") {
+        navigate(`/`);
+      } else {
+        navigate(`${path}`);
+      }
+      setShowMenu(false);
     };
 
     const handleLogout = () => {
