@@ -59,25 +59,29 @@
     justify-content: center;
 }
 
-.tagline {
+.register-intro-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 1rem;
+    max-width: 600px;
+}
+
+.register-tagline {
     font-family: 'Open Sans', sans-serif;
     font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 2vw;
-    text-align: center;
-    align-self: center;
-    animation: fadeInOut 3s infinite;
-    display: inline-block;
 }
 
-.black-text {
+.register-text-black {
     color: #3d2828;
     animation: fadeInOut 3s infinite;
     display: inline-block;
 }
 
-.highlighted-text {
+.register-text-highlight {
     color: #FF7578;
     animation: fadeInOut 3s infinite 1.5s;
     display: inline-block;
@@ -266,7 +270,7 @@
         padding: 20px;
     }
 
-    .tagline {
+    .register-tagline {
         font-size: clamp(1.8rem, 5vw, 2.5rem);
     }
 
@@ -277,4 +281,19 @@
     .WelcomeText {
         font-size: clamp(1.1rem, 3vw, 1.5rem);
     }
+}
+
+.register-promise-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-promise-text {
+    color: #735858;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 600;
+    z-index: 2;
 }

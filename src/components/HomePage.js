@@ -94,22 +94,22 @@ function HomePage() {
       </header>
 
       {/* 其余内容 */}
-      <div className="HeaderSection">
+      <div className="home-header-section">
         <img className="HeaderImage" src={`${process.env.PUBLIC_URL}/image/header.jpg`} alt="Header" />
-        <div className="IntroText">
-          <div className="Tagline">
-            <span className="black-text">Connect. </span>
-            <span className="highlighted-text">Match</span>
-            <span className="black-text">.Wag!</span>
+        <div className="home-intro-text">
+          <div className="home-tagline">
+            <span className="home-text-black">Connect. </span>
+            <span className="home-text-highlight">Match</span>
+            <span className="home-text-black">.Wag!</span>
           </div>
           <button className="GetStartedButton" onClick={handleGetStarted}>Get Started</button>
         </div>
       </div>
 
-      <div className="PromiseSection">
-        <div className="PromiseText">Petpal Promise</div>
-        <div className="PawPrint">
-          <div className="PawImage">
+      <div className="home-promise-section">
+        <div className="home-promise-text">Petpal Promise</div>
+        <div className="home-paw-print">
+          <div className="home-paw-image">
             <img src={`${process.env.PUBLIC_URL}/image/g3023.svg`} alt="Paw Print" />
           </div>
         </div>
