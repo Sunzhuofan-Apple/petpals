@@ -40,7 +40,24 @@ export const Matching = () => {
                 
                 if (!profilesResponse.ok) throw new Error('Failed to fetch sorted profiles');
                 const sortedProfiles = await profilesResponse.json();
-                if (sortedProfiles) setProfiles(sortedProfiles);
+                
+                // Fetch following status for each profile
+                const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!followingResponse.ok) throw new Error('Failed to fetch following status');
+                const followingData = await followingResponse.json();
+                const followingIds = followingData.following.map(pet => pet.id);
+                
+                // Add isFollowing property to each profile
+                const profilesWithFollowing = sortedProfiles.map(profile => ({
+                    ...profile,
+                    isFollowing: followingIds.includes(profile.id)
+                }));
+                
+                if (profilesWithFollowing) setProfiles(profilesWithFollowing);
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -128,6 +145,52 @@ export const Matching = () => {
         return 'hidden';
     };
 
+    const handleWagClick = async (profileId) => {
+        if (!profileId) {
+            console.error('Profile ID is undefined');
+            return;
+        }
+
+        try {
+            const csrfToken = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('csrftoken='))
+                ?.split('=')[1];
+
+            const isFollowing = profiles.find(p => p.id === profileId)?.isFollowing;
+            const endpoint = isFollowing ? 'unfollow-pet' : 'follow-pet';
+
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${endpoint}/${profileId}/`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                }
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Failed to ${isFollowing ? 'unfollow' : 'follow'} pet: ${response.status} ${errorText}`);
+            }
+
+            const data = await response.json();
+            
+            const updatedProfiles = profiles.map(profile => {
+                if (profile.id === profileId) {
+                    return { ...profile, isFollowing: !isFollowing };
+                }
+                return profile;
+            });
+            setProfiles(updatedProfiles);
+            console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Unable to ${isFollowing ? 'unfollow' : 'follow'} pet: ${error.message}. Please try again or contact support if the issue persists.`);
+        }
+    };
+
     return (
         <div className="matching-container">
             {
@@ -183,7 +246,12 @@ export const Matching = () => {
                                             <br />
                                             {distance} miles away from you
                                         </p>
-                                        <button className="wag-button">Wag your tail</button>
+                                        <button 
+                                            className="wag-button"
+                                            onClick={() => handleWagClick(profile.id)}
+                                        >
+                                            {profile.isFollowing ? 'Wagging!' : 'Wag your tail'}
+                                        </button>
                                     </div>
                                 );
                             })}

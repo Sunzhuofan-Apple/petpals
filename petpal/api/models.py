@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class Pet(models.Model):
+    id = models.AutoField(primary_key=True)
     SEX_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female'),
@@ -42,6 +43,8 @@ class Pet(models.Model):
 
 
 
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
+    following = models.ManyToManyField(User, related_name='following', blank=True)
     def __str__(self):
         return f"{self.name} ({self.breed})"
     
@@ -59,7 +62,6 @@ class Pet(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     pet = models.OneToOneField(Pet, on_delete=models.CASCADE, blank=True, null=True)
-
     def __str__(self):
         return self.user.username
     

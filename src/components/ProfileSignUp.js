@@ -79,7 +79,7 @@ const ProfileSignUp = () => {
     };
 
     const fileInputRef = useRef(null);
-    
+
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevState) => ({
@@ -121,7 +121,6 @@ const ProfileSignUp = () => {
     }, [navigate]);
     
     
-
     
 
     const handleSelectChange = (selectedOptions) => {

@@ -17,6 +17,10 @@ from .views import (
     get_sorted_profiles,
     upload_photos,  
     check_pet_exists,
+    follow_pet,
+    get_following,
+    unfollow_pet,
+
 )
 from . import views
 
@@ -44,6 +48,9 @@ urlpatterns = [
     path('api/upload-photos/', views.upload_photos, name='upload-photos'),  
     path('api/user-pet/', get_user_pet, name='get_user_pet'),
     path('api/check-pet-exists/', check_pet_exists, name='check-pet-exists'),
+    path('api/follow-pet/<int:pet_id>/', views.follow_pet, name='follow-pet'),
+    path('api/following/', views.get_following, name='get-following'),
+    path('api/unfollow-pet/<int:pet_id>/', views.unfollow_pet, name='unfollow-pet'),
 ]
 
 if settings.DEBUG:  
