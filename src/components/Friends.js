@@ -1,33 +1,58 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Friends.css";
+import getCSRFToken from "./getCSRFToken";
 
 const Friends = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLogin, setIsLogin] = useState(false);
+  const [username, setUsername] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
+    // Fetch login state and username
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/auth/redirect/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.is_authenticated) {
+            setIsLogin(true);
+            setUsername(data.username);
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
+
+    // Fetch followers and following
     const fetchData = async () => {
       try {
-        // Fetch followers
         const followersResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/followers/`, {
-          credentials: 'include'
+          credentials: "include",
         });
-        
-        if (!followersResponse.ok) throw new Error('Failed to fetch followers');
+        if (!followersResponse.ok) throw new Error("Failed to fetch followers");
         const followersData = await followersResponse.json();
         setFollowers(followersData.followers);
 
-        // Fetch following
         const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
-          credentials: 'include'
+          credentials: "include",
         });
-        
-        if (!followingResponse.ok) throw new Error('Failed to fetch following');
+        if (!followingResponse.ok) throw new Error("Failed to fetch following");
         const followingData = await followingResponse.json();
         setFollowing(followingData.following);
-
       } catch (err) {
         setError(err.message);
       } finally {
@@ -38,81 +63,34 @@ const Friends = () => {
     fetchData();
   }, []);
 
-  const handleWagBack = async (followerId) => {
-    try {
-      console.log('Attempting to wag back to pet ID:', followerId);
-      
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrftoken='))
-        ?.split('=')[1];
-      
-      const follower = followers.find(f => f.id === followerId);
-      const isWagging = follower?.hasWaggedBack;
-      const endpoint = isWagging ? 'unfollow-pet' : 'wag-back';
-      
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${endpoint}/${followerId}/`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
+  const handleLogout = () => {
+    fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken(),
+      },
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setIsLogin(false);
+          setUsername("");
         }
-      });
-
-      console.log('Wag back response status:', response.status);
-      const responseData = await response.json();
-      console.log('Wag back response data:', responseData);
-
-      if (!response.ok) throw new Error(`Failed to ${isWagging ? 'unfollow' : 'wag back'}`);
-
-      // Update followers list to show wag back status
-      setFollowers(followers.map(follower => 
-        follower.id === followerId 
-          ? { ...follower, hasWaggedBack: !isWagging }
-          : follower
-      ));
-
-      // Fetch updated following list
-      const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
-        credentials: 'include'
-      });
-      
-      if (!followingResponse.ok) throw new Error('Failed to fetch following');
-      const followingData = await followingResponse.json();
-      setFollowing(followingData.following);
-
-    } catch (err) {
-      console.error('Error wagging back:', err);
-    }
+      })
+      .catch((err) => console.error("Logout error:", err));
   };
 
-  const handleUnfollow = async (followId) => {
-    try {
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('csrftoken='))
-        ?.split('=')[1];
-      
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/unfollow-pet/${followId}/`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
-        }
-      });
+  const handleMouseEnter = () => setShowMenu(true);
+  const handleMouseLeave = () => setShowMenu(false);
 
-      if (!response.ok) throw new Error('Failed to unfollow');
-      
-      // Remove from following list
-      setFollowing(following.filter(follow => follow.id !== followId));
-      
-    } catch (err) {
-      console.error('Error unfollowing:', err);
+  const navigateTo = (path) => {
+    if (path === "Homepage") {
+      window.location.href = "http://localhost:3000/";
+    } else {
+      window.location.href = path;
     }
+    setShowMenu(false);
   };
 
   if (isLoading) return <div className="loading">Loading...</div>;
@@ -120,6 +98,27 @@ const Friends = () => {
 
   return (
     <div className="friends-container">
+      {/* Header */}
+      <header className="AppHeader">
+        <div
+          className="header-button username"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {username}
+          {showMenu && (
+            <div className="dropdown-menu">
+              <button onClick={() => navigateTo("Homepage")}>Homepage</button>
+              <button onClick={() => navigateTo("/MyProfile")}>Profile</button>
+            </div>
+          )}
+        </div>
+        <button className="header-button" onClick={handleLogout}>
+          {isLogin ? "Logout" : "Login"}
+        </button>
+      </header>
+
+      {/* Friends Content */}
       <h1 className="main-title">Friends</h1>
       <div className="friends-content">
         {/* Left Column - Followers */}
@@ -136,10 +135,10 @@ const Friends = () => {
                     {`${follower.name} wags your tail and says hi`}
                   </div>
                   <button
-                    className={`wag-back-button ${follower.hasWaggedBack ? 'wagging' : ''}`}
-                    onClick={() => handleWagBack(follower.id)}
+                    className={`wag-back-button ${follower.hasWaggedBack ? "wagging" : ""}`}
+                    onClick={() => console.log("Wag back", follower.id)}
                   >
-                    {follower.hasWaggedBack ? 'Wagging' : 'Wag back'}
+                    {follower.hasWaggedBack ? "Wagging" : "Wag back"}
                   </button>
                 </div>
               </div>
@@ -162,7 +161,7 @@ const Friends = () => {
                   </div>
                   <button
                     className="wag-back-button wagging"
-                    onClick={() => handleUnfollow(follow.id)}
+                    onClick={() => console.log("Unfollow", follow.id)}
                   >
                     Unfollow
                   </button>
