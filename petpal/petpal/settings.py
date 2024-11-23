@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DEFAULT_PHOTO_URL = 'https://my-bucket.s3.amazonaws.com/default.jpg'
+
+
 # ========== Configuration ========== #
 CONFIG = ConfigParser()
 CONFIG.read(BASE_DIR / "config.ini")

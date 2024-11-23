@@ -2,34 +2,32 @@ import React, { useState, useRef } from "react";
 import "../styles/AddPhoto.css";
 
 export const AddPhoto = () => {
-    // 用于存储最多 6 张照片的状态数组
     const [photos, setPhotos] = useState(Array(6).fill(null));
-    const fileInputRef = useRef(null); // 添加 ref 用于触发文件选择
+    const fileInputRef = useRef(null); 
 
-    // 上传照片事件处理函数
     const handlePhotoUpload = (event) => {
-        const files = Array.from(event.target.files); // 获取文件
+        const files = Array.from(event.target.files); 
         const updatedPhotos = [...photos];
 
         files.forEach((file, index) => {
-            const firstEmptyIndex = updatedPhotos.indexOf(null); // 找到第一个空位
+            const firstEmptyIndex = updatedPhotos.indexOf(null); 
             if (firstEmptyIndex !== -1) {
-                updatedPhotos[firstEmptyIndex] = URL.createObjectURL(file); // 将照片放到空位
+                updatedPhotos[firstEmptyIndex] = URL.createObjectURL(file); 
             }
         });
 
-        setPhotos(updatedPhotos); // 更新状态
+        setPhotos(updatedPhotos); 
     };
 
-    // 添加触发文件选择的函数
+
     const triggerFileInput = () => {
         fileInputRef.current.click();
     };
 
-    // 修改删除照片的函数
+
     const handleDeletePhoto = (index) => {
-        const updatedPhotos = photos.filter((photo, i) => i !== index) // 移除被删除的照片
-            .concat(null); // 在末尾添加一个空位
+        const updatedPhotos = photos.filter((photo, i) => i !== index) 
+            .concat(null); 
         setPhotos(updatedPhotos);
     };
 
