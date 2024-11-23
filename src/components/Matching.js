@@ -214,59 +214,57 @@ export const Matching = () => {
     };
 
     return (
-        <div className="matching-container">
-            {
-            isTransitioning ? (
-                <div className="transition-overlay">
-                <Transition onFinish={handleTransition} /> 
-            </div>
-            ) : 
-             isLoading ? (
-                <div>
-                    <Loading />
-                </div>
-            ) : !userPet ? (
-                <div className="no-pet-message">
-                    <h2>Ple ase set up your pet profile first</h2>
-                    <button onClick={() => window.location.href = '/ProfileSignUp'}>
-                        Set Up Profile
-                    </button>
-                </div>
-            ) : profiles.length === 0 ? (
-                <div className="no-matches-message">
-                    <h2>No matches found</h2>
-                    <p>Check back later for new potential matches!</p>
-                </div>
-            ) : 
-            (
-                <>
-                    <div className="controls">
-                        <button className="sort-button" onClick={handleSortByDistance}>
-                            Sort by distance
-                        </button>
-                        <button className="sort-button" onClick={handleSortByMatch}>
-                            Sort by match
+        <div className="container">
+            <header className="AppHeader">
+                <button className="header-button" onClick={() => window.location.href = "/"}>
+                    Home
+                </button>
+            </header>
+            <div className="matching-container">
+                {isTransitioning ? (
+                    <div className="transition-overlay">
+                        <Transition onFinish={handleTransition} />
+                    </div>
+                ) : isLoading ? (
+                    <div>
+                        <Loading />
+                    </div>
+                ) : !userPet ? (
+                    <div className="no-pet-message">
+                        <h2>Please set up your pet profile first</h2>
+                        <button onClick={() => window.location.href = '/ProfileSignUp'}>
+                            Set Up Profile
                         </button>
                     </div>
-
-                    <div className="cards-container">
+                ) : profiles.length === 0 ? (
+                    <div className="no-matches-message">
+                        <h2>No matches found</h2>
+                        <p>Check back later for new potential matches!</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="controls">
+                            <button className="sort-button" onClick={handleSortByDistance}>
+                                Sort by distance
+                            </button>
+                            <button className="sort-button" onClick={handleSortByMatch}>
+                                Sort by match
+                            </button>
+                        </div>
+                        <div className="cards-container">
                             {profiles.map((profile, index) => {
                                 const position = getCardPosition(index);
                                 if (position === 'hidden') return null;
-
-                                const { photos = [], name, breed, age, weight, distance } = profile; 
-
+    
+                                const { photos = [], name, breed, age, weight, distance } = profile;
+    
                                 return (
-                                    <div 
-                                        key={index}
-                                        className={`profile-card ${position}`}
-                                    >
+                                    <div key={index} className={`profile-card ${position}`}>
                                         <div className="match-score">
-                                            {/* Match: {calculateMatchScore(userPet, profile)}% */}
                                             Match: {profile.matchScore}%
                                         </div>
                                         <img
-                                            src={photos.length > 0 ? photos[0] : 'default-avatar.png'} 
+                                            src={photos.length > 0 ? photos[0] : 'default-avatar.png'}
                                             alt={`${name}'s photo`}
                                             className="profile-photo"
                                         />
@@ -276,7 +274,7 @@ export const Matching = () => {
                                             <br />
                                             {distance} miles away from you
                                         </p>
-                                        <button 
+                                        <button
                                             className="wag-button"
                                             onClick={() => handleWagClick(profile.id)}
                                         >
@@ -286,13 +284,14 @@ export const Matching = () => {
                                 );
                             })}
                         </div>
-
-                    <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
-                    <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
-                </>
-            )}
+                        <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
+                        <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
+                    </>
+                )}
+            </div>
         </div>
-        );
+    );
+    
 };
 
 export default Matching;
