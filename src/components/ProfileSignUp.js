@@ -144,7 +144,6 @@ const ProfileSignUp = () => {
         setPhotos(updatedPhotos);
     };
 
-    // 表单提交
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -153,6 +152,18 @@ const ProfileSignUp = () => {
         console.log("Selected Characters:", selectedCharacters);
         console.log("Selected Flags:", selectedFlags);
         console.log("Photos:", photos);
+        if (formData.health_states.length === 0) {
+            alert("Health states cannot be empty.");
+            return;
+        }
+        if (selectedCharacters.length === 0) {
+            alert("Please select at least one character.");
+            return;
+        }
+        if (selectedFlags.length === 0) {
+            alert("Please select at least one red flag.");
+            return;
+        }
 
         const payload = {
             ...formData,

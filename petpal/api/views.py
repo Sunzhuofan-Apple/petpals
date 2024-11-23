@@ -145,6 +145,12 @@ def profile_setup(request):
         user_profile, created = UserProfile.objects.get_or_create(user=request.user)
         
         pet_data = request.data
+        if not pet_data.get('health_states', '').strip():
+            return Response({'error': 'Health states cannot be empty.'}, status=400)
+        if not pet_data.get('characters', '').strip():
+            return Response({'error': 'Characters cannot be empty.'}, status=400)
+        if not pet_data.get('red_flags', '').strip():
+            return Response({'error': 'Red flags cannot be empty.'}, status=400)
         pet = Pet.objects.create(
             owner=request.user,
             name=pet_data['name'],
@@ -159,7 +165,7 @@ def profile_setup(request):
             red_flags=pet_data.get('red_flags', ''),
             photos=pet_data.get('photos', [])
         )
-        
+        user_profile, created = UserProfile.objects.get_or_create(user=request.user)
         user_profile.pet = pet
         user_profile.save()
         
