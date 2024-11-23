@@ -179,8 +179,8 @@ def ask(target_pet, pets_data):
             
             # if JSON parsing is successful, save the result and return
             if isinstance(json_load, list):
-                with open('gpt_result.json', 'w') as f:
-                    json.dump(json_load, f, indent=4)
+                # with open('gpt_result.json', 'w') as f:
+                #     json.dump(json_load, f, indent=4)
                 return json_load
             else:
                 print("Parsed JSON is not a list. Proceeding with regex extraction.")
@@ -201,8 +201,8 @@ def ask(target_pet, pets_data):
             print(f"Failed to parse JSON object: {e}")
         
         # save the result for debug
-        with open('gpt_result.json', 'w') as f:
-            json.dump(json_load, f, indent=4)
+        # with open('gpt_result.json', 'w') as f:
+        #     json.dump(json_load, f, indent=4)
     
     return json_load
 

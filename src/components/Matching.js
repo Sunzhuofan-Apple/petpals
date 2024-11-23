@@ -84,6 +84,7 @@ export const Matching = () => {
         const sortedProfiles = [...profiles].sort((a, b) => a.distance - b.distance);
         setProfiles(sortedProfiles);
         setCurrentIndex(0);
+        console.log('Sorted by distance', sortedProfiles);
     };
 
     const handleSortByMatch = () => {
@@ -92,6 +93,7 @@ export const Matching = () => {
         });
         setProfiles(sortedProfiles);
         setCurrentIndex(0);
+        console.log('Sorted by match', sortedProfiles);
     };
 
     // const handleSortByMatch = () => {
@@ -200,8 +202,7 @@ export const Matching = () => {
                 return profile;
             });
             setProfiles(updatedProfiles);
-            console.log('profiles', profiles);
-            // console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
+            console.log(`Successfully ${isFollowing ? 'unfollowed' : 'followed'} pet`, profileId);
         } catch (error) {
             console.error('Error:', error);
             alert(`Unable to ${isFollowing ? 'unfollow' : 'follow'} pet: ${error.message}. Please try again or contact support if the issue persists.`);
@@ -243,7 +244,6 @@ export const Matching = () => {
                                 if (position === 'hidden') return null;
 
                                 const { photos = [], name, breed, age, weight, distance } = profile; 
-                                console.log('photos', photos);
 
                                 return (
                                     <div 
