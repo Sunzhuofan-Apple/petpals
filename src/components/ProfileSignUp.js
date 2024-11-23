@@ -95,6 +95,12 @@ const ProfileSignUp = () => {
 
     useEffect(() => {
         const path = "/ProfileSignUp";
+        const from = new URLSearchParams(window.location.search).get('from');
+        
+        if (from === 'MyProfile') {
+            setShouldRender(true);
+            return;
+        }
         const isRedirectNeeded = protectRedirect(path, path);
         if (!isRedirectNeeded) {
             setShouldRender(true);
@@ -164,6 +170,14 @@ const ProfileSignUp = () => {
 
     useEffect(() => {
         const checkPetExists = async () => {
+            const from = new URLSearchParams(window.location.search).get('from');
+            
+            if (from === 'MyProfile') {
+                setShouldRender(true);
+                setIsLoading(false);
+                return;
+            }
+
             try {
                 const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/check-pet-exists/`, {
                     method: "GET",
@@ -181,9 +195,9 @@ const ProfileSignUp = () => {
                 }
             } catch (error) {
                 console.error("Error checking pet existence:", error);
-                navigate("/login"); // 跳转到登录页面
+                navigate("/login");
             } finally {
-                setIsLoading(false); // 结束加载状态
+                setIsLoading(false);
             }
         };
     
@@ -202,7 +216,7 @@ const ProfileSignUp = () => {
         });
     };
 
-    // 上传照片事件处理函数
+    // 上传照片事件处函数
     const handlePhotoUpload = async (event) => {
         const files = event.target.files;
         const formData = new FormData();
@@ -262,36 +276,53 @@ const ProfileSignUp = () => {
     
         const payload = {
             ...formData,
-            health_states: formData.health_states, // 确保是数组
+            health_states: formData.health_states,
             characters: selectedCharacters.map(c => c.name),
             red_flags: selectedFlags.map(f => f.name),
-            photos: photos.filter(p => p !== null),
+            photos: photos.filter(p => p !== null)
         };
-    
-        console.log("Final Payload:", payload);
     
         try {
             const csrfToken = getCSRFToken();
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrfToken,
-                },
-                credentials: 'include',
-                body: JSON.stringify(payload),
-            });
-    
-            if (response.ok) {
-                alert("Pet profile created successfully!");
-                window.location.href = '/Matching';
-            } else {
-                const data = await response.json();
-                alert(data.error || "Failed to create profile.");
+            const from = new URLSearchParams(window.location.search).get('from');
+            
+            const response = await fetch(
+                from === 'MyProfile' 
+                    ? `${process.env.REACT_APP_BACKEND}/api/update-pet/`
+                    : `${process.env.REACT_APP_BACKEND}/api/ProfileSignUp/`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrfToken,
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(payload),
+                }
+            );
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                throw new Error("Server returned non-JSON response");
             }
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to update profile");
+            }
+
+            alert(from === 'MyProfile' 
+                ? "Pet profile updated successfully!"
+                : "Pet profile created successfully!");
+            window.location.href = '/MyProfile';
         } catch (error) {
             console.error("Fetch error:", error);
-            alert("Error submitting profile. Please try again.");
+            if (error.message === "Server returned non-JSON response") {
+                alert("Server error. Please try again later.");
+            } else {
+                alert(error.message || "Error submitting profile. Please try again.");
+            }
         }
     };
     
@@ -389,6 +420,52 @@ const ProfileSignUp = () => {
             console.error('Error initializing Google Maps:', error);
         }
     };
+
+    useEffect(() => {
+        const from = new URLSearchParams(window.location.search).get('from');
+        
+        if (from === 'MyProfile') {
+            const fetchExistingPetData = async () => {
+                try {
+                    const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/user-pet/`, {
+                        method: "GET",
+                        credentials: "include",
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setFormData({
+                            name: data.name || "",
+                            sex: data.sex || "",
+                            preferred_time: data.preferred_time || "",
+                            breed: data.breed || "",
+                            birth_date: data.birth_date || "",
+                            location: data.location || "",
+                            weight: data.weight || "",
+                            health_states: data.health_states || [],
+                            photos: data.photos || Array(6).fill(null)
+                        });
+                        
+                        const existingCharacters = charactersList.filter(char => 
+                            data.characters.includes(char.name)
+                        );
+                        setSelectedCharacters(existingCharacters);
+                        
+                        const existingFlags = redFlagsList.filter(flag => 
+                            data.red_flags.includes(flag.name)
+                        );
+                        setSelectedFlags(existingFlags);
+                        
+                        setPhotos(data.photos || Array(6).fill(null));
+                    }
+                } catch (err) {
+                    console.error("Error fetching existing pet data:", err);
+                }
+            };
+
+            fetchExistingPetData();
+        }
+    }, []);
 
     if (!shouldRender) return null;
     if (isLoading) {

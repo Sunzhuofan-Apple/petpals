@@ -8,6 +8,8 @@ const MyProfile = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [username, setUsername] = useState("");
   const [showMenu, setShowMenu] = useState(false);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
   useEffect(() => {
     // Fetch login state and username
@@ -56,6 +58,31 @@ const MyProfile = () => {
     };
 
     fetchPetData();
+
+    // Add new fetch for followers and following
+    const fetchFriendsData = async () => {
+      try {
+        const followersResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/followers/`, {
+          credentials: "include",
+        });
+        if (followersResponse.ok) {
+          const followersData = await followersResponse.json();
+          setFollowers(followersData.followers);
+        }
+
+        const followingResponse = await fetch(`${process.env.REACT_APP_BACKEND}/api/following/`, {
+          credentials: "include",
+        });
+        if (followingResponse.ok) {
+          const followingData = await followingResponse.json();
+          setFollowing(followingData.following);
+        }
+      } catch (err) {
+        console.error("Error fetching friends data:", err);
+      }
+    };
+
+    fetchFriendsData();
   }, []);
 
   const handleLogout = () => {
@@ -161,6 +188,24 @@ const MyProfile = () => {
             Red flags: {red_flags} <br />
           </span>
         </p>
+      </div>
+      <div className="shots-followers">
+        <button 
+          className="edit-profile" 
+          onClick={() => window.location.href = '/ProfileSignUp?from=MyProfile'}
+        >
+          Edit Profile
+        </button>
+        <div className="divider"></div>
+        <div className="followers-section" onClick={() => window.location.href = '/Friends'}>
+          <div className="count">{followers.length}</div>
+          <div className="label">Followers</div>
+        </div>
+        <div className="divider"></div>
+        <div className="following-section" onClick={() => window.location.href = '/Friends'}>
+          <div className="count">{following.length}</div>
+          <div className="label">Following</div>
+        </div>
       </div>
     </div>
   );

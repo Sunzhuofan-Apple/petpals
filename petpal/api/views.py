@@ -287,19 +287,15 @@ def get_matching_recommendations(request):
 @permission_classes([IsAuthenticated])
 def get_sorted_profiles(request):
     try:
-        print("=== Debug: Starting get_sorted_profiles ===")
         user_profile = UserProfile.objects.get(user=request.user)
-        print(f"Found user profile for: {request.user.username}")
         
         if not user_profile.pet or not user_profile.pet.location:
             print("No pet or location found for user")
             return Response({'error': 'User pet location not found'}, status=400)
             
         user_location = user_profile.pet.location
-        print(f"User pet location: {user_location}")
         
         all_pets = Pet.objects.exclude(owner=request.user)
-        print(f"Total pets found (excluding user's): {all_pets.count()}")
         
         # Print all pets for debugging
         # for pet in all_pets:
@@ -342,8 +338,6 @@ def get_sorted_profiles(request):
                 continue
                 
         sorted_profiles = sorted(profiles, key=lambda x: x['distance'])
-        print(f"Final number of profiles: {len(sorted_profiles)}")
-        print("=== Debug: Ending get_sorted_profiles ===")
         
         return Response(sorted_profiles)
     except Exception as e:
@@ -355,14 +349,12 @@ def get_sorted_profiles(request):
 def matching(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
-        print(f"Found user profile for: {request.user.username}")
         
         if not user_profile.pet or not user_profile.pet.location:
             print("No pet or location found for user")
             return Response({'error': 'User pet location not found'}, status=400)
 
         result = process_target_pet(user_profile.pet.id, request.user.id)
-        print(f"Matching result: {result}")
         return JsonResponse({'results': result}, status=200)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
@@ -371,9 +363,7 @@ class MatchingAPIView(APIView):
     def post(self, request):
         try:
             pet_id = request.data
-            print(f"Processing target pet: {pet_id}")
             pet_info = Pet.objects.get(id=pet_id)
-            print(f"pet info: {pet_info.__dict__}")
             result = process_target_pet(pet_id)
             return Response({'results': result}, status=200)
         except Exception as e:
@@ -578,3 +568,41 @@ def check_pet_exists(request):
         return Response({"has_pet": has_pet}, status=200)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_pet(request):
+    try:
+        pet_data = request.data
+        if not isinstance(pet_data.get('health_states'), list):
+            return Response({'error': 'Health states must be a list.'}, status=400)
+        if not isinstance(pet_data.get('characters'), list):
+            return Response({'error': 'Characters must be a list.'}, status=400)
+        if not isinstance(pet_data.get('red_flags'), list):
+            return Response({'error': 'Red flags must be a list.'}, status=400)
+        
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            pet = user_profile.pet
+        except UserProfile.DoesNotExist:
+            return Response({'error': 'User profile not found'}, status=404)
+        except Pet.DoesNotExist:
+            return Response({'error': 'Pet not found'}, status=404)
+
+        pet.name = pet_data['name']
+        pet.sex = pet_data['sex']
+        pet.preferred_time = pet_data['preferred_time']
+        pet.breed = pet_data['breed']
+        pet.birth_date = pet_data['birth_date']
+        pet.location = pet_data['location']
+        pet.weight = float(pet_data['weight'])
+        pet.health_states = pet_data['health_states']
+        pet.characters = pet_data['characters']
+        pet.red_flags = pet_data['red_flags']
+        pet.photos = pet_data.get('photos', [])
+        
+        pet.save()
+
+        return Response({'message': 'Pet profile updated successfully'}, status=200)
+    except Exception as e:
+        return Response({'error': str(e)}, status=400)

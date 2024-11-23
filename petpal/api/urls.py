@@ -22,6 +22,7 @@ from .views import (
     unfollow_pet,
     get_followers,
     wag_back,
+    update_pet,
 )
 from . import views
 
@@ -53,6 +54,7 @@ urlpatterns = [
     path('api/followers/', views.get_followers, name='get-followers'),
     path('api/unfollow-pet/<int:pet_id>/', views.unfollow_pet, name='unfollow-pet'),
     path('api/wag-back/<int:follower_id>/', views.wag_back, name='wag-back'),
+    path('api/update-pet/', update_pet, name='update-pet'),
 ]
 
 if settings.DEBUG:  

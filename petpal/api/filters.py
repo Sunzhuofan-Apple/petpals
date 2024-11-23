@@ -103,7 +103,6 @@ def apply_filters(pets, target_pet):
 def get_full_prompt(target_pet, pets_data):
     target_pet = json.dumps(target_pet, indent=4)
     pets_data = json.dumps(pets_data, indent=4)
-    print("friends pets_data", pets_data)
     return f"""
     Return Format:
     [
@@ -172,7 +171,6 @@ def ask(target_pet, pets_data):
     fullcode = get_full_prompt(target_pet, pets_data)
     response = get_model_json("gpt-3.5-turbo-0125", fullcode) # alternative: gpt-4o-mini, gpt-4o
     string = response.choices[0].message.content
-    print("pet string", string)
 
     try:
             json_load = json.loads(string)
@@ -216,11 +214,8 @@ def id_to_display(matching_pets, target_pet, user_id):
     #     if isinstance(pet, dict) and "fields" in pet:
     #         cleaned_target_pet = pet["fields"]
     
-    print("cleaned target_pet", target_pet)
         
     target_location = target_pet["location"]
-    print("ready to process matching_pets")
-    print("matching_pets", matching_pets)
 
     # for json data
     # for pet_id, pet_data in json_load.items():
