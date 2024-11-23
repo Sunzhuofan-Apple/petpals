@@ -578,3 +578,47 @@ def update_pet(request):
         return Response({'message': 'Pet profile updated successfully'}, status=200)
     except Exception as e:
         return Response({'error': str(e)}, status=400)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_other_pet(request, id):
+    try:
+        pet = Pet.objects.get(id=id)
+        return Response({
+            'id': pet.id,
+            'name': pet.name,
+            'breed': pet.breed,
+            'sex': pet.sex,
+            'birth_date': pet.birth_date,
+            'location': pet.location,
+            'weight': pet.weight,
+            'preferred_time': pet.preferred_time,
+            'health_states': pet.health_states,
+            'characters': pet.characters,
+            'red_flags': pet.red_flags,
+            'photos': pet.photos,
+        })
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_other_following(request, id):
+    try:
+        pet = Pet.objects.get(id=id)
+        following_users = pet.following.all()
+        following_data = []
+        
+        for followed_user in following_users:
+            try:
+                followed_pet = Pet.objects.get(owner=followed_user)
+                following_data.append({
+                    'id': followed_pet.id,
+                    'name': followed_pet.name
+                })
+            except Pet.DoesNotExist:
+                continue
+                
+        return Response({'following': following_data}, status=200)
+    except Pet.DoesNotExist:
+        return Response({'error': 'Pet not found'}, status=404)

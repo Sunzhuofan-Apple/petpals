@@ -96,51 +96,29 @@ const Friends = () => {
     setShowMenu(false);
   };
 
-  const handleWagBack = async (followerId) => {
+  const handleUnfollow = async (followId) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/wag-back/${followerId}/`, {
-        method: "POST",
+      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/unfollow-pet/${followId}/`, {
+        method: 'POST',
+        credentials: 'include',
         headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
-        },
-        credentials: "include",
-        body: JSON.stringify({ followerId }),
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
+        }
       });
-      if (response.ok) {
-        const updatedFollower = await response.json();
-        setFollowers((prevFollowers) =>
-          prevFollowers.map((follower) =>
-            follower.id === updatedFollower.id ? updatedFollower : follower
-          )
-        );
+
+      if (!response.ok) {
+        throw new Error('Failed to unfollow pet');
       }
-    } catch (err) {
-      console.error("Error wagging back:", err);
+
+      // Update the following list by removing the unfollowed pet
+      setFollowing(following.filter(follow => follow.id !== followId));
+    } catch (error) {
+      console.error('Error unfollowing pet:', error);
     }
   };
-  
-  const handleUnfollow = async (followingId) => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/unfollow-pet/${followingId}/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": getCSRFToken(),
-        },
-        credentials: "include",
-        body: JSON.stringify({ followingId }),
-      });
-      if (response.ok) {
-        setFollowing((prevFollowing) =>
-          prevFollowing.filter((follow) => follow.id !== followingId)
-        );
-      }
-    } catch (err) {
-      console.error("Error unfollowing:", err);
-    }
-  };
-  
+
   if (isLoading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 

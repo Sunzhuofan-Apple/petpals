@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/OtherProfile.css";
+import getCSRFToken from "./getCSRFToken";
 
 const OtherProfile = () => {
   const { id } = useParams();
@@ -9,6 +10,38 @@ const OtherProfile = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [isLogin, setIsLogin] = useState(false);
+  const [username, setUsername] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleMouseEnter = () => setShowMenu(true);
+  const handleMouseLeave = () => setShowMenu(false);
+
+  const navigateTo = (path) => {
+    if (path === "Homepage") {
+      window.location.href = "http://localhost:3000/";
+    } else {
+      window.location.href = path;
+    }
+    setShowMenu(false);
+  };
+
+  const handleLogout = () => {
+    fetch(`${process.env.REACT_APP_BACKEND}/api/logout/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRFToken(),
+      },
+      credentials: "include",
+    })
+      .then((response) => {
+        if (response.ok) {
+          setIsLogin(false);
+          setUsername("");
+        }
+      })
+      .catch((err) => console.error("Logout error:", err));
+  };
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -24,6 +57,9 @@ const OtherProfile = () => {
         if (response.ok) {
           const data = await response.json();
           setIsLogin(data.is_authenticated);
+          if (data.is_authenticated) {
+            setUsername(data.username);
+          }
         }
       } catch (err) {
         console.error("Error checking login status:", err);
@@ -36,27 +72,17 @@ const OtherProfile = () => {
   useEffect(() => {
     const fetchPetData = async () => {
       try {
+        console.log("Fetching pet data for id:", id);
         const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/user-pet/${id}`, {
           method: "GET",
           credentials: "include",
         });
         
         if (response.ok) {
-          const contentType = response.headers.get("content-type");
-          if (contentType && contentType.includes("application/json")) {
-            const data = await response.json();
-            setPetData(data);
-          } else {
-            throw new Error("Invalid response format from server");
-          }
+          const data = await response.json();
+          setPetData(data);
         } else {
-          const text = await response.text();
-          try {
-            const errorData = JSON.parse(text);
-            throw new Error(errorData.error || `Failed to fetch pet data: ${response.status}`);
-          } catch (e) {
-            throw new Error(`Server error: ${response.status}`);
-          }
+          throw new Error(`Failed to fetch pet data: ${response.status}`);
         }
       } catch (err) {
         console.error("Error details:", err);
@@ -109,7 +135,25 @@ const OtherProfile = () => {
 
   return (
     <div className="my-profile-container">
-      <div className="text-wrapper-6">{name}'s Profile</div>
+      <header className="other-profile-header">
+        <div
+          className="header-button username"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {username}
+          {showMenu && (
+            <div className="dropdown-menu">
+              <button onClick={() => navigateTo("Homepage")}>Homepage</button>
+              <button onClick={() => navigateTo("/Friends")}>Friends</button>
+              <button onClick={() => navigateTo("/Matching")}>Matching</button>
+            </div>
+          )}
+        </div>
+        <button className="header-button" onClick={handleLogout}>
+          {isLogin ? "Logout" : "Login"}
+        </button>
+      </header>
       
       <div className="photo-placeholder">
         {photos && photos.length > 0 && photos[0] ? (
@@ -169,14 +213,14 @@ const OtherProfile = () => {
         </p>
       </div>
 
-      <div className="social-stats">
-        <div className="followers">
-          <div className="count">{followers?.length || 0}</div>
+      <div className="shots-followers">
+        <div className="followers-section">
+          <div className="count">{followers.length}</div>
           <div className="label">Followers</div>
         </div>
         <div className="divider"></div>
-        <div className="following">
-          <div className="count">{following?.length || 0}</div>
+        <div className="following-section">
+          <div className="count">{following.length}</div>
           <div className="label">Following</div>
         </div>
       </div>

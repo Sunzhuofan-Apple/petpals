@@ -4,6 +4,28 @@ from django.shortcuts import render
 from django.urls import path, include
 from django.contrib.auth.views import LogoutView
 from rest_framework.routers import DefaultRouter
+from .views import (
+    PetViewSet,
+    RegisterView,
+    LoginView,
+    PetFormView,
+    home,
+    login,
+    match_pet,
+    get_user_pet,
+    get_matching_recommendations,
+    get_sorted_profiles,
+    upload_photos,  
+    check_pet_exists,
+    follow_pet,
+    get_following,
+    unfollow_pet,
+    get_followers,
+    wag_back,
+    update_pet,
+    get_other_pet,
+    get_other_following,
+)
 from . import views
 
 router = DefaultRouter()
@@ -26,7 +48,7 @@ urlpatterns = [
     path('api/matching/', views.matching, name='matching'),
     path('api/user-pet/', views.get_user_pet, name='user-pet'),
     path('api/match-pet/', views.match_pet, name='match_pet'),
-    # path('api/sorted-profiles/', views.get_sorted_profiles, name='sorted-profiles'),
+    path('api/sorted-profiles/', views.get_sorted_profiles, name='sorted-profiles'),
     path('api/upload-photos/', views.upload_photos, name='upload-photos'),  
     path('api/user-pet/', views.get_user_pet, name='get_user_pet'),
     path('api/check-pet-exists/', views.check_pet_exists, name='check-pet-exists'),
@@ -35,7 +57,9 @@ urlpatterns = [
     path('api/followers/', views.get_followers, name='get-followers'),
     path('api/unfollow-pet/<int:pet_id>/', views.unfollow_pet, name='unfollow-pet'),
     path('api/wag-back/<int:follower_id>/', views.wag_back, name='wag-back'),
-    path('api/update-pet/', views.update_pet, name='update-pet'),
+    path('api/update-pet/', update_pet, name='update-pet'),
+    path('api/user-pet/<int:id>/', views.get_other_pet, name='get-other-pet'),
+    path('api/user-pet/<int:id>/following/', views.get_other_following, name='get-other-following'),
 ]
 
 if settings.DEBUG:  
