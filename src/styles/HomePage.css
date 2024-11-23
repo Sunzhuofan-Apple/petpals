@@ -18,7 +18,7 @@
   overflow-x: hidden;
 }
 
-.HeaderSection {
+.home-header-section {
   width: 100%;
   max-width: min(900px, 85vw);
   display: flex;
@@ -69,7 +69,7 @@
   color: #FF7578;
 }
 
-.IntroText {
+.home-intro-text {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -78,18 +78,18 @@
   max-width: 600px;
 }
 
-.Tagline {
+.home-tagline {
   font-family: 'Open Sans', sans-serif;
-  font-size: clamp(2rem, 5vw, 4rem);
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 700;
   line-height: 1.2;
 }
 
-.home-black-text {
+.home-text-black {
   color: #3d2828;
 }
 
-.home-highlighted-text {
+.home-text-highlight {
   color: #FF7578;
 }
 
@@ -243,7 +243,7 @@
 }
 
 @media (max-width: 768px) {
-  .Tagline {
+  .home-tagline {
     font-size: clamp(1.8rem, 6vw, 2.5rem);
   }
 
@@ -261,7 +261,7 @@
     height: min(160px, 22vh);
   }
 
-  .HeaderSection {
+  .home-header-section {
     flex-direction: column;
     align-items: center;
     margin-top: 5vh;
@@ -311,7 +311,7 @@
     gap: min(3vh, 40px);
   }
 
-  .HeaderSection {
+  .home-header-section {
     margin-top: min(15vh, 150px);
   }
 
@@ -321,7 +321,7 @@
 }
 
 @media (min-width: 1024px) and (max-height: 800px) {
-  .HeaderSection {
+  .home-header-section {
     margin-top: 1.75vh;
     margin-bottom: 0;
   }
@@ -333,7 +333,7 @@
 }
 
 @media (min-width: 1440px) {
-  .HeaderSection {
+  .home-header-section {
     margin-top: clamp(2vh, 2.5vh, 3vh);
     margin-bottom: 0;
   }
@@ -345,7 +345,7 @@
 }
 
 @media (max-width: 768px) {
-  .HeaderSection {
+  .home-header-section {
     margin-top: 6vh;
     margin-bottom: 1vh;
   }
@@ -369,7 +369,7 @@
 }
 
 @media (max-width: 480px) {
-  .HeaderSection {
+  .home-header-section {
     margin-top: 5vh;
   }
 
@@ -387,7 +387,7 @@
     gap: clamp(1vh, 2vh, 3vh);
   }
 
-  .HeaderSection {
+  .home-header-section {
     margin-top: clamp(2.5vh, 3vh, 3.5vh);
     margin-bottom: 0;
   }

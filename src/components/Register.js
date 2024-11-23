@@ -24,11 +24,13 @@ const Register = () => {
 
             <div className="login-container">
                 <div className="left-section">
-                    <p className="tagline">
-                        <span className="black-text">Happiness </span>
-                        <br />
-                        <span className="highlighted-text">starts here</span>
-                    </p>
+                    <div className="register-intro-text">
+                        <p className="register-tagline">
+                            <span className="register-text-black">Happiness </span>
+                            <br />
+                            <span className="register-text-highlight">starts here</span>
+                        </p>
+                    </div>
                     <img
                         className="illustration-image"
                         alt="Illustration"

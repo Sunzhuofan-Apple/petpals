@@ -6,44 +6,23 @@ body {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
     background-color: #FEDCD2;
+    min-height: 100vh;
 }
 
 .profile-signup {
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    margin-top: 80px;
 }
 
-.AppHeader {
-    position: fixed;
-    top: 0;
+.header {
     width: 100%;
-    padding: 1rem 2rem;
-    background-color: #FEDCD2;
-    z-index: 1000;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-}
-
-.header-button {
-    background: none;
-    border: none;
-    color: #735858;
-    font-size: 1.2rem;
-    font-weight: 600;
-    font-family: 'Open Sans', sans-serif;
-    cursor: pointer;
-    padding: 0.5vh 1vw;
-    transition: all 0.3s ease;
-}
-
-.header-button:hover {
-    color: #FF7578;
-    transform: translateY(-2px);
+    padding: 10px 20px;
 }
 
 .app-name {
@@ -72,7 +51,7 @@ body {
     max-width: 800px;
     background: none;
     padding: clamp(20px, 4vw, 40px);
-    margin-top: 0;
+    margin-top: 10px;
 }
 
 .profile-title {
@@ -80,11 +59,10 @@ body {
     font-size: clamp(1.8rem, 3vw, 2.5rem);
     font-weight: 700;
     font-family: 'Open Sans', sans-serif;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     position: relative;
     text-align: center;
     z-index: 2;
-    width: fit-content;
 }
 
 .profile-title-container {
@@ -92,71 +70,110 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 0;
+    margin-bottom: 40px;
     width: 100%;
-    background-color: #FEDCD2;
 }
 
 .profile-paw-print {
     position: absolute;
-    left: 50%;
     top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    width: auto;
-    height: auto;
+    width: min(160px, 30vw);
     display: flex;
     justify-content: center;
-    align-items: center;
     z-index: 1;
+    opacity: 0.5;
 }
 
 .profile-paw-image {
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .profile-paw-image img {
-    width: 100%;
+    width: min(100px, 20vw);
     height: auto;
-    opacity: 0.4;
-    max-width: 100px;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
-    max-width: 800px;
-    margin: 20px auto 0;
-    padding: 0 16px;
+    margin-bottom: 20px;
 }
 
 .form-grid label {
-    width: 100%;
-    position: relative;
     display: flex;
     flex-direction: column;
+    font-size: 16px;
+    color: #735858;
+    text-align: left;
+    position: relative;
     margin-bottom: 8px;
 }
 
-.input-field,
-.select__control,
-.css-13cymwt-control {
-    margin-top: 4px;
-    background: white !important;
-    border: 1px solid #eee !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
+.input-field, .select__control {
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 12px;
     font-size: 16px;
     color: #735858;
     transition: all 0.3s ease;
-    min-height: 38px !important;
-    box-shadow: none !important;
-    width: 100% !important;
+    margin-top: 4px;
+    height: 64px;
+    text-align: left;
 }
 
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 普通输入框样式 - 移除下拉箭头 */
+input.input-field {
+    background-image: none;
+    padding-right: 10px;  /* 恢复正常padding */
+}
+
+/* 添加header样式 */
+.profile-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2;
+    z-index: 1000;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* 错误消息样式 */
+.error-message {
+    color: #ff4d4f;
+    font-size: 12px;
+    margin-top: 4px;
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+}
+
+/* 表单容器样式 */
+.form-field-container {
+    position: relative;
+    margin-bottom: 24px;
+}
+
+/* Next按钮容器样式 */
 .button-container {
     display: flex;
     justify-content: center;
@@ -198,169 +215,94 @@ input.input-field {
     padding-right: 10px;  /* 恢复正常padding */
 }
 
-select.input-field {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg height='20' width='20' viewBox='0 0 20 20' aria-hidden='true' focusable='false'%3E%3Cpath d='M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z' fill='%23735858'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 10px center !important;
-    background-size: 16px !important;
-    padding-right: 40px !important;
+.AppHeader {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2;
+    z-index: 1000;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.header-button {
+    background: none;
+    border: none;
+    color: #735858;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
     cursor: pointer;
+    padding: 0.5vh 1vw;
+    transition: all 0.3s ease;
 }
 
-/* 移除默认的下拉箭头（针对IE和Edge） */
-select.input-field::-ms-expand {
-    display: none;
+.header-button:hover {
+    color: #FF7578;
+    transform: translateY(-2px);
 }
 
-.select__control {
-    border-color: #eee !important;
-    box-shadow: none !important;
+
+
+/* 增加特异性并使 !important 来确保样式优先级 */
+header.AppHeader {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 2rem;
+    background-color: #FEDCD2 !important; /* 使用 !important 确保不被覆盖 */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0;
+    width: 100%;
 }
 
-.select__indicator-separator {
-    display: none !important;
+/* 移除可能影响的其他 header 样式 */
+.profile-header {
+    display: none; /* 禁用其他 header 样式 */
 }
 
-.select__dropdown-indicator {
-    color: #735858 !important;
+/* 移除其他可能影响的样式 */
+.header {
+    background: none;
 }
 
-/* 添加错误消息样式 */
-.error-message {
-    position: absolute;
-    bottom: -14px;
-    left: 0;
-    color: #F2968F;
+.error-text {
+    color: #8B0000;
     font-size: 12px;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    margin: 0;
     line-height: 1;
+    text-align: left;
 }
 
 .input-field.error {
-    border-color: #E57373;
-    margin-bottom: 0;
+    border-color: #d9d9d9;
 }
 
-/* 禁用状态样式 */
-.input-field:disabled {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-}
-
-/* 添加输入框hover和focus状态 */
-.input-field:hover:not(.error) {
-    border-color: #F2968F;
-}
-
-.input-field:focus:not(.error) {
-    border-color: #FF7578;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(242, 150, 143, 0.2);
-}
-
-/* 调整错误状态下的hover和focus效果 */
-.input-field:hover.error {
-    border-color: #EF5350;
-}
-
-.input-field:focus.error {
-    border-color: #EF5350;
-    box-shadow: 0 0 0 2px rgba(239, 83, 80, 0.1);
-}
-
-/* 统一Select组件的下拉箭头样式 */
-.select__dropdown-indicator,
-.css-1xc3v61-indicatorContainer {
-    padding: 0 8px !important;
-}
-
-/* 统一Select组件的值容器样式 */
-.select__value-container,
-.css-1d8n9bt {
-    padding: 0 8px !important;
-}
-
-/* 移除Select组件的分隔线 */
-.select__indicator-separator,
-.css-1okebmr-indicatorSeparator {
-    display: none !important;
-}
-
-/* Sex和Preferred Time的下拉箭头样式 */
-select.input-field {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg height='20' width='20' viewBox='0 0 20 20' aria-hidden='true' focusable='false'%3E%3Cpath d='M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z' fill='%23735858'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 10px center !important;
-    background-size: 16px !important;
-    padding-right: 40px !important;
-    cursor: pointer;
-}
-
-/* 移除默认的下拉箭头（针对IE和Edge） */
-select.input-field::-ms-expand {
-    display: none;
-}
-
-/* 调整Select组件的focus状态边框 */
-.css-13cymwt-control:focus-within {
-    border-color: #FF7578 !important;
-    box-shadow: 0 0 0 1px #FF7578 !important;
-}
-
-/* 调整Select的hover状态 */
-.css-13cymwt-control:hover {
-    border-color: #F2968F !important;
-}
-
-/* 确保health state下拉框的容器高度一致 */
-.css-b62m3t-container {
-    width: 100% !important;
-    min-height: 38px !important;
-}
-
-/* 调整Select组件的内部padding */
-.css-1d8n9bt {
-    padding: 2px 8px !important;
-}
-
-/* 确保下拉箭头样式统一 */
-.css-tj5bde-Svg {
+/* 输入框基础样式 */
+.input-field, .select__control {
+    background: white;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
     color: #735858;
-}
-
-/* 统一所有Select组件的样式 */
-.basic-select {
+    transition: all 0.3s ease;
     margin-top: 4px;
+    height: 64px;
+    text-align: left;
 }
 
-.select__control {
-    background: white !important;
-    border: 1px solid #eee !important;
-    border-radius: 8px !important;
-    min-height: 48px !important;
-    box-shadow: none !important;
-}
-
-.select__control:hover {
-    border-color: #F2968F !important;
-}
-
-.select__control--is-focused {
-    border-color: #FF7578 !important;
-    box-shadow: 0 0 0 1px #FF7578 !important;
-}
-
-.select__indicator-separator {
-    display: none !important;
-}
-
-.select__dropdown-indicator {
-    color: #735858 !important;
+/* 确保下拉框和日期选择器也保持一致的高度 */
+select.input-field {
+    height: 64px;
 }
 
 .select__placeholder {
@@ -385,4 +327,6 @@ select.input-field::-ms-expand {
 
 .pac-item-selected {
     background-color: #f0f0f0;
+input[type="date"].input-field {
+    height: 64px;
 }
