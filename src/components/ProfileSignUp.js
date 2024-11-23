@@ -104,10 +104,15 @@ const ProfileSignUp = () => {
 
         switch (name) {
             case 'name':
-                // 限制名字长度为20个字符
-                finalValue = value.slice(0, 20);
-                if (finalValue.length === 20) {
+                // 如果当前长度已经是20，且新输入的值更长，则保持原值
+                if (formData.name.length >= 20 && value.length > 20) {
+                    finalValue = formData.name;  // 保持原来的值，不允许新输入
                     error = 'Name must be less than 20 characters';
+                } else {
+                    finalValue = value.slice(0, 20);  // 允许输入但不超过20个字符
+                    if (finalValue.length === 20) {
+                        error = 'Name must be less than 20 characters';
+                    }
                 }
                 break;
 
