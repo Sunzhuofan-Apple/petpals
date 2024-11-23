@@ -270,19 +270,17 @@ export const Matching = () => {
                 </button>
             </header>
 
-            {
-            isTransitioning ? (
+            {isTransitioning ? (
                 <div className="transition-overlay">
-                <Transition onFinish={handleTransition} /> 
-            </div>
-            ) : 
-             isLoading ? (
+                    <Transition onFinish={handleTransition} /> 
+                </div>
+            ) : isLoading ? (
                 <div>
                     <Loading />
                 </div>
             ) : !userPet ? (
                 <div className="no-pet-message">
-                    <h2>Ple ase set up your pet profile first</h2>
+                    <h2>Please set up your pet profile first</h2>
                     <button onClick={() => window.location.href = '/ProfileSignUp'}>
                         Set Up Profile
                     </button>
@@ -292,8 +290,7 @@ export const Matching = () => {
                     <h2>No matches found</h2>
                     <p>Check back later for new potential matches!</p>
                 </div>
-            ) : 
-            (
+            ) : (
                 <>
                     <div className="controls">
                         <button className="sort-button" onClick={handleSortByDistance}>
@@ -305,45 +302,44 @@ export const Matching = () => {
                     </div>
 
                     <div className="cards-container">
-                            {profiles.map((profile, index) => {
-                                const position = getCardPosition(index);
-                                if (position === 'hidden') return null;
-    
-                                const { photos = [], name, breed, age, weight, distance } = profile;
-    
-                                return (
-                                    <div key={index} className={`profile-card ${position}`}>
-                                        <div className="match-score">
-                                            Match: {profile.matchScore}%
-                                        </div>
-                                        <img
-                                            src={photos.length > 0 ? photos[0] : 'default-avatar.png'}
-                                            alt={`${name}'s photo`}
-                                            className="profile-photo"
-                                        />
-                                        <div className="profile-info">
-                                            <div className="profile-name">{name}</div>
-                                            <p className="profile-details">
-                                                {breed}, {age} years old, {weight} lbs
-                                                <br />
-                                                {distance} miles away from you
-                                            </p>
-                                        </div>
-                                        <button 
-                                            className="wag-button"
-                                            onClick={() => handleWagClick(profile.id)}
-                                        >
-                                            {profile.isFollowing ? 'Wagging!' : 'Wag your tail'}
-                                        </button>
+                        {profiles.map((profile, index) => {
+                            const position = getCardPosition(index);
+                            if (position === 'hidden') return null;
+
+                            const { photos = [], name, breed, age, weight, distance } = profile;
+
+                            return (
+                                <div key={index} className={`profile-card ${position}`}>
+                                    <div className="match-score">
+                                        Match: {profile.matchScore}%
                                     </div>
-                                );
-                            })}
-                        </div>
-                        <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
-                        <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
-                    </>
-                )}
-            </div>
+                                    <img
+                                        src={photos.length > 0 ? photos[0] : 'default-avatar.png'}
+                                        alt={`${name}'s photo`}
+                                        className="profile-photo"
+                                    />
+                                    <div className="profile-info">
+                                        <div className="profile-name">{name}</div>
+                                        <p className="profile-details">
+                                            {breed}, {age} years old, {weight} lbs
+                                            <br />
+                                            {distance} miles away from you
+                                        </p>
+                                    </div>
+                                    <button 
+                                        className="wag-button"
+                                        onClick={() => handleWagClick(profile.id)}
+                                    >
+                                        {profile.isFollowing ? 'Wagging!' : 'Wag your tail'}
+                                    </button>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <button className="arrow left-arrow" onClick={showPreviousProfile}>{"<"}</button>
+                    <button className="arrow right-arrow" onClick={showNextProfile}>{">"}</button>
+                </>
+            )}
         </div>
     );
     
