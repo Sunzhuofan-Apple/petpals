@@ -329,6 +329,7 @@ def get_sorted_profiles(request):
                 print(f"Calculated distance for {pet.name}: {distance} miles")
                 
                 profile_data = {
+                    'id': pet.id,
                     'name': pet.name,
                     'breed': pet.breed,
                     'age': (datetime.now().date() - pet.birth_date).days // 365,
@@ -428,14 +429,21 @@ def get_user_pet(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@csrf_exempt
 def follow_pet(request, pet_id):
     try:
         pet_to_follow = Pet.objects.get(id=pet_id)
         user_pet = Pet.objects.get(owner=request.user)
-        user_pet.following.add(pet_to_follow.owner)
+        if request.user in pet_to_follow.followers.all():
+            return Response({'message': 'Already following this pet'}, status=200)
         pet_to_follow.followers.add(request.user)
+        user_pet.following.add(pet_to_follow.owner)
         
-        return Response({'message': 'Successfully followed pet'}, status=200)
+        return Response({
+            'message': 'Successfully followed pet',
+            'isFollowing': True
+        }, status=200)
+        
     except Pet.DoesNotExist:
         return Response({'error': 'Pet not found'}, status=404)
     except Exception as e:

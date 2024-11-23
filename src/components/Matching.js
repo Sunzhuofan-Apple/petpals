@@ -129,18 +129,32 @@ export const Matching = () => {
     };
 
     const handleWagClick = async (profileId) => {
+        if (!profileId) {
+            console.error('Profile ID is undefined');
+            return;
+        }
+
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/follow-pet/${profileId}/`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
             });
 
-            if (!response.ok) throw new Error('Failed to follow pet');
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Server returned non-JSON response');
+            }
+
+            const data = await response.json();
             
-            // Optionally update the UI to show the pet is now followed
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to follow pet');
+            }
+            
             const updatedProfiles = profiles.map(profile => {
                 if (profile.id === profileId) {
                     return { ...profile, isFollowing: true };
@@ -148,8 +162,10 @@ export const Matching = () => {
                 return profile;
             });
             setProfiles(updatedProfiles);
+            
         } catch (error) {
             console.error('Error following pet:', error);
+            alert(error.message || 'Failed to follow pet. Please try again.');
         }
     };
 

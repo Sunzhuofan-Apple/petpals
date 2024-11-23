@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 class Pet(models.Model):
+    id = models.AutoField(primary_key=True)
     SEX_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female'),
