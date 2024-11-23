@@ -1,63 +1,6 @@
-.profile-container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    background: #FEDCD2;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-}
+@import './MyProfile.css';
 
-.photo-placeholder {
-    width: 150px;
-    height: 150px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin: 20px auto;
-}
-
-.social-stats {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.followers, .following {
-    margin: 0 10px;
-    font-size: 18px;
-    color: #6C6C6C;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.divider {
-    width: 2px;
-    height: 30px;
-    background: #6C6C6C;
-}
-
-.profile-details {
-    margin-top: 20px;
-}
-
-.pet-info {
-    font-size: 16px;
-    color: #201F1F;
-}
-
-.profile-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-
-@media (max-width: 600px) {
-    .social-stats {
-        flex-direction: column;
-    }
-    .divider {
-        display: none;
-    }
+.my-profile-container {
+    min-height: auto;
+    padding-top: 20px;
 }

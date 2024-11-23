@@ -157,7 +157,14 @@ const Friends = () => {
                 <div className="friend-avatar"></div>
                 <div className="friend-content">
                   <div className="friend-text">
-                    {`You wag ${follow.name}'s tail and say hi`}
+                    {`You wag `}
+                    <span 
+                      className="friend-name"
+                      onClick={() => window.location.href = `/OtherProfile/${follow.id}`}
+                    >
+                      {follow.name}
+                    </span>
+                    {`'s tail and say hi`}
                   </div>
                   <button
                     className="wag-back-button wagging"
